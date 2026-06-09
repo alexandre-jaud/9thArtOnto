@@ -9,8 +9,8 @@
      xmlns:terms="http://purl.org/dc/terms/"
      xmlns:seqartonto="http://www.semanticweb.org/ajaud02/seqartonto#">
     <owl:Ontology rdf:about="http://www.semanticweb.org/ajaud02/seqartonto">
-        <terms:title xml:lang="en">9thArtOnto</terms:title>
-        <rdfs:label xml:lang="en">9thArtOnto</rdfs:label>
+        <terms:title xml:lang="en">SequArtOnto</terms:title>
+        <rdfs:label xml:lang="en">SequArtOnto</rdfs:label>
     </owl:Ontology>
     
 
@@ -68,24 +68,6 @@
     ///////////////////////////////////////////////////////////////////////////////////////
      -->
 
-    
-
-
-    <!-- http://www.semanticweb.org/ajaud02/seqartonto#emittedBy -->
-
-    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/ajaud02/seqartonto#emittedBy">
-        <rdfs:domain>
-            <owl:Class>
-                <owl:unionOf rdf:parseType="Collection">
-                    <rdf:Description rdf:about="http://www.semanticweb.org/ajaud02/seqartonto#Balloon"/>
-                    <rdf:Description rdf:about="http://www.semanticweb.org/ajaud02/seqartonto#Caption"/>
-                </owl:unionOf>
-            </owl:Class>
-        </rdfs:domain>
-        <rdfs:range rdf:resource="http://www.semanticweb.org/ajaud02/seqartonto#Character"/>
-        <rdfs:comment xml:lang="en">Links a Balloon or Caption to the Character who is its speaker, thinker, or narrative voice.</rdfs:comment>
-        <rdfs:label xml:lang="en">emittedBy</rdfs:label>
-    </owl:ObjectProperty>
     
 
 
@@ -164,7 +146,7 @@
     <owl:ObjectProperty rdf:about="http://www.semanticweb.org/ajaud02/seqartonto#hasInstrument">
         <rdfs:domain rdf:resource="http://www.semanticweb.org/ajaud02/seqartonto#Interaction"/>
         <rdfs:range rdf:resource="http://www.semanticweb.org/ajaud02/seqartonto#Object"/>
-        <rdfs:comment xml:lang="en">Links an Interaction to an Object that plays a non-patient role, either as a tool used to perform the action (e.g. a gun, a sword) or as a passive support or spatial context (e.g. a bench being sat on, a table around which characters gather). The interactionType verb disambiguates the exact role.</rdfs:comment>
+        <rdfs:comment xml:lang="en">Links an Interaction to an Object that plays a non-patient role — either as a tool used to perform the action (e.g. a gun, a sword) or as a passive support or spatial context (e.g. a bench being sat on, a table around which characters gather). The interactionType verb disambiguates the exact role.</rdfs:comment>
         <rdfs:label xml:lang="en">hasInstrument</rdfs:label>
     </owl:ObjectProperty>
     
@@ -192,17 +174,6 @@
     
 
 
-    <!-- http://www.semanticweb.org/ajaud02/seqartonto#hasLocative -->
-
-    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/ajaud02/seqartonto#hasLocative">
-        <rdfs:domain rdf:resource="http://www.semanticweb.org/ajaud02/seqartonto#Interaction"/>
-        <rdfs:range rdf:resource="http://www.semanticweb.org/ajaud02/seqartonto#Object"/>
-        <rdfs:comment xml:lang="en">Links an Interaction to the Object that serves as its spatial reference point. Corresponds to the locative thematic role (Fillmore 1968): the object at, near, or in relation to which the action or spatial relation takes place (e.g. a wall, a table, a door). Distinct from hasInstrument (which the agent actively uses) and from hasPatient (which undergoes the action): the locative Object is a passive spatial anchor. Optional: only annotated when a specific Object grounds the spatial dimension of the Interaction.</rdfs:comment>
-        <rdfs:label xml:lang="en">hasLocative</rdfs:label>
-    </owl:ObjectProperty>
-
-
-
     <!-- http://www.semanticweb.org/ajaud02/seqartonto#hasNarrativeLocation -->
 
     <owl:ObjectProperty rdf:about="http://www.semanticweb.org/ajaud02/seqartonto#hasNarrativeLocation">
@@ -217,9 +188,10 @@
     <!-- http://www.semanticweb.org/ajaud02/seqartonto#hasNarrativeUnit -->
 
     <owl:ObjectProperty rdf:about="http://www.semanticweb.org/ajaud02/seqartonto#hasNarrativeUnit">
+        <owl:inverseOf rdf:resource="http://www.semanticweb.org/ajaud02/seqartonto#isNarrativeUnitOf"/>
         <rdfs:domain rdf:resource="http://www.semanticweb.org/ajaud02/seqartonto#NarrativeConstituent"/>
         <rdfs:range rdf:resource="http://www.semanticweb.org/ajaud02/seqartonto#NarrativeConstituent"/>
-        <rdfs:comment xml:lang="en">Hierarchical composition property linking a NarrativeConstituent to its direct sub-constituents within the five-level narrative tree (Story → Arc → Event → Scene → Segment). Used at every level of the hierarchy: a Story hasNarrativeUnit its Arcs, an Arc hasNarrativeUnit its Events, an Event hasNarrativeUnit its Scenes, and a Scene hasNarrativeUnit its Segments. Inspired by GOLEM&apos;s G9_Narrative_Unit mereological relation (Pianzola et al. 2025).</rdfs:comment>
+        <rdfs:comment xml:lang="en">Links a NarrativeConstituent to its direct sub-constituents (child nodes in the VNG tree). This property enables the recursive constituent structure of Cohn&apos;s Visual Narrative Grammar: a constituent (arc) is composed of two or more NarrativeConstituents, each of which can itself contain further sub-constituents. Inspired by GOLEM&apos;s G9_Narrative_Unit mereological relation.</rdfs:comment>
         <rdfs:label xml:lang="en">hasNarrativeUnit</rdfs:label>
     </owl:ObjectProperty>
     
@@ -278,16 +250,9 @@
     <!-- http://www.semanticweb.org/ajaud02/seqartonto#hasOnomatopoeia -->
 
     <owl:ObjectProperty rdf:about="http://www.semanticweb.org/ajaud02/seqartonto#hasOnomatopoeia">
-        <rdfs:domain>
-            <owl:Class>
-                <owl:unionOf rdf:parseType="Collection">
-                    <rdf:Description rdf:about="http://www.semanticweb.org/ajaud02/seqartonto#Level"/>
-                    <rdf:Description rdf:about="http://www.semanticweb.org/ajaud02/seqartonto#Balloon"/>
-                </owl:unionOf>
-            </owl:Class>
-        </rdfs:domain>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/ajaud02/seqartonto#Level"/>
         <rdfs:range rdf:resource="http://www.semanticweb.org/ajaud02/seqartonto#Onomatopoeia"/>
-        <rdfs:comment xml:lang="en">Links a Level or a Balloon to the Onomatopoeias it contains.</rdfs:comment>
+        <rdfs:comment xml:lang="en">Links a Level to the Onomatopoeias it contains.</rdfs:comment>
         <rdfs:label xml:lang="en">hasOnomatopoeia</rdfs:label>
     </owl:ObjectProperty>
     
@@ -388,6 +353,7 @@
     <!-- http://www.semanticweb.org/ajaud02/seqartonto#hasSubLocation -->
 
     <owl:ObjectProperty rdf:about="http://www.semanticweb.org/ajaud02/seqartonto#hasSubLocation">
+        <owl:inverseOf rdf:resource="http://www.semanticweb.org/ajaud02/seqartonto#isSubLocationOf"/>
         <rdfs:domain rdf:resource="http://www.semanticweb.org/ajaud02/seqartonto#NarrativeLocation"/>
         <rdfs:range rdf:resource="http://www.semanticweb.org/ajaud02/seqartonto#NarrativeLocation"/>
         <rdfs:comment xml:lang="en">Links a NarrativeLocation to its spatially contained sub-locations. Enables a recursive containment hierarchy of diegetic places (e.g. &quot;Paris&quot; hasSubLocation &quot;Café de Flore&quot;). Inspired by the mereological location structure in GOLEM (Pianzola et al. 2025).</rdfs:comment>
@@ -418,6 +384,16 @@
     
 
 
+    <!-- http://www.semanticweb.org/ajaud02/seqartonto#hasTemporalLink -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/ajaud02/seqartonto#hasTemporalLink">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/ajaud02/seqartonto#NarrativeConstituent"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/ajaud02/seqartonto#TemporalLink"/>
+        <rdfs:comment xml:lang="en">Links a NarrativeConstituent (arc-level, non-leaf) to a TemporalLink expressing its temporal relation with another constituent. Only annotated when the story-world order differs from or complexifies the reading order (flashback, flash-forward, parallel events). Inspired by TimeML&apos;s TLINK (Pustejovsky et al. 2003) and NOnt&apos;s use of Allen&apos;s interval algebra (Meghini et al. 2021).</rdfs:comment>
+        <rdfs:label xml:lang="en">hasTemporalLink</rdfs:label>
+    </owl:ObjectProperty>
+    
+
 
     <!-- http://www.semanticweb.org/ajaud02/seqartonto#hasTextLine -->
 
@@ -439,13 +415,13 @@
     
 
 
-    <!-- http://www.semanticweb.org/ajaud02/seqartonto#hasTextSpan -->
+    <!-- http://www.semanticweb.org/ajaud02/seqartonto#hasTextToken -->
 
-    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/ajaud02/seqartonto#hasTextSpan">
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/ajaud02/seqartonto#hasTextToken">
         <rdfs:domain rdf:resource="http://www.semanticweb.org/ajaud02/seqartonto#TextLine"/>
-        <rdfs:range rdf:resource="http://www.semanticweb.org/ajaud02/seqartonto#TextSpan"/>
-        <rdfs:comment xml:lang="en">Links a TextLine to the TextSpans (words or groups of words sharing the same typographic style) it contains. Multiple TextSpans within a TextLine are only justified when typographic style varies within the line.</rdfs:comment>
-        <rdfs:label xml:lang="en">hasTextSpan</rdfs:label>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/ajaud02/seqartonto#TextToken"/>
+        <rdfs:comment xml:lang="en">Links a TextLine to the TextTokens (words or fragments) it contains.</rdfs:comment>
+        <rdfs:label xml:lang="en">hasTextToken</rdfs:label>
     </owl:ObjectProperty>
     
 
@@ -466,7 +442,7 @@
     <owl:ObjectProperty rdf:about="http://www.semanticweb.org/ajaud02/seqartonto#instantiates">
         <rdfs:domain rdf:resource="http://www.semanticweb.org/ajaud02/seqartonto#Segment"/>
         <rdfs:range rdf:resource="http://www.semanticweb.org/ajaud02/seqartonto#Level"/>
-        <rdfs:comment xml:lang="en">Links a Segment (leaf NarrativeConstituent) to the Level(s) of the comic that visually realise it. Only Segments carry instantiates relations directly: higher-level constituents (Scene, Event, Arc, Story) are realised indirectly through the instantiates of their descendant Segments. A Segment may instantiate multiple Levels when it spans a polymorphic panel (e.g. both Level_3a and Level_3b of the same panel instantiate the same Segment). This property bridges the narrative/discourse layer and the visual/material layer.</rdfs:comment>
+        <rdfs:comment xml:lang="en">Links a Segment (leaf NarrativeConstituent) to the Level(s) of the comic that visually realise it. Only Segments carry instantiates relations directly: higher-level constituents (Scene, Event, Chapter, Story) are realised indirectly through the instantiates of their descendant Segments. A Segment may instantiate multiple Levels when it spans a polymorphic panel (e.g. both Level_3a and Level_3b of the same panel instantiate the same Segment). This property bridges the narrative/discourse layer and the visual/material layer.</rdfs:comment>
         <rdfs:label xml:lang="en">instantiates</rdfs:label>
     </owl:ObjectProperty>
     
@@ -483,6 +459,66 @@
     
 
 
+    <!-- http://www.semanticweb.org/ajaud02/seqartonto#isNarrativeUnitOf -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/ajaud02/seqartonto#isNarrativeUnitOf">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/ajaud02/seqartonto#NarrativeConstituent"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/ajaud02/seqartonto#NarrativeConstituent"/>
+        <rdfs:comment xml:lang="en">Inverse of hasNarrativeUnit. Links a NarrativeConstituent to its unique parent constituent in the VNG tree. Functional: a constituent belongs to exactly one parent (a constituent cannot appear at two different places in the tree simultaneously).</rdfs:comment>
+        <rdfs:label xml:lang="en">isNarrativeUnitOf</rdfs:label>
+    </owl:ObjectProperty>
+
+
+
+    <!-- http://www.semanticweb.org/ajaud02/seqartonto#hasChapter -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/ajaud02/seqartonto#hasChapter">
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/ajaud02/seqartonto#hasNarrativeUnit"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/ajaud02/seqartonto#Story"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/ajaud02/seqartonto#Chapter"/>
+        <rdfs:comment xml:lang="en">Links a Story to its constituent Chapters. Specialises hasNarrativeUnit at the Story→Chapter level of the narrative hierarchy.</rdfs:comment>
+        <rdfs:label xml:lang="en">hasChapter</rdfs:label>
+    </owl:ObjectProperty>
+
+
+
+    <!-- http://www.semanticweb.org/ajaud02/seqartonto#hasEvent -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/ajaud02/seqartonto#hasEvent">
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/ajaud02/seqartonto#hasNarrativeUnit"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/ajaud02/seqartonto#Chapter"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/ajaud02/seqartonto#Event"/>
+        <rdfs:comment xml:lang="en">Links a Chapter to its constituent Events. Specialises hasNarrativeUnit at the Chapter→Event level. An Event is a macro-level narrative arc unifying a set of Scenes around a common goal or dramatic tension (Chen 2025).</rdfs:comment>
+        <rdfs:label xml:lang="en">hasEvent</rdfs:label>
+    </owl:ObjectProperty>
+
+
+
+    <!-- http://www.semanticweb.org/ajaud02/seqartonto#hasScene -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/ajaud02/seqartonto#hasScene">
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/ajaud02/seqartonto#hasNarrativeUnit"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/ajaud02/seqartonto#Event"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/ajaud02/seqartonto#Scene"/>
+        <rdfs:comment xml:lang="en">Links an Event to its constituent Scenes. Specialises hasNarrativeUnit at the Event→Scene level. A Scene is the unit of spatial, character, and action continuity (Zwaan &amp; Radvansky 1998).</rdfs:comment>
+        <rdfs:label xml:lang="en">hasScene</rdfs:label>
+    </owl:ObjectProperty>
+
+
+
+    <!-- http://www.semanticweb.org/ajaud02/seqartonto#hasSegment -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/ajaud02/seqartonto#hasSegment">
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/ajaud02/seqartonto#hasNarrativeUnit"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/ajaud02/seqartonto#Scene"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/ajaud02/seqartonto#Segment"/>
+        <rdfs:comment xml:lang="en">Links a Scene to its constituent Segments. Specialises hasNarrativeUnit at the Scene→Segment level. A Segment is the leaf narrative unit bearing a VNG role (Establisher/Initial/Peak/Release/Refiner) and directly instantiating one or more Levels (Cohn 2013).</rdfs:comment>
+        <rdfs:label xml:lang="en">hasSegment</rdfs:label>
+    </owl:ObjectProperty>
+
+
+
     <!-- http://www.semanticweb.org/ajaud02/seqartonto#isObject -->
 
     <owl:ObjectProperty rdf:about="http://www.semanticweb.org/ajaud02/seqartonto#isObject">
@@ -490,6 +526,18 @@
         <rdfs:range rdf:resource="http://www.semanticweb.org/ajaud02/seqartonto#MetaObject"/>
         <rdfs:comment xml:lang="en">Links a local object occurrence (within a panel) to the meta-object it represents.</rdfs:comment>
         <rdfs:label xml:lang="en">isObject</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/ajaud02/seqartonto#isSubLocationOf -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/ajaud02/seqartonto#isSubLocationOf">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/ajaud02/seqartonto#NarrativeLocation"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/ajaud02/seqartonto#NarrativeLocation"/>
+        <rdfs:comment xml:lang="en">Inverse of hasSubLocation. Functional: a NarrativeLocation belongs to exactly one parent location in the hierarchy.</rdfs:comment>
+        <rdfs:label xml:lang="en">isSubLocationOf</rdfs:label>
     </owl:ObjectProperty>
     
 
@@ -531,16 +579,16 @@
     
 
 
-    <!-- http://www.semanticweb.org/ajaud02/seqartonto#nextNarrativeTextLine -->
+    <!-- http://www.semanticweb.org/ajaud02/seqartonto#nextTextLine -->
 
-    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/ajaud02/seqartonto#nextNarrativeTextLine">
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/ajaud02/seqartonto#nextTextLine">
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#AsymmetricProperty"/>
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#IrreflexiveProperty"/>
         <rdfs:domain rdf:resource="http://www.semanticweb.org/ajaud02/seqartonto#TextLine"/>
         <rdfs:range rdf:resource="http://www.semanticweb.org/ajaud02/seqartonto#TextLine"/>
-        <rdfs:comment xml:lang="en">Points to the immediately following narrative TextLine in reading order within its container (Balloon or Caption). Only applies to TextLines of type &quot;narrative&quot;; diegetic and paratextual lines are excluded. Functional: a TextLine has at most one successor.</rdfs:comment>
-        <rdfs:label xml:lang="en">nextNarrativeTextLine</rdfs:label>
+        <rdfs:comment xml:lang="en">Points to the immediately following TextLine in reading order within its container (Balloon, Caption, Level, or Plate). Functional: a TextLine has at most one successor. Typically derived from hasRank.</rdfs:comment>
+        <rdfs:label xml:lang="en">nextTextLine</rdfs:label>
     </owl:ObjectProperty>
     
 
@@ -590,7 +638,7 @@
             </owl:Class>
         </rdfs:domain>
         <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-        <rdfs:comment xml:lang="en">The background color of a balloon or caption box, encoded as a hex code (e.g. &quot;#FFFF00&quot;) or a color name (e.g. &quot;yellow&quot;). On a Balloon, this is used when the balloon fill differs from the default white, for instance a black background for a villain&apos;s speech, or a coloured fill conveying a particular emotional tone.</rdfs:comment>
+        <rdfs:comment xml:lang="en">The background color of a balloon or caption box, encoded as a hex code (e.g. &quot;#FFFF00&quot;) or a color name (e.g. &quot;yellow&quot;). On a Balloon, this is used when the balloon fill differs from the default white — for instance a black background for a villain&apos;s speech, or a coloured fill conveying a particular emotional tone.</rdfs:comment>
         <rdfs:label xml:lang="en">backgroundColor</rdfs:label>
     </owl:DatatypeProperty>
     
@@ -654,7 +702,7 @@
                     <rdf:Description rdf:about="http://www.semanticweb.org/ajaud02/seqartonto#Onomatopoeia"/>
                     <rdf:Description rdf:about="http://www.semanticweb.org/ajaud02/seqartonto#Panel"/>
                     <rdf:Description rdf:about="http://www.semanticweb.org/ajaud02/seqartonto#TextLine"/>
-                    <rdf:Description rdf:about="http://www.semanticweb.org/ajaud02/seqartonto#TextSpan"/>
+                    <rdf:Description rdf:about="http://www.semanticweb.org/ajaud02/seqartonto#TextToken"/>
                 </owl:unionOf>
             </owl:Class>
         </rdfs:domain>
@@ -833,7 +881,7 @@
                 </owl:oneOf>
             </rdfs:Datatype>
         </rdfs:range>
-        <rdfs:comment xml:lang="en">The sound category of the onomatopoeia. Allowed values: Human: &quot;cry&quot;, &quot;human-noise&quot;, &quot;human-emotion&quot;; Object: &quot;impact-explosion&quot;, &quot;creaking&quot;, &quot;technological-sound&quot;; Miscellaneous: &quot;animal-sound&quot;, &quot;nature-sound&quot;, &quot;ambient-emotion&quot;; Pictogram: &quot;symbol&quot;.</rdfs:comment>
+        <rdfs:comment xml:lang="en">The sound category of the onomatopoeia. Allowed values — Human: &quot;cry&quot;, &quot;human-noise&quot;, &quot;human-emotion&quot;; Object: &quot;impact-explosion&quot;, &quot;creaking&quot;, &quot;technological-sound&quot;; Miscellaneous: &quot;animal-sound&quot;, &quot;nature-sound&quot;, &quot;ambient-emotion&quot;; Pictogram: &quot;symbol&quot;.</rdfs:comment>
         <rdfs:label xml:lang="en">category</rdfs:label>
     </owl:DatatypeProperty>
     
@@ -873,12 +921,12 @@
             <owl:Class>
                 <owl:unionOf rdf:parseType="Collection">
                     <rdf:Description rdf:about="http://www.semanticweb.org/ajaud02/seqartonto#Onomatopoeia"/>
-                    <rdf:Description rdf:about="http://www.semanticweb.org/ajaud02/seqartonto#TextSpan"/>
+                    <rdf:Description rdf:about="http://www.semanticweb.org/ajaud02/seqartonto#TextToken"/>
                 </owl:unionOf>
             </owl:Class>
         </rdfs:domain>
         <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-        <rdfs:comment xml:lang="en">The textual content of a TextSpan (word or group of words within a TextLine sharing a typographic style) or an Onomatopoeia (e.g. &quot;BANG&quot;, &quot;SPLASH&quot;). Content is anchored at the finest granularity level.</rdfs:comment>
+        <rdfs:comment xml:lang="en">The textual content of a TextToken (word or fragment within a TextLine) or an Onomatopoeia (e.g. &quot;BANG&quot;, &quot;SPLASH&quot;). Content is anchored at the finest granularity level.</rdfs:comment>
         <rdfs:label xml:lang="en">content</rdfs:label>
     </owl:DatatypeProperty>
     
@@ -899,180 +947,8 @@
 
     <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/ajaud02/seqartonto#emotion">
         <rdfs:domain rdf:resource="http://www.semanticweb.org/ajaud02/seqartonto#Character"/>
-        <rdfs:range>
-            <rdfs:Datatype>
-                <owl:oneOf>
-                    <rdf:Description>
-                        <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#List"/>
-                        <rdf:first>afraid</rdf:first>
-                        <rdf:rest>
-                            <rdf:Description>
-                                <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#List"/>
-                                <rdf:first>alarmed</rdf:first>
-                                <rdf:rest>
-                                    <rdf:Description>
-                                        <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#List"/>
-                                        <rdf:first>angry</rdf:first>
-                                        <rdf:rest>
-                                            <rdf:Description>
-                                                <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#List"/>
-                                                <rdf:first>annoyed</rdf:first>
-                                                <rdf:rest>
-                                                    <rdf:Description>
-                                                        <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#List"/>
-                                                        <rdf:first>aroused</rdf:first>
-                                                        <rdf:rest>
-                                                            <rdf:Description>
-                                                                <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#List"/>
-                                                                <rdf:first>astonished</rdf:first>
-                                                                <rdf:rest>
-                                                                    <rdf:Description>
-                                                                        <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#List"/>
-                                                                        <rdf:first>at ease</rdf:first>
-                                                                        <rdf:rest>
-                                                                            <rdf:Description>
-                                                                                <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#List"/>
-                                                                                <rdf:first>bored</rdf:first>
-                                                                                <rdf:rest>
-                                                                                    <rdf:Description>
-                                                                                        <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#List"/>
-                                                                                        <rdf:first>calm</rdf:first>
-                                                                                        <rdf:rest>
-                                                                                            <rdf:Description>
-                                                                                                <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#List"/>
-                                                                                                <rdf:first>content</rdf:first>
-                                                                                                <rdf:rest>
-                                                                                                    <rdf:Description>
-                                                                                                        <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#List"/>
-                                                                                                        <rdf:first>delighted</rdf:first>
-                                                                                                        <rdf:rest>
-                                                                                                            <rdf:Description>
-                                                                                                                <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#List"/>
-                                                                                                                <rdf:first>depressed</rdf:first>
-                                                                                                                <rdf:rest>
-                                                                                                                    <rdf:Description>
-                                                                                                                        <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#List"/>
-                                                                                                                        <rdf:first>distressed</rdf:first>
-                                                                                                                        <rdf:rest>
-                                                                                                                            <rdf:Description>
-                                                                                                                                <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#List"/>
-                                                                                                                                <rdf:first>droopy</rdf:first>
-                                                                                                                                <rdf:rest>
-                                                                                                                                    <rdf:Description>
-                                                                                                                                        <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#List"/>
-                                                                                                                                        <rdf:first>excited</rdf:first>
-                                                                                                                                        <rdf:rest>
-                                                                                                                                            <rdf:Description>
-                                                                                                                                                <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#List"/>
-                                                                                                                                                <rdf:first>frustrated</rdf:first>
-                                                                                                                                                <rdf:rest>
-                                                                                                                                                    <rdf:Description>
-                                                                                                                                                        <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#List"/>
-                                                                                                                                                        <rdf:first>glad</rdf:first>
-                                                                                                                                                        <rdf:rest>
-                                                                                                                                                            <rdf:Description>
-                                                                                                                                                                <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#List"/>
-                                                                                                                                                                <rdf:first>gloomy</rdf:first>
-                                                                                                                                                                <rdf:rest>
-                                                                                                                                                                    <rdf:Description>
-                                                                                                                                                                        <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#List"/>
-                                                                                                                                                                        <rdf:first>happy</rdf:first>
-                                                                                                                                                                        <rdf:rest>
-                                                                                                                                                                            <rdf:Description>
-                                                                                                                                                                                <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#List"/>
-                                                                                                                                                                                <rdf:first>miserable</rdf:first>
-                                                                                                                                                                                <rdf:rest>
-                                                                                                                                                                                    <rdf:Description>
-                                                                                                                                                                                        <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#List"/>
-                                                                                                                                                                                        <rdf:first>pleased</rdf:first>
-                                                                                                                                                                                        <rdf:rest>
-                                                                                                                                                                                            <rdf:Description>
-                                                                                                                                                                                                <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#List"/>
-                                                                                                                                                                                                <rdf:first>relaxed</rdf:first>
-                                                                                                                                                                                                <rdf:rest>
-                                                                                                                                                                                                    <rdf:Description>
-                                                                                                                                                                                                        <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#List"/>
-                                                                                                                                                                                                        <rdf:first>sad</rdf:first>
-                                                                                                                                                                                                        <rdf:rest>
-                                                                                                                                                                                                            <rdf:Description>
-                                                                                                                                                                                                                <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#List"/>
-                                                                                                                                                                                                                <rdf:first>satisfied</rdf:first>
-                                                                                                                                                                                                                <rdf:rest>
-                                                                                                                                                                                                                    <rdf:Description>
-                                                                                                                                                                                                                        <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#List"/>
-                                                                                                                                                                                                                        <rdf:first>serene</rdf:first>
-                                                                                                                                                                                                                        <rdf:rest>
-                                                                                                                                                                                                                            <rdf:Description>
-                                                                                                                                                                                                                                <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#List"/>
-                                                                                                                                                                                                                                <rdf:first>sleepy</rdf:first>
-                                                                                                                                                                                                                                <rdf:rest>
-                                                                                                                                                                                                                                    <rdf:Description>
-                                                                                                                                                                                                                                        <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#List"/>
-                                                                                                                                                                                                                                        <rdf:first>tense</rdf:first>
-                                                                                                                                                                                                                                        <rdf:rest>
-                                                                                                                                                                                                                                            <rdf:Description>
-                                                                                                                                                                                                                                                <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#List"/>
-                                                                                                                                                                                                                                                <rdf:first>tired</rdf:first>
-                                                                                                                                                                                                                                                <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
-                                                                                                                                                                                                                                            </rdf:Description>
-                                                                                                                                                                                                                                        </rdf:rest>
-                                                                                                                                                                                                                                    </rdf:Description>
-                                                                                                                                                                                                                                </rdf:rest>
-                                                                                                                                                                                                                            </rdf:Description>
-                                                                                                                                                                                                                        </rdf:rest>
-                                                                                                                                                                                                                    </rdf:Description>
-                                                                                                                                                                                                                </rdf:rest>
-                                                                                                                                                                                                            </rdf:Description>
-                                                                                                                                                                                                        </rdf:rest>
-                                                                                                                                                                                                    </rdf:Description>
-                                                                                                                                                                                                </rdf:rest>
-                                                                                                                                                                                            </rdf:Description>
-                                                                                                                                                                                        </rdf:rest>
-                                                                                                                                                                                    </rdf:Description>
-                                                                                                                                                                                </rdf:rest>
-                                                                                                                                                                            </rdf:Description>
-                                                                                                                                                                        </rdf:rest>
-                                                                                                                                                                    </rdf:Description>
-                                                                                                                                                                </rdf:rest>
-                                                                                                                                                            </rdf:Description>
-                                                                                                                                                        </rdf:rest>
-                                                                                                                                                    </rdf:Description>
-                                                                                                                                                </rdf:rest>
-                                                                                                                                            </rdf:Description>
-                                                                                                                                        </rdf:rest>
-                                                                                                                                    </rdf:Description>
-                                                                                                                                </rdf:rest>
-                                                                                                                            </rdf:Description>
-                                                                                                                        </rdf:rest>
-                                                                                                                    </rdf:Description>
-                                                                                                                </rdf:rest>
-                                                                                                            </rdf:Description>
-                                                                                                        </rdf:rest>
-                                                                                                    </rdf:Description>
-                                                                                                </rdf:rest>
-                                                                                            </rdf:Description>
-                                                                                        </rdf:rest>
-                                                                                    </rdf:Description>
-                                                                                </rdf:rest>
-                                                                            </rdf:Description>
-                                                                        </rdf:rest>
-                                                                    </rdf:Description>
-                                                                </rdf:rest>
-                                                            </rdf:Description>
-                                                        </rdf:rest>
-                                                    </rdf:Description>
-                                                </rdf:rest>
-                                            </rdf:Description>
-                                        </rdf:rest>
-                                    </rdf:Description>
-                                </rdf:rest>
-                            </rdf:Description>
-                        </rdf:rest>
-                    </rdf:Description>
-                </owl:oneOf>
-            </rdfs:Datatype>
-        </rdfs:range>
-        <rdfs:comment xml:lang="en">The emotion expressed by the character within this panel occurrence. Allowed values are the 28 affect terms from Russell&apos;s circumplex model of affect (Russell 1980): &quot;afraid&quot;, &quot;alarmed&quot;, &quot;angry&quot;, &quot;annoyed&quot;, &quot;aroused&quot;, &quot;astonished&quot;, &quot;at ease&quot;, &quot;bored&quot;, &quot;calm&quot;, &quot;content&quot;, &quot;delighted&quot;, &quot;depressed&quot;, &quot;distressed&quot;, &quot;droopy&quot;, &quot;excited&quot;, &quot;frustrated&quot;, &quot;glad&quot;, &quot;gloomy&quot;, &quot;happy&quot;, &quot;miserable&quot;, &quot;pleased&quot;, &quot;relaxed&quot;, &quot;sad&quot;, &quot;satisfied&quot;, &quot;serene&quot;, &quot;sleepy&quot;, &quot;tense&quot;, &quot;tired&quot;.</rdfs:comment>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+        <rdfs:comment xml:lang="en">The emotion expressed by the character within this panel occurrence. TO-BE-DEFINED: the allowed values will be drawn from a predefined emotion vocabulary</rdfs:comment>
         <rdfs:label xml:lang="en">emotion</rdfs:label>
     </owl:DatatypeProperty>
     
@@ -1090,7 +966,7 @@
             </owl:Class>
         </rdfs:domain>
         <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-        <rdfs:comment xml:lang="en">Describes the graphic style. On a Book, it characterises the overall visual style of the work (e.g. &quot;ligne claire&quot;, &quot;expressionist&quot;, &quot;realistic&quot;, &quot;cartoonish&quot;). On a Panel, it is used only when the panel departs from the dominant style of the book, for instance to signal a dream sequence, a flashback rendered differently, or a deliberate stylistic shift (e.g. &quot;watercolour insert&quot;, &quot;sketchy&quot;, &quot;black-and-white within colour album&quot;). Panels that follow the book&apos;s default style should leave this property absent.</rdfs:comment>
+        <rdfs:comment xml:lang="en">Describes the graphic style. On a Book, it characterises the overall visual style of the work (e.g. &quot;ligne claire&quot;, &quot;expressionist&quot;, &quot;realistic&quot;, &quot;cartoonish&quot;). On a Panel, it is used only when the panel departs from the dominant style of the book — for instance to signal a dream sequence, a flashback rendered differently, or a deliberate stylistic shift (e.g. &quot;watercolour insert&quot;, &quot;sketchy&quot;, &quot;black-and-white within colour album&quot;). Panels that follow the book&apos;s default style should leave this property absent.</rdfs:comment>
         <rdfs:label xml:lang="en">graphicStyle</rdfs:label>
     </owl:DatatypeProperty>
     
@@ -1110,9 +986,16 @@
     <!-- http://www.semanticweb.org/ajaud02/seqartonto#hasRank -->
 
     <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/ajaud02/seqartonto#hasRank">
-        <rdfs:domain rdf:resource="http://www.semanticweb.org/ajaud02/seqartonto#Panel"/>
+        <rdfs:domain>
+            <owl:Class>
+                <owl:unionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://www.semanticweb.org/ajaud02/seqartonto#Panel"/>
+                    <rdf:Description rdf:about="http://www.semanticweb.org/ajaud02/seqartonto#TextLine"/>
+                </owl:unionOf>
+            </owl:Class>
+        </rdfs:domain>
         <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#positiveInteger"/>
-        <rdfs:comment xml:lang="en">The position of the Panel in the canonical reading sequence within its Plate (1-based). The next panel can be derived from hasRank: panel P2 follows P1 if P2 has rank n+1 and both share the same Plate.</rdfs:comment>
+        <rdfs:comment xml:lang="en">The position of the element in the canonical reading sequence within its container (1-based). On Panel: position within its Plate; on TextLine: position within its Balloon, Caption, Level, or Plate. The next element can be derived from hasRank: element E2 follows E1 if E2 has rank n+1 and both share the same container.</rdfs:comment>
         <rdfs:label xml:lang="en">hasRank</rdfs:label>
     </owl:DatatypeProperty>
     
@@ -1140,12 +1023,23 @@
     
 
 
+    <!-- http://www.semanticweb.org/ajaud02/seqartonto#isAllCaps -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/ajaud02/seqartonto#isAllCaps">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/ajaud02/seqartonto#TextToken"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+        <rdfs:comment xml:lang="en">Indicates whether the token is rendered entirely in capital letters. In comics, all-caps text is common but a shift to lower-case or mixed-case within a line can signal a change of tone or volume.</rdfs:comment>
+        <rdfs:label xml:lang="en">isAllCaps</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
     <!-- http://www.semanticweb.org/ajaud02/seqartonto#isBold -->
 
     <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/ajaud02/seqartonto#isBold">
-        <rdfs:domain rdf:resource="http://www.semanticweb.org/ajaud02/seqartonto#TextSpan"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/ajaud02/seqartonto#TextToken"/>
         <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
-        <rdfs:comment xml:lang="en">Indicates whether the span is rendered in bold. Bold text within a line typically signals emphasis, stress, or increased vocal intensity.</rdfs:comment>
+        <rdfs:comment xml:lang="en">Indicates whether the token is rendered in bold. Bold text within a line typically signals emphasis, stress, or increased vocal intensity.</rdfs:comment>
         <rdfs:label xml:lang="en">isBold</rdfs:label>
     </owl:DatatypeProperty>
     
@@ -1154,34 +1048,12 @@
     <!-- http://www.semanticweb.org/ajaud02/seqartonto#isItalic -->
 
     <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/ajaud02/seqartonto#isItalic">
-        <rdfs:domain rdf:resource="http://www.semanticweb.org/ajaud02/seqartonto#TextSpan"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/ajaud02/seqartonto#TextToken"/>
         <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
-        <rdfs:comment xml:lang="en">Indicates whether the span is rendered in italic. Italic text within a line typically signals a foreign word, a title, a whisper, or a particular vocal inflection.</rdfs:comment>
+        <rdfs:comment xml:lang="en">Indicates whether the token is rendered in italic. Italic text within a line typically signals a foreign word, a title, a whisper, or a particular vocal inflection.</rdfs:comment>
         <rdfs:label xml:lang="en">isItalic</rdfs:label>
     </owl:DatatypeProperty>
     
-
-
-    <!-- http://www.semanticweb.org/ajaud02/seqartonto#textColor -->
-
-    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/ajaud02/seqartonto#textColor">
-        <rdfs:domain rdf:resource="http://www.semanticweb.org/ajaud02/seqartonto#TextSpan"/>
-        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-        <rdfs:comment xml:lang="en">The color of the text in this span, encoded as a CSS hex color string (e.g. &quot;#FF0000&quot; for red). Color variation within a line can signal emphasis, character identity, or supernatural/magical connotations.</rdfs:comment>
-        <rdfs:label xml:lang="en">textColor</rdfs:label>
-    </owl:DatatypeProperty>
-
-
-
-    <!-- http://www.semanticweb.org/ajaud02/seqartonto#textEffect -->
-
-    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/ajaud02/seqartonto#textEffect">
-        <rdfs:domain rdf:resource="http://www.semanticweb.org/ajaud02/seqartonto#TextSpan"/>
-        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-        <rdfs:comment xml:lang="en">A free-text description of any visual effect or decoration applied to this span beyond basic typographic style (e.g. &quot;yellow circle&quot;, &quot;red underline&quot;, &quot;drop shadow&quot;, &quot;outlined&quot;). Intended for graphical embellishments that cannot be expressed by isBold, isItalic, or textColor alone.</rdfs:comment>
-        <rdfs:label xml:lang="en">textEffect</rdfs:label>
-    </owl:DatatypeProperty>
-
 
 
     <!-- http://www.semanticweb.org/ajaud02/seqartonto#isLocative -->
@@ -1248,12 +1120,11 @@
                 <owl:unionOf rdf:parseType="Collection">
                     <rdf:Description rdf:about="http://www.semanticweb.org/ajaud02/seqartonto#MetaCharacter"/>
                     <rdf:Description rdf:about="http://www.semanticweb.org/ajaud02/seqartonto#MetaObject"/>
-                    <rdf:Description rdf:about="http://www.semanticweb.org/ajaud02/seqartonto#Object"/>
                 </owl:unionOf>
             </owl:Class>
         </rdfs:domain>
         <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-        <rdfs:comment xml:lang="en">The name of a meta-character, meta-object, or object occurrence as referred to in the narrative (e.g. &quot;Asterix&quot;, &quot;Excalibur&quot;, &quot;guitar&quot;).</rdfs:comment>
+        <rdfs:comment xml:lang="en">The name of a meta-character or meta-object as referred to in the narrative (e.g. &quot;Asterix&quot;, &quot;Excalibur&quot;).</rdfs:comment>
         <rdfs:label xml:lang="en">name</rdfs:label>
     </owl:DatatypeProperty>
     
@@ -1310,7 +1181,7 @@
                 </owl:oneOf>
             </rdfs:Datatype>
         </rdfs:range>
-        <rdfs:comment xml:lang="en">The narrative role of this NarrativeConstituent within its parent arc, following Cohn&apos;s Visual Narrative Grammar (2020). Functional: each constituent bears exactly one role. The value is constrained to the following enumeration: &quot;Establisher&quot; (E): sets the scene without advancing the action; &quot;Initial&quot; (I): initiates the narrative tension; &quot;Peak&quot; (P): the climactic moment that heads the constituent and determines its role at the level above; &quot;Release&quot; (R): resolves the tension after a Peak; &quot;Refiner&quot; (r): elaborates or modifies an adjacent element without independent narrative force. The role is relative to the constituent&apos;s position within its parent: a sub-constituent with role &quot;Peak&quot; is what makes the parent itself a &quot;Peak&quot; at the next level up (recursive heading).</rdfs:comment>
+        <rdfs:comment xml:lang="en">The narrative role of this NarrativeConstituent within its parent arc, following Cohn&apos;s Visual Narrative Grammar (2020). Functional: each constituent bears exactly one role. The value is constrained to the following enumeration: &quot;Establisher&quot; (E) — sets the scene without advancing the action; &quot;Initial&quot; (I) — initiates the narrative tension; &quot;Peak&quot; (P) — the climactic moment that heads the constituent and determines its role at the level above; &quot;Release&quot; (R) — resolves the tension after a Peak; &quot;Refiner&quot; (r) — elaborates or modifies an adjacent element without independent narrative force. The role is relative to the constituent&apos;s position within its parent: a sub-constituent with role &quot;Peak&quot; is what makes the parent itself a &quot;Peak&quot; at the next level up (recursive heading).</rdfs:comment>
         <rdfs:label xml:lang="en">narrativeRole</rdfs:label>
     </owl:DatatypeProperty>
     
@@ -1514,68 +1385,6 @@
     
 
 
-    <!-- http://www.semanticweb.org/ajaud02/seqartonto#textLineType -->
-
-    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/ajaud02/seqartonto#textLineType">
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
-        <rdfs:domain rdf:resource="http://www.semanticweb.org/ajaud02/seqartonto#TextLine"/>
-        <rdfs:range>
-            <rdfs:Datatype>
-                <owl:oneOf>
-                    <rdf:Description>
-                        <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#List"/>
-                        <rdf:first>diegetic</rdf:first>
-                        <rdf:rest>
-                            <rdf:Description>
-                                <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#List"/>
-                                <rdf:first>narrative</rdf:first>
-                                <rdf:rest>
-                                    <rdf:Description>
-                                        <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#List"/>
-                                        <rdf:first>paratext</rdf:first>
-                                        <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
-                                    </rdf:Description>
-                                </rdf:rest>
-                            </rdf:Description>
-                        </rdf:rest>
-                    </rdf:Description>
-                </owl:oneOf>
-            </rdfs:Datatype>
-        </rdfs:range>
-        <rdfs:comment xml:lang="en">The functional role of the text line within the plate. Allowed values: &quot;narrative&quot; (text anchored in the discourse, such as speech or thought in a Balloon, narration or description in a Caption); &quot;diegetic&quot; (text that exists as a visual inscription within the represented world, e.g. text on a building facade, a road sign, an open letter or newspaper); &quot;paratext&quot; (editorial text outside the diegesis, e.g. title, page number, credits, legal notices, or any information printed in the margins of the plate, in the Genettian sense).</rdfs:comment>
-        <rdfs:label xml:lang="en">textLineType</rdfs:label>
-    </owl:DatatypeProperty>
-    
-
-
-    <!-- http://www.semanticweb.org/ajaud02/seqartonto#textOrientation -->
-
-    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/ajaud02/seqartonto#textOrientation">
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
-        <rdfs:domain rdf:resource="http://www.semanticweb.org/ajaud02/seqartonto#TextLine"/>
-        <rdfs:range>
-            <rdfs:Datatype>
-                <owl:oneOf>
-                    <rdf:Description>
-                        <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#List"/>
-                        <rdf:first>horizontal</rdf:first>
-                        <rdf:rest>
-                            <rdf:Description>
-                                <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#List"/>
-                                <rdf:first>vertical</rdf:first>
-                                <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
-                            </rdf:Description>
-                        </rdf:rest>
-                    </rdf:Description>
-                </owl:oneOf>
-            </rdfs:Datatype>
-        </rdfs:range>
-        <rdfs:comment xml:lang="en">The physical orientation of the text line on the plate. Allowed values: &quot;horizontal&quot; (text runs left-to-right or right-to-left along the horizontal axis, as in most Western and manga layouts) or &quot;vertical&quot; (text runs top-to-bottom along the vertical axis, as in traditional East Asian comics). When absent, horizontal orientation is assumed.</rdfs:comment>
-        <rdfs:label xml:lang="en">textOrientation</rdfs:label>
-    </owl:DatatypeProperty>
-    
-
-
     <!-- http://www.semanticweb.org/ajaud02/seqartonto#timexText -->
 
     <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/ajaud02/seqartonto#timexText">
@@ -1648,16 +1457,34 @@
                 <owl:oneOf>
                     <rdf:Description>
                         <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#List"/>
-                        <rdf:first>BEFORE</rdf:first>
+                        <rdf:first>AFTER</rdf:first>
                         <rdf:rest>
                             <rdf:Description>
                                 <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#List"/>
-                                <rdf:first>IDENTITY</rdf:first>
+                                <rdf:first>BEFORE</rdf:first>
                                 <rdf:rest>
                                     <rdf:Description>
                                         <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#List"/>
-                                        <rdf:first>SIMULTANEOUS</rdf:first>
-                                        <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                                        <rdf:first>INCLUDES</rdf:first>
+                                        <rdf:rest>
+                                            <rdf:Description>
+                                                <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#List"/>
+                                                <rdf:first>IS_INCLUDED</rdf:first>
+                                                <rdf:rest>
+                                                    <rdf:Description>
+                                                        <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#List"/>
+                                                        <rdf:first>OVERLAPS</rdf:first>
+                                                        <rdf:rest>
+                                                            <rdf:Description>
+                                                                <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#List"/>
+                                                                <rdf:first>SIMULTANEOUS</rdf:first>
+                                                                <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                                                            </rdf:Description>
+                                                        </rdf:rest>
+                                                    </rdf:Description>
+                                                </rdf:rest>
+                                            </rdf:Description>
+                                        </rdf:rest>
                                     </rdf:Description>
                                 </rdf:rest>
                             </rdf:Description>
@@ -1666,7 +1493,7 @@
                 </owl:oneOf>
             </rdfs:Datatype>
         </rdfs:range>
-        <rdfs:comment xml:lang="en">The type of temporal relation between the source and target NarrativeConstituents, following TimeML (Pustejovsky et al. 2003): BEFORE (source ends before target begins in the story world, e.g. a flashback), SIMULTANEOUS (source and target co-occur in the story world, e.g. parallel narration), IDENTITY (source and target refer to the same story-world event seen from two different narrative positions).</rdfs:comment>
+        <rdfs:comment xml:lang="en">The type of temporal relation between the source and target NarrativeConstituents, following a subset of Allen&apos;s interval algebra (Allen 1983) as used in TimeML (Pustejovsky et al. 2003): BEFORE (source ends before target begins), AFTER (inverse), SIMULTANEOUS (source and target overlap fully, e.g. parallel narration), INCLUDES (source temporally contains target), IS_INCLUDED (source is contained within target), OVERLAPS (source partially overlaps target). Only annotated when the story-world order differs from the reading order.</rdfs:comment>
         <rdfs:label xml:lang="en">tlinkType</rdfs:label>
     </owl:DatatypeProperty>
     
@@ -1677,7 +1504,7 @@
     <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/ajaud02/seqartonto#visible">
         <rdfs:domain rdf:resource="http://www.semanticweb.org/ajaud02/seqartonto#Character"/>
         <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
-        <rdfs:comment xml:lang="en">Indicates whether the character is graphically represented within the panel (true) or is diegetically present but off-panel (false). A value of false allows modelling off-field characters whose presence is inferred from contextual cues, such as a speech balloon with no visible speaker, or a character whose presence is logically deduced from other visual elements (e.g. a taxi implying a driver). Attaching invisible characters to a Level ensures the knowledge graph reflects the actual narrative structure, not only its visible content.</rdfs:comment>
+        <rdfs:comment xml:lang="en">Indicates whether the character is graphically represented within the panel (true) or is diegetically present but off-panel (false). A value of false allows modelling off-field characters whose presence is inferred from contextual cues — such as a speech balloon with no visible speaker, or a character whose presence is logically deduced from other visual elements (e.g. a taxi implying a driver). Attaching invisible characters to a Level ensures the knowledge graph reflects the actual narrative structure, not only its visible content.</rdfs:comment>
         <rdfs:label xml:lang="en">visible</rdfs:label>
     </owl:DatatypeProperty>
     
@@ -1702,19 +1529,6 @@
     ///////////////////////////////////////////////////////////////////////////////////////
      -->
 
-    
-
-
-    <!-- http://www.semanticweb.org/ajaud02/seqartonto#Arc -->
-
-    <owl:Class rdf:about="http://www.semanticweb.org/ajaud02/seqartonto#Arc">
-        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/ajaud02/seqartonto#NarrativeConstituent"/>
-        <visualFill>#3D006E</visualFill>
-        <visualShape>polygon</visualShape>
-        <visualStroke>#000000</visualStroke>
-        <rdfs:comment xml:lang="en">An Arc is a major narrative division of a Story, grouping a set of Events united by a shared narrative thread, dramatic tension, or thematic continuity. Unlike an editorial chapter (a physical division of the book), an Arc is defined purely by narrative coherence. An Arc is composed of one or more Events via hasNarrativeUnit.</rdfs:comment>
-        <rdfs:label xml:lang="en">Arc</rdfs:label>
-    </owl:Class>
     
 
 
@@ -1762,19 +1576,6 @@
         <visualStroke>#000000</visualStroke>
         <rdfs:comment xml:lang="en">A Character is the local representation of a MetaCharacter within a panel or a plate. It constitutes the visual and contextual instantiation of that MetaCharacter at a specific moment in the narrative, embedded within a particular spatial and temporal frame. A single MetaCharacter may thus be represented by multiple Characters across different panels or plates, each potentially varying in appearance, posture, expression, or scale depending on the artistic choices of the author.</rdfs:comment>
         <rdfs:label xml:lang="en">Character</rdfs:label>
-    </owl:Class>
-    
-
-
-    <!-- http://www.semanticweb.org/ajaud02/seqartonto#Event -->
-
-    <owl:Class rdf:about="http://www.semanticweb.org/ajaud02/seqartonto#Event">
-        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/ajaud02/seqartonto#NarrativeConstituent"/>
-        <visualFill>#6A0DAD</visualFill>
-        <visualShape>polygon</visualShape>
-        <visualStroke>#000000</visualStroke>
-        <rdfs:comment xml:lang="en">An Event is a NarrativeConstituent that unifies a set of Scenes around a single dramatic question, understood as a causal or intentional thread that persists across changes of location and protagonist cast. An Event opens with an unresolved tension and closes when that tension is resolved or abandoned. Grounded in the causal and intentional dimensions of the Event-Indexing Model (Zwaan &amp; Radvansky 1998) and event segmentation theory (Zacks &amp; Tversky 2001). Corresponds to the macro-event level of Chen (2025). An Event is composed of one or more Scenes via hasNarrativeUnit.</rdfs:comment>
-        <rdfs:label xml:lang="en">Event</rdfs:label>
     </owl:Class>
     
 
@@ -1833,7 +1634,7 @@
         <visualFill>#6A0DAD</visualFill>
         <visualShape>polygon</visualShape>
         <visualStroke>#000000</visualStroke>
-        <rdfs:comment xml:lang="en">Abstract superclass of all narrative units in 9thArtOnto. A NarrativeConstituent represents a coherent grouping of narrative content at one of five levels of abstraction, forming a strict tree: Story → Arc → Event → Scene → Segment. The hierarchy integrates three theoretical frameworks: (1) the editorial/structural level (Story, Arc) groups events by narrative coherence rather than by physical book division; (2) the cognitive level (Event, Scene) is grounded in the Event-Indexing Model (Zwaan &amp; Radvansky 1998) and event segmentation theory (Zacks &amp; Tversky 2001); (3) the visual-grammatical level (Segment) corresponds to the VNG constituent (Arc) of Cohn (2013), the only level that directly realises Levels via instantiates and bears a narrativeRole (Establisher, Initial, Peak, Release, Refiner). Location (hasNarrativeLocation) is anchored at the Scene level, as a Scene is defined by spatial, character, and action continuity. Non-leaf levels (Story, Arc, Event, Scene) are realised indirectly through their descendant Segments. Composition is navigated uniformly via hasNarrativeUnit at every level of the hierarchy. Inspired by Cohn (2013, 2020), GOLEM&apos;s G9_Narrative_Unit (Pianzola et al. 2025), and Chen&apos;s (2025) hierarchical event framework.</rdfs:comment>
+        <rdfs:comment xml:lang="en">Abstract superclass of all narrative units in SequArtOnto. A NarrativeConstituent represents a coherent grouping of narrative content at one of five levels of abstraction, forming a strict tree: Story → Chapter → Event → Scene → Segment. The hierarchy integrates three theoretical frameworks: (1) the editorial/structural level (Story, Chapter) follows standard comics publishing conventions; (2) the cognitive level (Event, Scene) is grounded in the Event-Indexing Model (Zwaan &amp; Radvansky 1998) and event segmentation theory (Zacks &amp; Tversky 2001); (3) the visual-grammatical level (Segment) corresponds to the VNG constituent (Arc) of Cohn (2013), the only level that directly realises Levels via instantiates and bears a narrativeRole (Establisher, Initial, Peak, Release, Refiner). Location (hasNarrativeLocation) is anchored at the Scene level, as a Scene is defined by spatial, character, and action continuity. Non-leaf levels (Story, Chapter, Event, Scene) are realised indirectly through their descendant Segments. Composition is navigated via hasNarrativeUnit (generic) or its specialisations hasChapter, hasEvent, hasScene, hasSegment. Inspired by Cohn (2013, 2020), GOLEM&apos;s G9_Narrative_Unit (Meghini et al. 2021), and Chen&apos;s (2025) hierarchical event framework.</rdfs:comment>
         <rdfs:label xml:lang="en">NarrativeConstituent</rdfs:label>
     </owl:Class>
     
@@ -1899,19 +1700,6 @@
     
 
 
-    <!-- http://www.semanticweb.org/ajaud02/seqartonto#Scene -->
-
-    <owl:Class rdf:about="http://www.semanticweb.org/ajaud02/seqartonto#Scene">
-        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/ajaud02/seqartonto#NarrativeConstituent"/>
-        <visualFill>#9B30FF</visualFill>
-        <visualShape>polygon</visualShape>
-        <visualStroke>#000000</visualStroke>
-        <rdfs:comment xml:lang="en">A Scene is a NarrativeConstituent defined by the simultaneous stability of two perceptually detectable dimensions: spatial (same NarrativeLocation) and character (same set of protagonists). Following the Event-Indexing Model (Zwaan &amp; Radvansky 1998; Zwaan, Magliano &amp; Graesser 1995), a new Scene begins whenever one of these dimensions shifts significantly: a change of location or a significant change in the protagonist cast. The causal and intentional dimensions of the EIM are delegated to the Event level, which groups Scenes around a shared dramatic question. The Scene bears the hasNarrativeLocation link and is composed of one or more Segments via hasNarrativeUnit.</rdfs:comment>
-        <rdfs:label xml:lang="en">Scene</rdfs:label>
-    </owl:Class>
-    
-
-
     <!-- http://www.semanticweb.org/ajaud02/seqartonto#SceneSetting -->
 
     <owl:Class rdf:about="http://www.semanticweb.org/ajaud02/seqartonto#SceneSetting">
@@ -1920,32 +1708,6 @@
         <visualStroke>#000000</visualStroke>
         <rdfs:comment xml:lang="en">A SceneSetting captures the visual appearance of the environment as it is rendered in a specific Level. It is the visual instance of a NarrativeLocation: while a NarrativeLocation is the diegetic concept (&quot;the forest&quot;), a SceneSetting describes how that location looks in a particular panel level (&quot;dense foggy forest at night&quot;). Anchored on Level (via hasSceneSetting) and linked to its corresponding NarrativeLocation (via realizesLocation). Mirrors the MetaCharacter/Character pattern for identity persistence vs. local visual description.</rdfs:comment>
         <rdfs:label xml:lang="en">SceneSetting</rdfs:label>
-    </owl:Class>
-    
-
-
-    <!-- http://www.semanticweb.org/ajaud02/seqartonto#Segment -->
-
-    <owl:Class rdf:about="http://www.semanticweb.org/ajaud02/seqartonto#Segment">
-        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/ajaud02/seqartonto#NarrativeConstituent"/>
-        <visualFill>#C76BFF</visualFill>
-        <visualShape>polygon</visualShape>
-        <visualStroke>#000000</visualStroke>
-        <rdfs:comment xml:lang="en">A Segment is the leaf NarrativeConstituent in the narrative hierarchy. It corresponds to a VNG constituent (Arc) in the sense of Cohn (2013): a grouping of one or more Levels that together bear a single narrative role (Establisher, Initial, Peak, Release, or Refiner) relative to the parent Scene. The Segment is the only level that directly instantiates Levels (via instantiates) and the only level that carries a narrativeRole value. Higher levels (Scene, Event, Arc, Story) are realised indirectly through their descendant Segments. APPLICABILITY WARNING: narrativeRole should only be annotated when the visual track carries the narrative autonomously. As Cohn (2015) cautions: &quot;not all sequences of images use the principles of VNG. In particular, narrative sequences used in multimodal contexts (i.e., combining text and image) may not have a clear-cut narrative structure, due to the meaning being distributed into both text and image. […] The structures of VNG appear most strongly in wordless visual narratives.&quot; A practical diagnostic: if deleting the text causes the visuals to lose their overall gist, narrativeRole should be left unassigned on this Segment.</rdfs:comment>
-        <rdfs:label xml:lang="en">Segment</rdfs:label>
-    </owl:Class>
-    
-
-
-    <!-- http://www.semanticweb.org/ajaud02/seqartonto#Story -->
-
-    <owl:Class rdf:about="http://www.semanticweb.org/ajaud02/seqartonto#Story">
-        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/ajaud02/seqartonto#NarrativeConstituent"/>
-        <visualFill>#1A0040</visualFill>
-        <visualShape>polygon</visualShape>
-        <visualStroke>#000000</visualStroke>
-        <rdfs:comment xml:lang="en">A Story is the top-level NarrativeConstituent representing the complete narrative content of a comic work (the fabula in its entirety). It is the narrative counterpart of a Book: while a Book is the physical artefact, a Story is the abstract sequence of events it conveys. A Story is composed of one or more Arcs via hasNarrativeUnit.</rdfs:comment>
-        <rdfs:label xml:lang="en">Story</rdfs:label>
     </owl:Class>
     
 
@@ -1968,7 +1730,7 @@
         <visualFill>#FF8C00</visualFill>
         <visualShape>diamond</visualShape>
         <visualStroke>#000000</visualStroke>
-        <rdfs:comment xml:lang="en">A reified temporal relation between two NarrativeConstituents, expressing how their story-world intervals relate according to Allen&apos;s interval algebra (Allen 1983). Only instantiated when the fabula order differs from or complexifies the syuzhet order: flashbacks (BEFORE/AFTER), flash-forwards (AFTER), and parallel narration (SIMULTANEOUS). The default case (consecutive constituents in both reading and story order) requires no TemporalLink.</rdfs:comment>
+        <rdfs:comment xml:lang="en">A reified temporal relation between two NarrativeConstituents (arc-level), expressing how their story-world intervals relate according to Allen&apos;s interval algebra (Allen 1983). Inspired by TimeML&apos;s TLINK (Pustejovsky et al. 2003) and NOnt&apos;s temporal modelling (Meghini et al. 2021). Only instantiated when the fabula order differs from or complexifies the syuzhet order: flashbacks (BEFORE/AFTER), flash-forwards (AFTER), and parallel narration (SIMULTANEOUS). The default case — consecutive arcs in both reading and story order — requires no TemporalLink.</rdfs:comment>
         <rdfs:label xml:lang="en">TemporalLink</rdfs:label>
     </owl:Class>
     
@@ -1980,22 +1742,101 @@
         <visualFill>#808080</visualFill>
         <visualShape>circle</visualShape>
         <visualStroke>#000000</visualStroke>
-        <rdfs:comment xml:lang="en">A TextLine represents a single physical line of text as it appears on the plate. It allows fine-grained annotation of text independently of its container. A TextLine may be contained in a Balloon, a Caption, or a FreeText element (e.g. text on the facade of a building or an object); containers link to their TextLines via hasTextLine. A TextLine is further decomposed into one or more TextSpans via hasTextSpan, only when typographic style varies within the line.</rdfs:comment>
+        <rdfs:comment xml:lang="en">A TextLine represents a single physical line of text as it appears on the plate. It allows fine-grained annotation of text independently of its container. A TextLine may be contained in a Balloon, a Caption, or a FreeText element (e.g. text on the facade of a building or an object). Its content is accessible either directly via the content property or at a finer level through its TextTokens.</rdfs:comment>
         <rdfs:label xml:lang="en">TextLine</rdfs:label>
     </owl:Class>
     
 
 
-    <!-- http://www.semanticweb.org/ajaud02/seqartonto#TextSpan -->
+    <!-- http://www.semanticweb.org/ajaud02/seqartonto#TextToken -->
 
-    <owl:Class rdf:about="http://www.semanticweb.org/ajaud02/seqartonto#TextSpan">
+    <owl:Class rdf:about="http://www.semanticweb.org/ajaud02/seqartonto#TextToken">
         <visualFill>#D3D3D3</visualFill>
         <visualShape>circle</visualShape>
         <visualStroke>#000000</visualStroke>
-        <rdfs:comment xml:lang="en">A TextSpan represents a word or group of words within a TextLine that share a uniform typographic style. This level of granularity is justified by the fact that typographic style can vary within a single line, as a word rendered in bold, italic, or all-caps carries its own meaning and may signal emphasis, vocal stress, or a change of register. Multiple TextSpans within a TextLine are only warranted when there is actual stylistic variation; a stylistically homogeneous line maps to a single TextSpan.</rdfs:comment>
-        <rdfs:label xml:lang="en">TextSpan</rdfs:label>
+        <rdfs:comment xml:lang="en">A TextToken represents a word or fragment within a TextLine. This level of granularity is justified by the fact that typographic style can vary within a single line — a word rendered in bold, italic, or all-caps carries its own meaning and may signal emphasis, vocal stress, or a change of register.</rdfs:comment>
+        <rdfs:label xml:lang="en">TextToken</rdfs:label>
     </owl:Class>
     
+
+
+    <!-- http://www.semanticweb.org/ajaud02/seqartonto#Story -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/ajaud02/seqartonto#Story">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/ajaud02/seqartonto#NarrativeConstituent"/>
+        <visualFill>#1A0040</visualFill>
+        <visualShape>polygon</visualShape>
+        <visualStroke>#000000</visualStroke>
+        <rdfs:comment xml:lang="en">A Story is the top-level NarrativeConstituent representing the complete narrative content of a comic work (the fabula in its entirety). It is the narrative counterpart of a Book: while a Book is the physical artefact, a Story is the abstract sequence of events it conveys. A Story is composed of one or more Chapters via hasChapter.</rdfs:comment>
+        <rdfs:label xml:lang="en">Story</rdfs:label>
+    </owl:Class>
+
+
+
+    <!-- http://www.semanticweb.org/ajaud02/seqartonto#Chapter -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/ajaud02/seqartonto#Chapter">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/ajaud02/seqartonto#NarrativeConstituent"/>
+        <visualFill>#3D006E</visualFill>
+        <visualShape>polygon</visualShape>
+        <visualStroke>#000000</visualStroke>
+        <rdfs:comment xml:lang="en">A Chapter is a major narrative division of a Story, typically corresponding to an editorial chapter or album section. It groups a set of Events united by a shared narrative arc or thematic continuity. A Chapter is composed of one or more Events via hasEvent.</rdfs:comment>
+        <rdfs:label xml:lang="en">Chapter</rdfs:label>
+    </owl:Class>
+
+
+
+    <!-- http://www.semanticweb.org/ajaud02/seqartonto#Event -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/ajaud02/seqartonto#Event">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/ajaud02/seqartonto#NarrativeConstituent"/>
+        <visualFill>#6A0DAD</visualFill>
+        <visualShape>polygon</visualShape>
+        <visualStroke>#000000</visualStroke>
+        <rdfs:comment xml:lang="en">An Event is a macro-level narrative arc within a Chapter, unifying a set of Scenes around a common goal, dramatic tension, or causal thread. Corresponds to the macro-event level of Chen (2025) and the event segmentation theory of Zacks &amp; Tversky (2001). An Event is composed of one or more Scenes via hasScene.</rdfs:comment>
+        <rdfs:label xml:lang="en">Event</rdfs:label>
+    </owl:Class>
+
+
+
+    <!-- http://www.semanticweb.org/ajaud02/seqartonto#Scene -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/ajaud02/seqartonto#Scene">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/ajaud02/seqartonto#NarrativeConstituent"/>
+        <visualFill>#9B30FF</visualFill>
+        <visualShape>polygon</visualShape>
+        <visualStroke>#000000</visualStroke>
+        <rdfs:comment xml:lang="en">A Scene is a NarrativeConstituent defined by the simultaneous stability of three dimensions: spatial (same NarrativeLocation), character (same set of protagonists), and action (continuous causal/intentional thread). Following the Event-Indexing Model (Zwaan &amp; Radvansky 1998; Zwaan, Magliano &amp; Graesser 1995), a new Scene begins whenever one of these dimensions shifts significantly. The Scene bears the hasNarrativeLocation link and is composed of one or more Segments via hasSegment.</rdfs:comment>
+        <rdfs:label xml:lang="en">Scene</rdfs:label>
+    </owl:Class>
+
+
+
+    <!-- http://www.semanticweb.org/ajaud02/seqartonto#Segment -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/ajaud02/seqartonto#Segment">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/ajaud02/seqartonto#NarrativeConstituent"/>
+        <visualFill>#C76BFF</visualFill>
+        <visualShape>polygon</visualShape>
+        <visualStroke>#000000</visualStroke>
+        <rdfs:comment xml:lang="en">A Segment is the leaf NarrativeConstituent in the narrative hierarchy. It corresponds to a VNG constituent (Arc) in the sense of Cohn (2013): a grouping of one or more Levels that together bear a single narrative role (Establisher, Initial, Peak, Release, or Refiner) relative to the parent Scene. The Segment is the only level that directly instantiates Levels (via instantiates) and the only level that carries a narrativeRole value. Higher levels (Scene, Event, Chapter, Story) are realised indirectly through their descendant Segments. APPLICABILITY WARNING — narrativeRole should only be annotated when the visual track carries the narrative autonomously. As Cohn (2015) cautions: &quot;not all sequences of images use the principles of VNG. In particular, narrative sequences used in multimodal contexts (i.e., combining text and image) may not have a clear-cut narrative structure, due to the meaning being distributed into both text and image. […] The structures of VNG appear most strongly in wordless visual narratives.&quot; A practical diagnostic: if deleting the text causes the visuals to lose their overall gist, narrativeRole should be left unassigned on this Segment.</rdfs:comment>
+        <rdfs:label xml:lang="en">Segment</rdfs:label>
+    </owl:Class>
+
+
+
+    <!-- AllDisjointClasses: Story, Chapter, Event, Scene, Segment -->
+
+    <owl:AllDisjointClasses>
+        <owl:members rdf:parseType="Collection">
+            <rdf:Description rdf:about="http://www.semanticweb.org/ajaud02/seqartonto#Story"/>
+            <rdf:Description rdf:about="http://www.semanticweb.org/ajaud02/seqartonto#Chapter"/>
+            <rdf:Description rdf:about="http://www.semanticweb.org/ajaud02/seqartonto#Event"/>
+            <rdf:Description rdf:about="http://www.semanticweb.org/ajaud02/seqartonto#Scene"/>
+            <rdf:Description rdf:about="http://www.semanticweb.org/ajaud02/seqartonto#Segment"/>
+        </owl:members>
+    </owl:AllDisjointClasses>
+
 
 
     <!-- http://www.semanticweb.org/ajaud02/seqartonto#Timex -->
@@ -2007,27 +1848,6 @@
         <rdfs:comment xml:lang="en">A temporal expression found in a Caption (typically captionType &quot;Effect&quot;), such as &quot;Three years later&quot; or &quot;The next morning&quot;. Corresponds to TimeML&apos;s TIMEX3 annotation standard (ISO 24617-1). Carries the original text (timexText), the expression type (timexType: DATE, TIME, DURATION, SET), and optionally a normalized ISO 8601 value (timexValue).</rdfs:comment>
         <rdfs:label xml:lang="en">Timex</rdfs:label>
     </owl:Class>
-    
-
-
-    <!-- 
-    ///////////////////////////////////////////////////////////////////////////////////////
-    //
-    // General axioms
-    //
-    ///////////////////////////////////////////////////////////////////////////////////////
-     -->
-
-    <rdf:Description>
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#AllDisjointClasses"/>
-        <owl:members rdf:parseType="Collection">
-            <rdf:Description rdf:about="http://www.semanticweb.org/ajaud02/seqartonto#Arc"/>
-            <rdf:Description rdf:about="http://www.semanticweb.org/ajaud02/seqartonto#Event"/>
-            <rdf:Description rdf:about="http://www.semanticweb.org/ajaud02/seqartonto#Scene"/>
-            <rdf:Description rdf:about="http://www.semanticweb.org/ajaud02/seqartonto#Segment"/>
-            <rdf:Description rdf:about="http://www.semanticweb.org/ajaud02/seqartonto#Story"/>
-        </owl:members>
-    </rdf:Description>
 </rdf:RDF>
 
 

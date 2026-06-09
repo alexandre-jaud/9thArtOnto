@@ -1,0 +1,55 @@
+{
+  "panel": {
+    "stroke": "blue",
+    "fill": "rgba(0, 0, 255, 0.1)"
+  },
+  "character": {
+    "stroke": "red",
+    "fill": "rgba(128, 0, 128, 0.1)"
+  },
+  "balloon": {
+    "stroke": "#90D5FF",
+    "fill": "rgba(128, 0, 128, 0.1)"
+  },
+  "caption": {
+    "stroke": "pink",
+    "fill": "rgba(128, 0, 128, 0.1)"
+  },
+  "object": {
+    "stroke": "#FFBF00",
+    "fill": "rgba(128, 0, 128, 0.1)"
+  },
+  "extra": {
+    "stroke": "#00CED1",
+    "fill": "rgba(0, 206, 209, 0.15)"
+  },
+  "onomatopoeia": {
+    "stroke": "#296a2b",
+    "fill": "rgba(41, 106, 43, 0.15)"
+  },
+  "textspan": {
+    "stroke": "#A0A0A0",
+    "fill": "rgba(211, 211, 211, 0.3)"
+  },
+  "metaCharacter": {
+    "stroke": "#FF00FF",
+    "fill": "rgba(255, 0, 255, 0.15)"
+  },
+  "narrativeLocation": {
+    "stroke": "#2E8B57",
+    "fill": "rgba(46, 139, 87, 0.15)"
+  },
+  "sceneSetting": {
+    "stroke": "#3a8a3a",
+    "fill": "rgba(144, 238, 144, 0.2)"
+  },
+  "default": {
+    "stroke": "gray",
+    "fill": "rgba(100, 100, 100, 0.1)"
+  },
+
+  "selected": {
+    "stroke": "yellow",
+    "fill": "rgba(255, 255, 0, 0.2)"
+  }
+}

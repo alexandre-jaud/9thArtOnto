@@ -1,0 +1,2657 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SequArtOnto – Documentation</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: "Segoe UI", system-ui, sans-serif;
+      background: #f8f9fb;
+      color: #1a202c;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    /* ── Header ── */
+    header {
+      background: #ffffff;
+      border-bottom: 1px solid #e2e8f0;
+      padding: 1.25rem 2rem;
+      display: flex;
+      align-items: baseline;
+      gap: 1rem;
+    }
+    header h1 { font-size: 1.4rem; font-weight: 700; color: #2d3748; }
+    header .subtitle { font-size: .85rem; color: #a0aec0; }
+
+    /* ── Layout ── */
+    .layout { display: flex; flex: 1; }
+
+    /* ── Sidebar ── */
+    aside {
+      width: 220px;
+      flex-shrink: 0;
+      background: #ffffff;
+      border-right: 1px solid #e2e8f0;
+      padding: 1.5rem 0;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+    }
+    .sidebar-section {
+      padding: .75rem 1rem .4rem;
+      font-size: .7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: #a0aec0;
+    }
+    .sidebar-section + .sidebar-section { margin-top: .5rem; border-top: 1px solid #f0f4f8; }
+    .nav-list { list-style: none; }
+    .nav-sublist { list-style: none; }
+
+    /* Row wrapper (carries the indent) */
+    .nav-row {
+      display: flex;
+      align-items: center;
+      gap: .2rem;
+      border-left: 3px solid transparent;
+      transition: background .15s, border-color .15s;
+    }
+    .nav-row:hover { background: #edf2f7; border-left-color: #2b6cb0; }
+    .nav-row.active { background: #ebf8ff; border-left-color: #2b6cb0; }
+
+    /* Toggle button */
+    .nav-toggle {
+      flex-shrink: 0;
+      background: none; border: none;
+      font-size: .75rem; color: #a0aec0;
+      cursor: pointer; padding: 0 .2rem;
+      line-height: 1;
+      transition: color .15s, transform .15s;
+    }
+    .nav-toggle:hover { color: #4a5568; }
+    .nav-toggle.collapsed { transform: rotate(-90deg); }
+
+    /* The actual anchor */
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: .4rem;
+      padding: .42rem .5rem .42rem 0;
+      font-size: .88rem;
+      color: #4a5568;
+      text-decoration: none;
+      flex: 1;
+      min-width: 0;
+    }
+    .nav-link span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .nav-row:hover .nav-link { color: #2b6cb0; }
+    .nav-row.active .nav-link { color: #2b6cb0; font-weight: 600; }
+    .nav-link--rel { color: #6b7280; font-style: italic; }
+    .nav-row--rel:hover { background: #faf5ff; border-left-color: #7c3aed; }
+    .nav-row--rel:hover .nav-link--rel { color: #7c3aed; }
+    .nav-row--rel.active { background: #faf5ff; border-left-color: #7c3aed; }
+    .nav-row--rel.active .nav-link--rel { color: #7c3aed; }
+
+    /* ── Main content ── */
+    main { flex: 1; padding: 2.5rem 3rem; max-width: 1100px; }
+    .section-heading {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #a0aec0;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      margin-bottom: 1.25rem;
+      padding-bottom: .4rem;
+      border-bottom: 2px solid #e2e8f0;
+    }
+    .section-heading + .section-heading { margin-top: 2.5rem; }
+
+    /* ── Detail panel ── */
+    .detail-panel {
+      margin-bottom: 2rem;
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .detail-title {
+      font-size: 1.1rem; font-weight: 700; color: #1e40af;
+      padding: .9rem 1.5rem;
+      background: #eff6ff;
+      border-bottom: 1px solid #bfdbfe;
+    }
+    .detail-title--rel { color: #6d28d9; background: #faf5ff; border-bottom-color: #e9d8fd; }
+    .detail-section {
+      display: flex; gap: 1rem;
+      padding: .85rem 1.5rem;
+      border-bottom: 1px solid #f0f4f8;
+      align-items: baseline;
+    }
+    .detail-section:last-child { border-bottom: none; }
+    .detail-label {
+      flex-shrink: 0; width: 130px;
+      font-size: .78rem; font-weight: 600;
+      text-transform: uppercase; letter-spacing: .05em;
+      color: #a0aec0;
+    }
+    .detail-value { font-size: .92rem; color: #4a5568; line-height: 1.6; }
+    .detail-uri { font-size: .78rem; color: #718096; word-break: break-all; }
+
+    /* ── Badges ── */
+    .badge {
+      display: inline-block; font-size: .78rem;
+      padding: .2rem .7rem;
+      background: #ebf8ff; color: #2b6cb0; border: 1px solid #bee3f8;
+      border-radius: 999px; margin-right: .3rem;
+    }
+    .badge-range { background: #f0fff4; color: #276749; border-color: #9ae6b4; }
+    .badge-enum { background: #fefce8; color: #854d0e; border-color: #fde68a; }
+    .badge-inverse { background: #faf5ff; color: #6d28d9; border-color: #e9d8fd; }
+
+    /* ── Property tables ── */
+    .detail-section--table { align-items: flex-start; }
+    .prop-table { width: 100%; border-collapse: collapse; font-size: .85rem; }
+    .prop-table thead tr { background: #f7fafc; }
+    .prop-table th {
+      text-align: left; padding: .4rem .75rem;
+      font-size: .72rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .05em; color: #a0aec0; border-bottom: 1px solid #e2e8f0;
+    }
+    .prop-table td { padding: .5rem .75rem; border-bottom: 1px solid #f0f4f8; color: #4a5568; vertical-align: top; }
+    .prop-table tbody tr:last-child td { border-bottom: none; }
+    .prop-name { font-weight: 600; color: #2d3748; white-space: nowrap; }
+    .prop-comment { color: #718096; }
+
+    /* ── Visual node preview ── */
+    .visual-preview { display: flex; align-items: center; gap: .75rem; }
+    .visual-meta { display: flex; flex-wrap: wrap; gap: .4rem; align-items: center; }
+    .visual-chip {
+      display: inline-block; font-size: .75rem;
+      padding: .2rem .6rem; border: 1px solid #e2e8f0;
+      border-radius: 4px; background: #f7fafc; color: #4a5568; font-family: monospace;
+    }
+
+    /* ── Relations visuelles ── */
+    .detail-section--rels { align-items: flex-start; }
+    .rel-list { display: flex; flex-direction: column; gap: .75rem; }
+    .rel-row {
+      display: flex; align-items: center; gap: .75rem;
+      padding: .6rem .9rem;
+      background: #faf5ff; border: 1px solid #e9d8fd; border-radius: 8px;
+    }
+    .rel-node { display: flex; flex-direction: column; align-items: center; gap: .25rem; min-width: 55px; }
+    .rel-node-label { font-size: .72rem; font-weight: 600; color: #4a5568; text-align: center; }
+    .rel-arrow { flex: 1; display: flex; flex-direction: column; align-items: center; gap: .15rem; }
+    .rel-prop-label { font-size: .78rem; font-weight: 600; color: #6d28d9; }
+    .arrow-svg { width: 80px; height: 20px; }
+
+    /* ── Colonne exemple ── */
+    .prop-see-also { white-space: nowrap; }
+
+    /* ── Bouton image ── */
+    .img-btn {
+      margin-left: .5rem;
+      font-size: .72rem;
+      padding: .15rem .5rem;
+      background: #eff6ff;
+      color: #1d4ed8;
+      border: 1px solid #bfdbfe;
+      border-radius: 4px;
+      cursor: pointer;
+      vertical-align: middle;
+      transition: background .15s;
+    }
+    .img-btn:hover { background: #dbeafe; }
+
+    /* ── Modale image ── */
+    .modal-backdrop {
+      display: none;
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,.6);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-backdrop.open { display: flex; }
+    .modal-box {
+      background: #fff;
+      border-radius: 12px;
+      padding: 1rem;
+      max-width: 90vw;
+      max-height: 90vh;
+      box-shadow: 0 20px 60px rgba(0,0,0,.4);
+      display: flex;
+      flex-direction: column;
+      gap: .75rem;
+    }
+    .modal-box img {
+      max-width: 80vw;
+      max-height: 75vh;
+      object-fit: contain;
+      border-radius: 6px;
+    }
+    .modal-close {
+      align-self: flex-end;
+      background: none;
+      border: none;
+      font-size: 1.2rem;
+      cursor: pointer;
+      color: #718096;
+    }
+    .modal-close:hover { color: #1a202c; }
+
+    /* ── Footer ── */
+    footer {
+      text-align: center; padding: 1.2rem;
+      font-size: .78rem; color: #a0aec0;
+      border-top: 1px solid #e2e8f0; background: #ffffff;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>SequArtOnto</h1>
+  <span class="subtitle">Visual documentation</span>
+</header>
+
+<div class="layout">
+  <aside>
+    <div class="sidebar-section">Classes (25)</div>
+    <ul class="nav-list"><li class="nav-item"><div class="nav-row nav-row--leaf" style="padding-left:2.50rem"><a href="#class-Balloon" class="nav-link"><svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><circle cx="8" cy="8" r="6" fill="#90D5FF" stroke="#000000" stroke-width="2"/></svg><span>Balloon</span></a></div></li>
+<li class="nav-item"><div class="nav-row nav-row--leaf" style="padding-left:2.50rem"><a href="#class-Book" class="nav-link"><svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><polygon points="8,2 14,8 8,14 2,8" fill="#4169E1" stroke="#000000" stroke-width="2"/></svg><span>Book</span></a></div></li>
+<li class="nav-item"><div class="nav-row nav-row--leaf" style="padding-left:2.50rem"><a href="#class-Caption" class="nav-link"><svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="2" width="12" height="12" rx="3" fill="#ffadf2" stroke="#000000" stroke-width="2"/></svg><span>Caption</span></a></div></li>
+<li class="nav-item"><div class="nav-row nav-row--leaf" style="padding-left:2.50rem"><a href="#class-Character" class="nav-link"><svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><circle cx="8" cy="8" r="6" fill="#FF0000" stroke="#000000" stroke-width="2"/></svg><span>Character</span></a></div></li>
+<li class="nav-item"><div class="nav-row nav-row--leaf" style="padding-left:2.50rem"><a href="#class-Interaction" class="nav-link"><svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><polygon points="8,2 14,14 2,14" fill="#FF8C00" stroke="#000000" stroke-width="2"/></svg><span>Interaction</span></a></div></li>
+<li class="nav-item"><div class="nav-row nav-row--leaf" style="padding-left:2.50rem"><a href="#class-Level" class="nav-link"><svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="2" width="12" height="12" rx="3" fill="#ff6600" stroke="#000000" stroke-width="2"/></svg><span>Level</span></a></div></li>
+<li class="nav-item"><div class="nav-row nav-row--leaf" style="padding-left:2.50rem"><a href="#class-MetaCharacter" class="nav-link"><svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><circle cx="8" cy="8" r="6" fill="#FF00FF" stroke="#000000" stroke-width="2"/></svg><span>MetaCharacter</span></a></div></li>
+<li class="nav-item"><div class="nav-row nav-row--leaf" style="padding-left:2.50rem"><a href="#class-MetaObject" class="nav-link"><svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><circle cx="8" cy="8" r="6" fill="#FFFE00" stroke="#000000" stroke-width="2"/></svg><span>MetaObject</span></a></div></li>
+<li class="nav-item"><div class="nav-row" style="padding-left:1.10rem"><button class="nav-toggle" title="Réduire/développer">▾</button><a href="#class-NarrativeConstituent" class="nav-link"><svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><polygon points="8,2 14,8 8,14 2,8" fill="#6A0DAD" stroke="#000000" stroke-width="2"/></svg><span>NarrativeConstituent</span></a></div><ul class="nav-sublist"><li class="nav-item"><div class="nav-row nav-row--leaf" style="padding-left:3.60rem"><a href="#class-Arc" class="nav-link"><svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><polygon points="8,2 14,8 8,14 2,8" fill="#3D006E" stroke="#000000" stroke-width="2"/></svg><span>Arc</span></a></div></li>
+<li class="nav-item"><div class="nav-row nav-row--leaf" style="padding-left:3.60rem"><a href="#class-Event" class="nav-link"><svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><polygon points="8,2 14,8 8,14 2,8" fill="#6A0DAD" stroke="#000000" stroke-width="2"/></svg><span>Event</span></a></div></li>
+<li class="nav-item"><div class="nav-row nav-row--leaf" style="padding-left:3.60rem"><a href="#class-Scene" class="nav-link"><svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><polygon points="8,2 14,8 8,14 2,8" fill="#9B30FF" stroke="#000000" stroke-width="2"/></svg><span>Scene</span></a></div></li>
+<li class="nav-item"><div class="nav-row nav-row--leaf" style="padding-left:3.60rem"><a href="#class-Segment" class="nav-link"><svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><polygon points="8,2 14,8 8,14 2,8" fill="#C76BFF" stroke="#000000" stroke-width="2"/></svg><span>Segment</span></a></div></li>
+<li class="nav-item"><div class="nav-row nav-row--leaf" style="padding-left:3.60rem"><a href="#class-Story" class="nav-link"><svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><polygon points="8,2 14,8 8,14 2,8" fill="#1A0040" stroke="#000000" stroke-width="2"/></svg><span>Story</span></a></div></li>
+</ul></li>
+<li class="nav-item"><div class="nav-row nav-row--leaf" style="padding-left:2.50rem"><a href="#class-NarrativeLocation" class="nav-link"><svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><polygon points="8,2 14,8 8,14 2,8" fill="#2E8B57" stroke="#000000" stroke-width="2"/></svg><span>NarrativeLocation</span></a></div></li>
+<li class="nav-item"><div class="nav-row nav-row--leaf" style="padding-left:2.50rem"><a href="#class-Object" class="nav-link"><svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><circle cx="8" cy="8" r="6" fill="#FFBF00" stroke="#000000" stroke-width="2"/></svg><span>Object</span></a></div></li>
+<li class="nav-item"><div class="nav-row nav-row--leaf" style="padding-left:2.50rem"><a href="#class-Onomatopoeia" class="nav-link"><svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><circle cx="8" cy="8" r="6" fill="#296a2b" stroke="#000000" stroke-width="2"/></svg><span>Onomatopoeia</span></a></div></li>
+<li class="nav-item"><div class="nav-row nav-row--leaf" style="padding-left:2.50rem"><a href="#class-Panel" class="nav-link"><svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="2" width="12" height="12" rx="3" fill="#ffffff" stroke="#000000" stroke-width="2"/></svg><span>Panel</span></a></div></li>
+<li class="nav-item"><div class="nav-row nav-row--leaf" style="padding-left:2.50rem"><a href="#class-Plate" class="nav-link"><svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><polygon points="8,2 14,8 8,14 2,8" fill="#FF6347" stroke="#000000" stroke-width="2"/></svg><span>Plate</span></a></div></li>
+<li class="nav-item"><div class="nav-row nav-row--leaf" style="padding-left:2.50rem"><a href="#class-SceneSetting" class="nav-link"><svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><polygon points="8,2 14,8 8,14 2,8" fill="#90EE90" stroke="#000000" stroke-width="2"/></svg><span>SceneSetting</span></a></div></li>
+<li class="nav-item"><div class="nav-row nav-row--leaf" style="padding-left:2.50rem"><a href="#class-Tail" class="nav-link"><svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><polygon points="8,2 14,14 2,14" fill="#4682B4" stroke="#1A1A2E" stroke-width="2"/></svg><span>Tail</span></a></div></li>
+<li class="nav-item"><div class="nav-row nav-row--leaf" style="padding-left:2.50rem"><a href="#class-TemporalLink" class="nav-link"><svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><polygon points="8,2 14,8 8,14 2,8" fill="#FF8C00" stroke="#000000" stroke-width="2"/></svg><span>TemporalLink</span></a></div></li>
+<li class="nav-item"><div class="nav-row nav-row--leaf" style="padding-left:2.50rem"><a href="#class-TextLine" class="nav-link"><svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><circle cx="8" cy="8" r="6" fill="#808080" stroke="#000000" stroke-width="2"/></svg><span>TextLine</span></a></div></li>
+<li class="nav-item"><div class="nav-row nav-row--leaf" style="padding-left:2.50rem"><a href="#class-TextSpan" class="nav-link"><svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><circle cx="8" cy="8" r="6" fill="#D3D3D3" stroke="#000000" stroke-width="2"/></svg><span>TextSpan</span></a></div></li>
+<li class="nav-item"><div class="nav-row nav-row--leaf" style="padding-left:2.50rem"><a href="#class-Timex" class="nav-link"><svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><polygon points="8,2 14,8 8,14 2,8" fill="#FFD700" stroke="#000000" stroke-width="2"/></svg><span>Timex</span></a></div></li>
+</ul>
+    <div class="sidebar-section">Object Properties (37)</div>
+    <ul class="nav-list"><li class="nav-item"><div class="nav-row nav-row--rel" style="padding-left:1.1rem"><a href="#rel-emittedBy" class="nav-link nav-link--rel"><span>⟶ emittedBy</span></a></div></li>
+<li class="nav-item"><div class="nav-row nav-row--rel" style="padding-left:1.1rem"><a href="#rel-hasAgent" class="nav-link nav-link--rel"><span>⟶ hasAgent</span></a></div></li>
+<li class="nav-item"><div class="nav-row nav-row--rel" style="padding-left:1.1rem"><a href="#rel-hasBalloon" class="nav-link nav-link--rel"><span>⟶ hasBalloon</span></a></div></li>
+<li class="nav-item"><div class="nav-row nav-row--rel" style="padding-left:1.1rem"><a href="#rel-hasCaption" class="nav-link nav-link--rel"><span>⟶ hasCaption</span></a></div></li>
+<li class="nav-item"><div class="nav-row nav-row--rel" style="padding-left:1.1rem"><a href="#rel-hasCharacter" class="nav-link nav-link--rel"><span>⟶ hasCharacter</span></a></div></li>
+<li class="nav-item"><div class="nav-row nav-row--rel" style="padding-left:1.1rem"><a href="#rel-hasCharacterOccurrence" class="nav-link nav-link--rel"><span>⟶ hasCharacterOccurrence</span></a></div></li>
+<li class="nav-item"><div class="nav-row nav-row--rel" style="padding-left:1.1rem"><a href="#rel-hasInstrument" class="nav-link nav-link--rel"><span>⟶ hasInstrument</span></a></div></li>
+<li class="nav-item"><div class="nav-row nav-row--rel" style="padding-left:1.1rem"><a href="#rel-hasInteraction" class="nav-link nav-link--rel"><span>⟶ hasInteraction</span></a></div></li>
+<li class="nav-item"><div class="nav-row nav-row--rel" style="padding-left:1.1rem"><a href="#rel-hasLevel" class="nav-link nav-link--rel"><span>⟶ hasLevel</span></a></div></li>
+<li class="nav-item"><div class="nav-row nav-row--rel" style="padding-left:1.1rem"><a href="#rel-hasLocative" class="nav-link nav-link--rel"><span>⟶ hasLocative</span></a></div></li>
+<li class="nav-item"><div class="nav-row nav-row--rel" style="padding-left:1.1rem"><a href="#rel-hasNarrativeLocation" class="nav-link nav-link--rel"><span>⟶ hasNarrativeLocation</span></a></div></li>
+<li class="nav-item"><div class="nav-row nav-row--rel" style="padding-left:1.1rem"><a href="#rel-hasNarrativeUnit" class="nav-link nav-link--rel"><span>⟶ hasNarrativeUnit</span></a></div></li>
+<li class="nav-item"><div class="nav-row nav-row--rel" style="padding-left:1.1rem"><a href="#rel-hasNextPanel" class="nav-link nav-link--rel"><span>⟶ hasNextPanel</span></a></div></li>
+<li class="nav-item"><div class="nav-row nav-row--rel" style="padding-left:1.1rem"><a href="#rel-hasNextPlate" class="nav-link nav-link--rel"><span>⟶ hasNextPlate</span></a></div></li>
+<li class="nav-item"><div class="nav-row nav-row--rel" style="padding-left:1.1rem"><a href="#rel-hasObject" class="nav-link nav-link--rel"><span>⟶ hasObject</span></a></div></li>
+<li class="nav-item"><div class="nav-row nav-row--rel" style="padding-left:1.1rem"><a href="#rel-hasObjectOccurrence" class="nav-link nav-link--rel"><span>⟶ hasObjectOccurrence</span></a></div></li>
+<li class="nav-item"><div class="nav-row nav-row--rel" style="padding-left:1.1rem"><a href="#rel-hasOnomatopoeia" class="nav-link nav-link--rel"><span>⟶ hasOnomatopoeia</span></a></div></li>
+<li class="nav-item"><div class="nav-row nav-row--rel" style="padding-left:1.1rem"><a href="#rel-hasOrigin" class="nav-link nav-link--rel"><span>⟶ hasOrigin</span></a></div></li>
+<li class="nav-item"><div class="nav-row nav-row--rel" style="padding-left:1.1rem"><a href="#rel-hasPanel" class="nav-link nav-link--rel"><span>⟶ hasPanel</span></a></div></li>
+<li class="nav-item"><div class="nav-row nav-row--rel" style="padding-left:1.1rem"><a href="#rel-hasPatient" class="nav-link nav-link--rel"><span>⟶ hasPatient</span></a></div></li>
+<li class="nav-item"><div class="nav-row nav-row--rel" style="padding-left:1.1rem"><a href="#rel-hasPlate" class="nav-link nav-link--rel"><span>⟶ hasPlate</span></a></div></li>
+<li class="nav-item"><div class="nav-row nav-row--rel" style="padding-left:1.1rem"><a href="#rel-hasPolypticContinuity" class="nav-link nav-link--rel"><span>⟶ hasPolypticContinuity</span></a></div></li>
+<li class="nav-item"><div class="nav-row nav-row--rel" style="padding-left:1.1rem"><a href="#rel-hasSceneSetting" class="nav-link nav-link--rel"><span>⟶ hasSceneSetting</span></a></div></li>
+<li class="nav-item"><div class="nav-row nav-row--rel" style="padding-left:1.1rem"><a href="#rel-hasSourceEvent" class="nav-link nav-link--rel"><span>⟶ hasSourceEvent</span></a></div></li>
+<li class="nav-item"><div class="nav-row nav-row--rel" style="padding-left:1.1rem"><a href="#rel-hasSubLocation" class="nav-link nav-link--rel"><span>⟶ hasSubLocation</span></a></div></li>
+<li class="nav-item"><div class="nav-row nav-row--rel" style="padding-left:1.1rem"><a href="#rel-hasTail" class="nav-link nav-link--rel"><span>⟶ hasTail</span></a></div></li>
+<li class="nav-item"><div class="nav-row nav-row--rel" style="padding-left:1.1rem"><a href="#rel-hasTargetEvent" class="nav-link nav-link--rel"><span>⟶ hasTargetEvent</span></a></div></li>
+<li class="nav-item"><div class="nav-row nav-row--rel" style="padding-left:1.1rem"><a href="#rel-hasTextLine" class="nav-link nav-link--rel"><span>⟶ hasTextLine</span></a></div></li>
+<li class="nav-item"><div class="nav-row nav-row--rel" style="padding-left:1.1rem"><a href="#rel-hasTextSpan" class="nav-link nav-link--rel"><span>⟶ hasTextSpan</span></a></div></li>
+<li class="nav-item"><div class="nav-row nav-row--rel" style="padding-left:1.1rem"><a href="#rel-hasTimex" class="nav-link nav-link--rel"><span>⟶ hasTimex</span></a></div></li>
+<li class="nav-item"><div class="nav-row nav-row--rel" style="padding-left:1.1rem"><a href="#rel-instantiates" class="nav-link nav-link--rel"><span>⟶ instantiates</span></a></div></li>
+<li class="nav-item"><div class="nav-row nav-row--rel" style="padding-left:1.1rem"><a href="#rel-isCharacter" class="nav-link nav-link--rel"><span>⟶ isCharacter</span></a></div></li>
+<li class="nav-item"><div class="nav-row nav-row--rel" style="padding-left:1.1rem"><a href="#rel-isObject" class="nav-link nav-link--rel"><span>⟶ isObject</span></a></div></li>
+<li class="nav-item"><div class="nav-row nav-row--rel" style="padding-left:1.1rem"><a href="#rel-linkedTo" class="nav-link nav-link--rel"><span>⟶ linkedTo</span></a></div></li>
+<li class="nav-item"><div class="nav-row nav-row--rel" style="padding-left:1.1rem"><a href="#rel-mentions" class="nav-link nav-link--rel"><span>⟶ mentions</span></a></div></li>
+<li class="nav-item"><div class="nav-row nav-row--rel" style="padding-left:1.1rem"><a href="#rel-nextNarrativeTextLine" class="nav-link nav-link--rel"><span>⟶ nextNarrativeTextLine</span></a></div></li>
+<li class="nav-item"><div class="nav-row nav-row--rel" style="padding-left:1.1rem"><a href="#rel-realizesLocation" class="nav-link nav-link--rel"><span>⟶ realizesLocation</span></a></div></li>
+</ul>
+  </aside>
+
+  <main>
+    <div class="section-heading">Classes</div>
+    
+        <section class="detail-panel" id="class-Arc">
+          <h2 class="detail-title">Arc</h2>
+          <div class="detail-section">
+            <span class="detail-label">Description</span>
+            <span class="detail-value">An Arc is a major narrative division of a Story, grouping a set of Events united by a shared narrative thread, dramatic tension, or thematic continuity. Unlike an editorial chapter (a physical division of the book), an Arc is defined purely by narrative coherence. An Arc is composed of one or more Events via hasNarrativeUnit.</span>
+          </div>
+          <div class="detail-section">
+            <span class="detail-label">URI</span>
+            <code class="detail-uri">/seqartonto#Arc</code>
+          </div>
+          <div class="detail-section">
+            <span class="detail-label">Visual node</span>
+            <span class="detail-value visual-preview">
+              <svg width="48" height="48" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><polygon points="24,2 46,24 24,46 2,24" fill="#3D006E" stroke="#000000" stroke-width="2"/></svg>
+              <span class="visual-meta">
+                <span class="visual-chip">polygon</span>
+                <span class="visual-chip" style="background:#3D006E;border-color:#000000;color:#000000;">#3D006E</span>
+                <span class="visual-chip">stroke #000000</span>
+              </span>
+            </span>
+          </div>
+          <div class="detail-section"><span class="detail-label">Subclass of</span><span class="detail-value"><span class="badge">NarrativeConstituent</span></span></div>
+          
+        </section>
+        
+        <section class="detail-panel" id="class-Balloon">
+          <h2 class="detail-title">Balloon</h2>
+          <div class="detail-section">
+            <span class="detail-label">Description</span>
+            <span class="detail-value">A Balloon is a graphic area containing the text that transcribes speech, thoughts, or narration. It serves as a visual interface between the text and the speaking character, to whom it is generally connected by a tail. Furthermore, the shape of the bubble and the style of its outline (smooth, wavy, jagged) convey important narrative information about the emotional state or tone of voice of the speaker.</span>
+          </div>
+          <div class="detail-section">
+            <span class="detail-label">URI</span>
+            <code class="detail-uri">/seqartonto#Balloon</code>
+          </div>
+          <div class="detail-section">
+            <span class="detail-label">Visual node</span>
+            <span class="detail-value visual-preview">
+              <svg width="48" height="48" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><circle cx="24" cy="24" r="22" fill="#90D5FF" stroke="#000000" stroke-width="2"/></svg>
+              <span class="visual-meta">
+                <span class="visual-chip">circle</span>
+                <span class="visual-chip" style="background:#90D5FF;border-color:#000000;color:#000000;">#90D5FF</span>
+                <span class="visual-chip">stroke #000000</span>
+              </span>
+            </span>
+          </div>
+          
+          
+            <div class="detail-section detail-section--table">
+              <span class="detail-label">Attributes</span>
+              <div class="detail-value">
+                <table class="prop-table">
+                  <thead><tr><th>Name</th><th>Values</th><th>Description</th></tr></thead>
+                  <tbody><tr>
+                  <td class="prop-name">backgroundColor</td>
+                  <td class="prop-range"><span class="badge badge-range">string</span></td>
+                  <td class="prop-comment">The background color of a balloon or caption box, encoded as a hex code (e.g. "#FFFF00") or a color name (e.g. "yellow"). On a Balloon, this is used when the balloon fill differs from the default white — for instance a black background for a villain's speech, or a coloured fill conveying a particular emotional tone.</td>
+                  
+                </tr><tr>
+                  <td class="prop-name">balloonType</td>
+                  <td class="prop-range"><span class="badge badge-enum">broadcast</span><span class="badge badge-enum">exclamation</span><span class="badge badge-enum">speech</span><span class="badge badge-enum">thought</span><span class="badge badge-enum">whisper</span></td>
+                  <td class="prop-comment">The narrative role of the balloon. Allowed values: "speech" (standard spoken dialogue), "thought" (internal monologue or thought), "exclamation" (strong emotional outburst or shout), "whisper" (low-voice or confidential speech), "broadcast" (off-panel voice, narrator, or off-screen broadcast such as a radio or telephone).</td>
+                  
+                </tr><tr>
+                  <td class="prop-name">borderPoints</td>
+                  <td class="prop-range"><span class="badge badge-range">string</span></td>
+                  <td class="prop-comment">The polygon boundary of the element as an ordered list of 2D points, encoded as a space-separated string of "x,y" pairs (SVG polygon format). Example: "10,20 50,20 50,80 10,80". Coordinates are expressed in pixels relative to the plate origin.</td>
+                  
+                </tr><tr>
+                  <td class="prop-name">borderStyle</td>
+                  <td class="prop-range"><span class="badge badge-enum">smooth</span><span class="badge badge-enum">wavy</span><span class="badge badge-enum">zigzag</span></td>
+                  <td class="prop-comment">The stroke style of the balloon border. Allowed values: "smooth" (plain continuous line, standard speech), "wavy" (undulating line, typically used for thoughts or fear), "zigzag" (jagged line, typically used to express anger or shouting).</td>
+                  
+                </tr><tr>
+                  <td class="prop-name">closureState</td>
+                  <td class="prop-range"><span class="badge badge-enum">closed</span><span class="badge badge-enum">unclosed</span></td>
+                  <td class="prop-comment">Indicates whether the balloon boundary is fully drawn or partially open. Allowed values: "closed" (enclosed by a continuous border), "unclosed" (open or half-open, blending partially into the background).</td>
+                  
+                </tr><tr>
+                  <td class="prop-name">shape</td>
+                  <td class="prop-range"><span class="badge badge-enum">cloud</span><span class="badge badge-enum">oval</span><span class="badge badge-enum">peak</span><span class="badge badge-enum">rectangle</span><span class="badge badge-enum">suggested</span></td>
+                  <td class="prop-comment">The overall shape of the balloon. Allowed values: "oval" (standard elliptical bubble), "rectangle" (rectangular bubble), "cloud" (cloud-shaped, typically used for thoughts), "peak" (spiky/explosion shape, typically used for shouts), "suggested" (implied boundary, not fully drawn).</td>
+                  
+                </tr></tbody>
+                </table>
+              </div>
+            </div>
+        </section>
+        
+        <section class="detail-panel" id="class-Book">
+          <h2 class="detail-title">Book</h2>
+          <div class="detail-section">
+            <span class="detail-label">Description</span>
+            <span class="detail-value">A Book is a comic book work as a whole, serving as the top-level container for all its plates. It corresponds to a complete published album or volume, identified by its title.</span>
+          </div>
+          <div class="detail-section">
+            <span class="detail-label">URI</span>
+            <code class="detail-uri">/seqartonto#Book</code>
+          </div>
+          <div class="detail-section">
+            <span class="detail-label">Visual node</span>
+            <span class="detail-value visual-preview">
+              <svg width="48" height="48" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><polygon points="24,2 46,24 24,46 2,24" fill="#4169E1" stroke="#000000" stroke-width="2"/></svg>
+              <span class="visual-meta">
+                <span class="visual-chip">polygon</span>
+                <span class="visual-chip" style="background:#4169E1;border-color:#000000;color:#000000;">#4169E1</span>
+                <span class="visual-chip">stroke #000000</span>
+              </span>
+            </span>
+          </div>
+          
+          
+            <div class="detail-section detail-section--table">
+              <span class="detail-label">Attributes</span>
+              <div class="detail-value">
+                <table class="prop-table">
+                  <thead><tr><th>Name</th><th>Values</th><th>Description</th></tr></thead>
+                  <tbody><tr>
+                  <td class="prop-name">graphicStyle</td>
+                  <td class="prop-range"><span class="badge badge-range">string</span></td>
+                  <td class="prop-comment">Describes the graphic style. On a Book, it characterises the overall visual style of the work (e.g. "ligne claire", "expressionist", "realistic", "cartoonish"). On a Panel, it is used only when the panel departs from the dominant style of the book — for instance to signal a dream sequence, a flashback rendered differently, or a deliberate stylistic shift (e.g. "watercolour insert", "sketchy", "black-and-white within colour album"). Panels that follow the book's default style should leave this property absent.</td>
+                  
+                </tr><tr>
+                  <td class="prop-name">rightToLeft</td>
+                  <td class="prop-range"><span class="badge badge-range">boolean</span></td>
+                  <td class="prop-comment">Indicates whether the book is read from right to left (true) or left to right (false). A value of true typically characterises manga and other East Asian comics, while a value of false corresponds to Western comics (bandes dessinées, American comics, etc.).</td>
+                  
+                </tr><tr>
+                  <td class="prop-name">title</td>
+                  <td class="prop-range"><span class="badge badge-range">string</span></td>
+                  <td class="prop-comment">The title of the comic book work (e.g. "Asterix en Lusitanie"). Used on Book individuals.</td>
+                  
+                </tr></tbody>
+                </table>
+              </div>
+            </div>
+        </section>
+        
+        <section class="detail-panel" id="class-Caption">
+          <h2 class="detail-title">Caption</h2>
+          <div class="detail-section">
+            <span class="detail-label">Description</span>
+            <span class="detail-value">A Caption is a graphic element, generally rectangular in shape, with no directional arrow, often placed in the corners of a panel. Unlike conventional speech bubbles, it is used to include narrative text, such as the voice of an omniscient narrator (caption box) serving to situate the action in space and time, or the voice-over of a character recounting their memories.</span>
+          </div>
+          <div class="detail-section">
+            <span class="detail-label">URI</span>
+            <code class="detail-uri">/seqartonto#Caption</code>
+          </div>
+          <div class="detail-section">
+            <span class="detail-label">Visual node</span>
+            <span class="detail-value visual-preview">
+              <svg width="48" height="48" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="2" width="44" height="44" rx="3" fill="#ffadf2" stroke="#000000" stroke-width="2"/></svg>
+              <span class="visual-meta">
+                <span class="visual-chip">rect</span>
+                <span class="visual-chip" style="background:#ffadf2;border-color:#000000;color:#000000;">#ffadf2</span>
+                <span class="visual-chip">stroke #000000</span>
+              </span>
+            </span>
+          </div>
+          
+          
+            <div class="detail-section detail-section--table">
+              <span class="detail-label">Attributes</span>
+              <div class="detail-value">
+                <table class="prop-table">
+                  <thead><tr><th>Name</th><th>Values</th><th>Description</th></tr></thead>
+                  <tbody><tr>
+                  <td class="prop-name">backgroundColor</td>
+                  <td class="prop-range"><span class="badge badge-range">string</span></td>
+                  <td class="prop-comment">The background color of a balloon or caption box, encoded as a hex code (e.g. "#FFFF00") or a color name (e.g. "yellow"). On a Balloon, this is used when the balloon fill differs from the default white — for instance a black background for a villain's speech, or a coloured fill conveying a particular emotional tone.</td>
+                  
+                </tr><tr>
+                  <td class="prop-name">borderPoints</td>
+                  <td class="prop-range"><span class="badge badge-range">string</span></td>
+                  <td class="prop-comment">The polygon boundary of the element as an ordered list of 2D points, encoded as a space-separated string of "x,y" pairs (SVG polygon format). Example: "10,20 50,20 50,80 10,80". Coordinates are expressed in pixels relative to the plate origin.</td>
+                  
+                </tr><tr>
+                  <td class="prop-name">captionType</td>
+                  <td class="prop-range"><span class="badge badge-enum">Effect</span><span class="badge badge-enum">Internal</span><span class="badge badge-enum">Narrative</span></td>
+                  <td class="prop-comment">The enunciative role of the caption. Allowed values: "Narrative" (voice of an external narrator commenting or introducing an action from outside the fiction, e.g. "And so our friends set off once more on a long journey…"), "Effect" (atmospheric, temporal, or situational indication, e.g. "The next morning…"), "Internal" (inner monologue of a character expressed as a caption, e.g. "Those words were engraved in my heart…").</td>
+                  
+                </tr></tbody>
+                </table>
+              </div>
+            </div>
+        </section>
+        
+        <section class="detail-panel" id="class-Character">
+          <h2 class="detail-title">Character</h2>
+          <div class="detail-section">
+            <span class="detail-label">Description</span>
+            <span class="detail-value">A Character is the local representation of a MetaCharacter within a panel or a plate. It constitutes the visual and contextual instantiation of that MetaCharacter at a specific moment in the narrative, embedded within a particular spatial and temporal frame. A single MetaCharacter may thus be represented by multiple Characters across different panels or plates, each potentially varying in appearance, posture, expression, or scale depending on the artistic choices of the author.</span>
+          </div>
+          <div class="detail-section">
+            <span class="detail-label">URI</span>
+            <code class="detail-uri">/seqartonto#Character</code>
+          </div>
+          <div class="detail-section">
+            <span class="detail-label">Visual node</span>
+            <span class="detail-value visual-preview">
+              <svg width="48" height="48" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><circle cx="24" cy="24" r="22" fill="#FF0000" stroke="#000000" stroke-width="2"/></svg>
+              <span class="visual-meta">
+                <span class="visual-chip">circle</span>
+                <span class="visual-chip" style="background:#FF0000;border-color:#000000;color:#000000;">#FF0000</span>
+                <span class="visual-chip">stroke #000000</span>
+              </span>
+            </span>
+          </div>
+          
+          
+            <div class="detail-section detail-section--table">
+              <span class="detail-label">Attributes</span>
+              <div class="detail-value">
+                <table class="prop-table">
+                  <thead><tr><th>Name</th><th>Values</th><th>Description</th></tr></thead>
+                  <tbody><tr>
+                  <td class="prop-name">borderPoints</td>
+                  <td class="prop-range"><span class="badge badge-range">string</span></td>
+                  <td class="prop-comment">The polygon boundary of the element as an ordered list of 2D points, encoded as a space-separated string of "x,y" pairs (SVG polygon format). Example: "10,20 50,20 50,80 10,80". Coordinates are expressed in pixels relative to the plate origin.</td>
+                  
+                </tr><tr>
+                  <td class="prop-name">emotion</td>
+                  <td class="prop-range"><span class="badge badge-enum">alarmed</span><span class="badge badge-enum">annoyed</span><span class="badge badge-enum">aroused</span><span class="badge badge-enum">bored</span><span class="badge badge-enum">calm</span><span class="badge badge-enum">content</span><span class="badge badge-enum">excited</span><span class="badge badge-enum">frustrated</span><span class="badge badge-enum">glad</span><span class="badge badge-enum">happy</span><span class="badge badge-enum">sad</span><span class="badge badge-enum">tired</span></td>
+                  <td class="prop-comment">The emotion expressed by the character within this panel occurrence. Allowed values drawn from EmoArt (Zhang et al. 2025), a 12-category vocabulary balanced across the arousal-valence space — Positive/High-arousal: "aroused", "excited", "happy"; Negative/High-arousal: "alarmed", "annoyed", "frustrated"; Negative/Low-arousal: "bored", "sad", "tired"; Positive/Low-arousal: "calm", "content", "glad".</td>
+                  
+                </tr><tr>
+                  <td class="prop-name">visible</td>
+                  <td class="prop-range"><span class="badge badge-range">boolean</span></td>
+                  <td class="prop-comment">Indicates whether the character is graphically represented within the panel (true) or is diegetically present but off-panel (false). A value of false allows modelling off-field characters whose presence is inferred from contextual cues — such as a speech balloon with no visible speaker, or a character whose presence is logically deduced from other visual elements (e.g. a taxi implying a driver). Attaching invisible characters to a Level ensures the knowledge graph reflects the actual narrative structure, not only its visible content.</td>
+                  
+                </tr></tbody>
+                </table>
+              </div>
+            </div>
+        </section>
+        
+        <section class="detail-panel" id="class-Event">
+          <h2 class="detail-title">Event</h2>
+          <div class="detail-section">
+            <span class="detail-label">Description</span>
+            <span class="detail-value">An Event is a NarrativeConstituent that unifies a set of Scenes around a single dramatic question — a causal or intentional thread that persists across changes of location and protagonist cast. An Event opens with an unresolved tension and closes when that tension is resolved or abandoned. Grounded in the causal and intentional dimensions of the Event-Indexing Model (Zwaan & Radvansky 1998) and event segmentation theory (Zacks & Tversky 2001). Corresponds to the macro-event level of Chen (2025). An Event is composed of one or more Scenes via hasNarrativeUnit.</span>
+          </div>
+          <div class="detail-section">
+            <span class="detail-label">URI</span>
+            <code class="detail-uri">/seqartonto#Event</code>
+          </div>
+          <div class="detail-section">
+            <span class="detail-label">Visual node</span>
+            <span class="detail-value visual-preview">
+              <svg width="48" height="48" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><polygon points="24,2 46,24 24,46 2,24" fill="#6A0DAD" stroke="#000000" stroke-width="2"/></svg>
+              <span class="visual-meta">
+                <span class="visual-chip">polygon</span>
+                <span class="visual-chip" style="background:#6A0DAD;border-color:#000000;color:#000000;">#6A0DAD</span>
+                <span class="visual-chip">stroke #000000</span>
+              </span>
+            </span>
+          </div>
+          <div class="detail-section"><span class="detail-label">Subclass of</span><span class="detail-value"><span class="badge">NarrativeConstituent</span></span></div>
+          
+        </section>
+        
+        <section class="detail-panel" id="class-Interaction">
+          <h2 class="detail-title">Interaction</h2>
+          <div class="detail-section">
+            <span class="detail-label">Description</span>
+            <span class="detail-value">An Interaction is a direct action or relation between participants (Characters or Objects) within the same Level. It is characterised by its type (interactionType), one or more agents (hasAgent), an optional patient (hasPatient), and an optional instrument or support object (hasInstrument).</span>
+          </div>
+          <div class="detail-section">
+            <span class="detail-label">URI</span>
+            <code class="detail-uri">/seqartonto#Interaction</code>
+          </div>
+          <div class="detail-section">
+            <span class="detail-label">Visual node</span>
+            <span class="detail-value visual-preview">
+              <svg width="48" height="48" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><polygon points="24,2 46,46 2,46" fill="#FF8C00" stroke="#000000" stroke-width="2"/></svg>
+              <span class="visual-meta">
+                <span class="visual-chip">triangle</span>
+                <span class="visual-chip" style="background:#FF8C00;border-color:#000000;color:#000000;">#FF8C00</span>
+                <span class="visual-chip">stroke #000000</span>
+              </span>
+            </span>
+          </div>
+          
+          
+            <div class="detail-section detail-section--table">
+              <span class="detail-label">Attributes</span>
+              <div class="detail-value">
+                <table class="prop-table">
+                  <thead><tr><th>Name</th><th>Values</th><th>Description</th></tr></thead>
+                  <tbody><tr>
+                  <td class="prop-name">interactionType</td>
+                  <td class="prop-range"><span class="badge badge-range">string</span></td>
+                  <td class="prop-comment">Describes the nature of the interaction as a verb in infinitive form or a spatial relation (e.g. "shoot", "kiss", "sit-on", "carry"). Also disambiguates the role of hasInstrument participants (tool vs. spatial support).</td>
+                  
+                </tr></tbody>
+                </table>
+              </div>
+            </div>
+        </section>
+        
+        <section class="detail-panel" id="class-Level">
+          <h2 class="detail-title">Level</h2>
+          <div class="detail-section">
+            <span class="detail-label">Description</span>
+            <span class="detail-value">A Level is the finest-grained content unit within a Panel. It represents the visual and narrative content of the panel as perceived within a single, coherent time window (T). In the standard case, a panel contains exactly one Level, which groups all the characters, objects, balloons, onomatopoeias, and free text present in the scene at that moment. When a panel depicts several distinct temporal moments simultaneously — a polychronic panel (isPolychronic = true) — it is decomposed into multiple Levels, each corresponding to a different time window: for instance, a foreground showing the present action and a background depicting a simultaneous or past event.</span>
+          </div>
+          <div class="detail-section">
+            <span class="detail-label">URI</span>
+            <code class="detail-uri">/seqartonto#Level</code>
+          </div>
+          <div class="detail-section">
+            <span class="detail-label">Visual node</span>
+            <span class="detail-value visual-preview">
+              <svg width="48" height="48" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="2" width="44" height="44" rx="3" fill="#ff6600" stroke="#000000" stroke-width="2"/></svg>
+              <span class="visual-meta">
+                <span class="visual-chip">rect</span>
+                <span class="visual-chip" style="background:#ff6600;border-color:#000000;color:#000000;">#ff6600</span>
+                <span class="visual-chip">stroke #000000</span>
+              </span>
+            </span>
+          </div>
+          
+          
+        </section>
+        
+        <section class="detail-panel" id="class-MetaCharacter">
+          <h2 class="detail-title">MetaCharacter</h2>
+          <div class="detail-section">
+            <span class="detail-label">Description</span>
+            <span class="detail-value">A MetaCharacter is a persistent actor of the story, identified across all its occurrences in the work. It is not necessarily human and can take many forms, such as an animal, a robot, or an object. Drawn with complete artistic freedom, it very often exhibits significant deformations or disproportions that distance it from real-world proportions. To distinguish it from a background element, its active narrative function is the primary criterion: a true MetaCharacter has a direct influence on the story, which is generally manifested by uttering at least one speech bubble.</span>
+          </div>
+          <div class="detail-section">
+            <span class="detail-label">URI</span>
+            <code class="detail-uri">/seqartonto#MetaCharacter</code>
+          </div>
+          <div class="detail-section">
+            <span class="detail-label">Visual node</span>
+            <span class="detail-value visual-preview">
+              <svg width="48" height="48" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><circle cx="24" cy="24" r="22" fill="#FF00FF" stroke="#000000" stroke-width="2"/></svg>
+              <span class="visual-meta">
+                <span class="visual-chip">circle</span>
+                <span class="visual-chip" style="background:#FF00FF;border-color:#000000;color:#000000;">#FF00FF</span>
+                <span class="visual-chip">stroke #000000</span>
+              </span>
+            </span>
+          </div>
+          
+          
+            <div class="detail-section detail-section--table">
+              <span class="detail-label">Attributes</span>
+              <div class="detail-value">
+                <table class="prop-table">
+                  <thead><tr><th>Name</th><th>Values</th><th>Description</th></tr></thead>
+                  <tbody><tr>
+                  <td class="prop-name">name</td>
+                  <td class="prop-range"><span class="badge badge-range">string</span></td>
+                  <td class="prop-comment">The name of a meta-character, meta-object, or object occurrence as referred to in the narrative (e.g. "Asterix", "Excalibur", "guitar").</td>
+                  
+                </tr></tbody>
+                </table>
+              </div>
+            </div>
+        </section>
+        
+        <section class="detail-panel" id="class-MetaObject">
+          <h2 class="detail-title">MetaObject</h2>
+          <div class="detail-section">
+            <span class="detail-label">Description</span>
+            <span class="detail-value">A MetaObject is a named, narratively significant object that recurs across panels or plates and can be identified as a persistent entity in the story world (e.g. a weapon, a vehicle, a symbolic artefact). It serves as the abstract referent of which local Object occurrences within panels are instantiations.</span>
+          </div>
+          <div class="detail-section">
+            <span class="detail-label">URI</span>
+            <code class="detail-uri">/seqartonto#MetaObject</code>
+          </div>
+          <div class="detail-section">
+            <span class="detail-label">Visual node</span>
+            <span class="detail-value visual-preview">
+              <svg width="48" height="48" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><circle cx="24" cy="24" r="22" fill="#FFFE00" stroke="#000000" stroke-width="2"/></svg>
+              <span class="visual-meta">
+                <span class="visual-chip">circle</span>
+                <span class="visual-chip" style="background:#FFFE00;border-color:#000000;color:#000000;">#FFFE00</span>
+                <span class="visual-chip">stroke #000000</span>
+              </span>
+            </span>
+          </div>
+          
+          
+            <div class="detail-section detail-section--table">
+              <span class="detail-label">Attributes</span>
+              <div class="detail-value">
+                <table class="prop-table">
+                  <thead><tr><th>Name</th><th>Values</th><th>Description</th></tr></thead>
+                  <tbody><tr>
+                  <td class="prop-name">name</td>
+                  <td class="prop-range"><span class="badge badge-range">string</span></td>
+                  <td class="prop-comment">The name of a meta-character, meta-object, or object occurrence as referred to in the narrative (e.g. "Asterix", "Excalibur", "guitar").</td>
+                  
+                </tr></tbody>
+                </table>
+              </div>
+            </div>
+        </section>
+        
+        <section class="detail-panel" id="class-NarrativeConstituent">
+          <h2 class="detail-title">NarrativeConstituent</h2>
+          <div class="detail-section">
+            <span class="detail-label">Description</span>
+            <span class="detail-value">Abstract superclass of all narrative units in SequArtOnto. A NarrativeConstituent represents a coherent grouping of narrative content at one of five levels of abstraction, forming a strict tree: Story → Arc → Event → Scene → Segment. The hierarchy integrates three theoretical frameworks: (1) the editorial/structural level (Story, Arc) groups events by narrative coherence rather than by physical book division; (2) the cognitive level (Event, Scene) is grounded in the Event-Indexing Model (Zwaan & Radvansky 1998) and event segmentation theory (Zacks & Tversky 2001); (3) the visual-grammatical level (Segment) corresponds to the VNG constituent (Arc) of Cohn (2013), the only level that directly realises Levels via instantiates and bears a narrativeRole (Establisher, Initial, Peak, Release, Refiner). Location (hasNarrativeLocation) is anchored at the Scene level, as a Scene is defined by spatial, character, and action continuity. Non-leaf levels (Story, Arc, Event, Scene) are realised indirectly through their descendant Segments. Composition is navigated uniformly via hasNarrativeUnit at every level of the hierarchy. Inspired by Cohn (2013, 2020), GOLEM's G9_Narrative_Unit (Pianzola et al. 2025), and Chen's (2025) hierarchical event framework.</span>
+          </div>
+          <div class="detail-section">
+            <span class="detail-label">URI</span>
+            <code class="detail-uri">/seqartonto#NarrativeConstituent</code>
+          </div>
+          <div class="detail-section">
+            <span class="detail-label">Visual node</span>
+            <span class="detail-value visual-preview">
+              <svg width="48" height="48" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><polygon points="24,2 46,24 24,46 2,24" fill="#6A0DAD" stroke="#000000" stroke-width="2"/></svg>
+              <span class="visual-meta">
+                <span class="visual-chip">polygon</span>
+                <span class="visual-chip" style="background:#6A0DAD;border-color:#000000;color:#000000;">#6A0DAD</span>
+                <span class="visual-chip">stroke #000000</span>
+              </span>
+            </span>
+          </div>
+          
+          
+            <div class="detail-section detail-section--table">
+              <span class="detail-label">Attributes</span>
+              <div class="detail-value">
+                <table class="prop-table">
+                  <thead><tr><th>Name</th><th>Values</th><th>Description</th></tr></thead>
+                  <tbody><tr>
+                  <td class="prop-name">narrativeEvent</td>
+                  <td class="prop-range"><span class="badge badge-range">string</span></td>
+                  <td class="prop-comment">A free-text description of the narrative event (story-world action, state, or transition) represented by this constituent. Captures the semantic content of what happens at this level of the narrative arc, independently of how it is distributed across panels. Inspired by GOLEM's G5_Narrative_Event (Meghini et al. 2021) and Chen's (2025) event-based hierarchical framework. A leaf constituent may describe a single action (e.g. "The detective picks up the clue"), while a higher-level constituent describes the macro-event it subsumes (e.g. "The detective discovers the truth").</td>
+                  
+                </tr></tbody>
+                </table>
+              </div>
+            </div>
+        </section>
+        
+        <section class="detail-panel" id="class-NarrativeLocation">
+          <h2 class="detail-title">NarrativeLocation</h2>
+          <div class="detail-section">
+            <span class="detail-label">Description</span>
+            <span class="detail-value">A NarrativeLocation represents the diegetic place where narrative events occur. It is the story-world concept of a location, independent of how it is visually rendered in any specific panel. NarrativeLocations form a recursive containment hierarchy via hasSubLocation (e.g. "Paris" contains "Café de Flore"). A single NarrativeLocation instance can be referenced by multiple leaf NarrativeConstituents, providing identity persistence across panels without requiring a separate MetaLocation class. Inspired by GOLEM's G13_Narrative_Location (Pianzola et al. 2025).</span>
+          </div>
+          <div class="detail-section">
+            <span class="detail-label">URI</span>
+            <code class="detail-uri">/seqartonto#NarrativeLocation</code>
+          </div>
+          <div class="detail-section">
+            <span class="detail-label">Visual node</span>
+            <span class="detail-value visual-preview">
+              <svg width="48" height="48" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><polygon points="24,2 46,24 24,46 2,24" fill="#2E8B57" stroke="#000000" stroke-width="2"/></svg>
+              <span class="visual-meta">
+                <span class="visual-chip">hexagon</span>
+                <span class="visual-chip" style="background:#2E8B57;border-color:#000000;color:#000000;">#2E8B57</span>
+                <span class="visual-chip">stroke #000000</span>
+              </span>
+            </span>
+          </div>
+          
+          
+            <div class="detail-section detail-section--table">
+              <span class="detail-label">Attributes</span>
+              <div class="detail-value">
+                <table class="prop-table">
+                  <thead><tr><th>Name</th><th>Values</th><th>Description</th></tr></thead>
+                  <tbody><tr>
+                  <td class="prop-name">locationName</td>
+                  <td class="prop-range"><span class="badge badge-range">string</span></td>
+                  <td class="prop-comment">The name of the diegetic location (e.g. "Paris", "The Forbidden Forest", "Café de Flore"). Free text, as location names in fictional worlds are not necessarily grounded in real-world gazetteers.</td>
+                  
+                </tr></tbody>
+                </table>
+              </div>
+            </div>
+        </section>
+        
+        <section class="detail-panel" id="class-Object">
+          <h2 class="detail-title">Object</h2>
+          <div class="detail-section">
+            <span class="detail-label">Description</span>
+            <span class="detail-value">An Object is a physical or tangible entity present within a panel that enters into interaction with one or more characters. Unlike background elements, an Object plays an active role in the scene by being manipulated, wielded, or otherwise engaged with by a character.</span>
+          </div>
+          <div class="detail-section">
+            <span class="detail-label">URI</span>
+            <code class="detail-uri">/seqartonto#Object</code>
+          </div>
+          <div class="detail-section">
+            <span class="detail-label">Visual node</span>
+            <span class="detail-value visual-preview">
+              <svg width="48" height="48" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><circle cx="24" cy="24" r="22" fill="#FFBF00" stroke="#000000" stroke-width="2"/></svg>
+              <span class="visual-meta">
+                <span class="visual-chip">circle</span>
+                <span class="visual-chip" style="background:#FFBF00;border-color:#000000;color:#000000;">#FFBF00</span>
+                <span class="visual-chip">stroke #000000</span>
+              </span>
+            </span>
+          </div>
+          
+          
+            <div class="detail-section detail-section--table">
+              <span class="detail-label">Attributes</span>
+              <div class="detail-value">
+                <table class="prop-table">
+                  <thead><tr><th>Name</th><th>Values</th><th>Description</th></tr></thead>
+                  <tbody><tr>
+                  <td class="prop-name">borderPoints</td>
+                  <td class="prop-range"><span class="badge badge-range">string</span></td>
+                  <td class="prop-comment">The polygon boundary of the element as an ordered list of 2D points, encoded as a space-separated string of "x,y" pairs (SVG polygon format). Example: "10,20 50,20 50,80 10,80". Coordinates are expressed in pixels relative to the plate origin.</td>
+                  
+                </tr><tr>
+                  <td class="prop-name">name</td>
+                  <td class="prop-range"><span class="badge badge-range">string</span></td>
+                  <td class="prop-comment">The name of a meta-character, meta-object, or object occurrence as referred to in the narrative (e.g. "Asterix", "Excalibur", "guitar").</td>
+                  
+                </tr></tbody>
+                </table>
+              </div>
+            </div>
+        </section>
+        
+        <section class="detail-panel" id="class-Onomatopoeia">
+          <h2 class="detail-title">Onomatopoeia</h2>
+          <div class="detail-section">
+            <span class="detail-label">Description</span>
+            <span class="detail-value">An Onomatopoeia is a word designed to phonetically imitate the natural sounds associated with the objects or actions it describes. In comics, it is graphically integrated into the image in a wide variety of shapes, colours, and orientations to visually represent those sounds. As a genuine narrative device, it bridges the gap between text and image to heighten the reader's immersion and the emotional impact of a scene.</span>
+          </div>
+          <div class="detail-section">
+            <span class="detail-label">URI</span>
+            <code class="detail-uri">/seqartonto#Onomatopoeia</code>
+          </div>
+          <div class="detail-section">
+            <span class="detail-label">Visual node</span>
+            <span class="detail-value visual-preview">
+              <svg width="48" height="48" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><circle cx="24" cy="24" r="22" fill="#296a2b" stroke="#000000" stroke-width="2"/></svg>
+              <span class="visual-meta">
+                <span class="visual-chip">circle</span>
+                <span class="visual-chip" style="background:#296a2b;border-color:#000000;color:#000000;">#296a2b</span>
+                <span class="visual-chip">stroke #000000</span>
+              </span>
+            </span>
+          </div>
+          
+          
+            <div class="detail-section detail-section--table">
+              <span class="detail-label">Attributes</span>
+              <div class="detail-value">
+                <table class="prop-table">
+                  <thead><tr><th>Name</th><th>Values</th><th>Description</th></tr></thead>
+                  <tbody><tr>
+                  <td class="prop-name">borderPoints</td>
+                  <td class="prop-range"><span class="badge badge-range">string</span></td>
+                  <td class="prop-comment">The polygon boundary of the element as an ordered list of 2D points, encoded as a space-separated string of "x,y" pairs (SVG polygon format). Example: "10,20 50,20 50,80 10,80". Coordinates are expressed in pixels relative to the plate origin.</td>
+                  
+                </tr><tr>
+                  <td class="prop-name">category</td>
+                  <td class="prop-range"><span class="badge badge-enum">ambient-emotion</span><span class="badge badge-enum">animal-sound</span><span class="badge badge-enum">creaking</span><span class="badge badge-enum">cry</span><span class="badge badge-enum">human-emotion</span><span class="badge badge-enum">human-noise</span><span class="badge badge-enum">impact-explosion</span><span class="badge badge-enum">nature-sound</span><span class="badge badge-enum">symbol</span><span class="badge badge-enum">technological-sound</span></td>
+                  <td class="prop-comment">The sound category of the onomatopoeia. Allowed values — Human: "cry", "human-noise", "human-emotion"; Object: "impact-explosion", "creaking", "technological-sound"; Miscellaneous: "animal-sound", "nature-sound", "ambient-emotion"; Pictogram: "symbol".</td>
+                  
+                </tr><tr>
+                  <td class="prop-name">content</td>
+                  <td class="prop-range"><span class="badge badge-range">string</span></td>
+                  <td class="prop-comment">The textual content of a TextSpan (word or group of words within a TextLine sharing a typographic style) or an Onomatopoeia (e.g. "BANG", "SPLASH"). Content is anchored at the finest granularity level.</td>
+                  
+                </tr></tbody>
+                </table>
+              </div>
+            </div>
+        </section>
+        
+        <section class="detail-panel" id="class-Panel">
+          <h2 class="detail-title">Panel</h2>
+          <div class="detail-section">
+            <span class="detail-label">Description</span>
+            <span class="detail-value">A Panel is an image area within a comic plate that illustrates a single action or scene. Although traditionally considered as a rectangle bounded by borders, new definitions describe it as a free-shape polygon encompassing the entirety of its visual content. Arranged sequentially, panels can sometimes be frameless, overlap each other, or adopt a wide variety of shapes.</span>
+          </div>
+          <div class="detail-section">
+            <span class="detail-label">URI</span>
+            <code class="detail-uri">/seqartonto#Panel</code>
+          </div>
+          <div class="detail-section">
+            <span class="detail-label">Visual node</span>
+            <span class="detail-value visual-preview">
+              <svg width="48" height="48" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="2" width="44" height="44" rx="3" fill="#ffffff" stroke="#000000" stroke-width="2"/></svg>
+              <span class="visual-meta">
+                <span class="visual-chip">rect</span>
+                <span class="visual-chip" style="background:#ffffff;border-color:#000000;color:#000000;">#ffffff</span>
+                <span class="visual-chip">stroke #000000</span>
+              </span>
+            </span>
+          </div>
+          
+          
+            <div class="detail-section detail-section--table">
+              <span class="detail-label">Attributes</span>
+              <div class="detail-value">
+                <table class="prop-table">
+                  <thead><tr><th>Name</th><th>Values</th><th>Description</th><th>Example</th></tr></thead>
+                  <tbody><tr>
+                  <td class="prop-name">borderPoints</td>
+                  <td class="prop-range"><span class="badge badge-range">string</span></td>
+                  <td class="prop-comment">The polygon boundary of the element as an ordered list of 2D points, encoded as a space-separated string of "x,y" pairs (SVG polygon format). Example: "10,20 50,20 50,80 10,80". Coordinates are expressed in pixels relative to the plate origin.</td>
+                  <td class="prop-see-also"></td>
+                </tr><tr>
+                  <td class="prop-name">borderType</td>
+                  <td class="prop-range"><span class="badge badge-enum">frameless</span><span class="badge badge-enum">full-fenced</span><span class="badge badge-enum">half-closed</span></td>
+                  <td class="prop-comment">Describes the border style of the panel. Allowed values: "full-fenced" (fully enclosed by borders), "half-closed" (partially bordered), "frameless" (no visible border).</td>
+                  <td class="prop-see-also"></td>
+                </tr><tr>
+                  <td class="prop-name">graphicStyle</td>
+                  <td class="prop-range"><span class="badge badge-range">string</span></td>
+                  <td class="prop-comment">Describes the graphic style. On a Book, it characterises the overall visual style of the work (e.g. "ligne claire", "expressionist", "realistic", "cartoonish"). On a Panel, it is used only when the panel departs from the dominant style of the book — for instance to signal a dream sequence, a flashback rendered differently, or a deliberate stylistic shift (e.g. "watercolour insert", "sketchy", "black-and-white within colour album"). Panels that follow the book's default style should leave this property absent.</td>
+                  <td class="prop-see-also"></td>
+                </tr><tr>
+                  <td class="prop-name">hasRank</td>
+                  <td class="prop-range"><span class="badge badge-range">positiveInteger</span></td>
+                  <td class="prop-comment">The position of the Panel in the canonical reading sequence within its Plate (1-based). The next panel can be derived from hasRank: panel P2 follows P1 if P2 has rank n+1 and both share the same Plate.</td>
+                  <td class="prop-see-also"></td>
+                </tr><tr>
+                  <td class="prop-name">isLocative</td>
+                  <td class="prop-range"><span class="badge badge-range">boolean</span></td>
+                  <td class="prop-comment">Indicates whether the panel is a locative panel, i.e. a purely establishing shot that sets the spatial context of a scene. Rather than depicting an action or advancing the narrative in time, it implicitly signals to the reader where the events of the following panels take place.</td>
+                  <td class="prop-see-also"></td>
+                </tr><tr>
+                  <td class="prop-name">isPolychronic</td>
+                  <td class="prop-range"><span class="badge badge-range">boolean</span></td>
+                  <td class="prop-comment">Indicates whether the panel contains two or more layers, each corresponding to a distinct time window (T). For example, the foreground may represent the present while the background depicts a flashback, thus embedding multiple temporal moments within a single panel.</td>
+                  <td class="prop-see-also"><button class="img-btn" onclick="openModal('exemple/polychronicPanel.png')">&#128247; View</button></td>
+                </tr><tr>
+                  <td class="prop-name">isPolymorphic</td>
+                  <td class="prop-range"><span class="badge badge-range">boolean</span></td>
+                  <td class="prop-comment">Indicates whether the panel is a polymorphic panel (also known as a stroboscopic panel), i.e. a single panel in which the same character or entity is drawn multiple times in different positions to depict the unfolding of an action.</td>
+                  <td class="prop-see-also"></td>
+                </tr><tr>
+                  <td class="prop-name">isPolyptic</td>
+                  <td class="prop-range"><span class="badge badge-range">boolean</span></td>
+                  <td class="prop-comment">Indicates whether the panel is part of a polyptic composition, i.e. a panel whose image extends across adjacent panels to form a single continuous visual composition spanning multiple panels.</td>
+                  <td class="prop-see-also"></td>
+                </tr><tr>
+                  <td class="prop-name">panelTransition</td>
+                  <td class="prop-range"><span class="badge badge-enum">action-to-action</span><span class="badge badge-enum">aspect-to-aspect</span><span class="badge badge-enum">moment-to-moment</span><span class="badge badge-enum">non-sequitur</span><span class="badge badge-enum">scene-to-scene</span><span class="badge badge-enum">subject-to-subject</span></td>
+                  <td class="prop-comment">The type of temporal/spatial transition between this Panel and the next one in reading order (McCloud, 1993). Values: "moment-to-moment" (successive instants of a single action), "action-to-action" (a single subject performing distinct actions), "subject-to-subject" (different subjects within a single scene), "scene-to-scene" (significant temporal or spatial jump), "aspect-to-aspect" (different aspects of the same place, idea or mood, no time progression), "non-sequitur" (no logical or narrative relation). Applies to the source panel of the nextPanel relation.</td>
+                  <td class="prop-see-also"></td>
+                </tr></tbody>
+                </table>
+              </div>
+            </div>
+        </section>
+        
+        <section class="detail-panel" id="class-Plate">
+          <h2 class="detail-title">Plate</h2>
+          <div class="detail-section">
+            <span class="detail-label">Description</span>
+            <span class="detail-value">A Plate is the plane or space on which the different panels of a comic strip are spatially juxtaposed and ordered to tell a story. In a classic printed work, it generally materializes as a page (or even a double page) of an album.</span>
+          </div>
+          <div class="detail-section">
+            <span class="detail-label">URI</span>
+            <code class="detail-uri">/seqartonto#Plate</code>
+          </div>
+          <div class="detail-section">
+            <span class="detail-label">Visual node</span>
+            <span class="detail-value visual-preview">
+              <svg width="48" height="48" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><polygon points="24,2 46,24 24,46 2,24" fill="#FF6347" stroke="#000000" stroke-width="2"/></svg>
+              <span class="visual-meta">
+                <span class="visual-chip">polygon</span>
+                <span class="visual-chip" style="background:#FF6347;border-color:#000000;color:#000000;">#FF6347</span>
+                <span class="visual-chip">stroke #000000</span>
+              </span>
+            </span>
+          </div>
+          
+          
+            <div class="detail-section detail-section--table">
+              <span class="detail-label">Attributes</span>
+              <div class="detail-value">
+                <table class="prop-table">
+                  <thead><tr><th>Name</th><th>Values</th><th>Description</th></tr></thead>
+                  <tbody><tr>
+                  <td class="prop-name">atmosphericLayer</td>
+                  <td class="prop-range"><span class="badge badge-range">string</span></td>
+                  <td class="prop-comment">Describes a visual effect or atmospheric element that overlays the entire plate and is perceived first by the reader (e.g. "snow", "fog", "rain", "dust").</td>
+                  
+                </tr><tr>
+                  <td class="prop-name">hasNumber</td>
+                  <td class="prop-range"><span class="badge badge-range">integer</span></td>
+                  <td class="prop-comment">The sequential number of the plate within the book.</td>
+                  
+                </tr><tr>
+                  <td class="prop-name">height</td>
+                  <td class="prop-range"><span class="badge badge-range">positiveInteger</span></td>
+                  <td class="prop-comment">The height of the plate in pixels. Defines the vertical extent of the spatial reference frame within which the borderPoints of all contained panels are expressed.</td>
+                  
+                </tr><tr>
+                  <td class="prop-name">onDoublePage</td>
+                  <td class="prop-range"><span class="badge badge-range">boolean</span></td>
+                  <td class="prop-comment">Indicates whether the plate spans a double page (true) or a single page (false).</td>
+                  
+                </tr><tr>
+                  <td class="prop-name">width</td>
+                  <td class="prop-range"><span class="badge badge-range">positiveInteger</span></td>
+                  <td class="prop-comment">The width of the plate in pixels. Defines the horizontal extent of the spatial reference frame within which the borderPoints of all contained panels are expressed.</td>
+                  
+                </tr></tbody>
+                </table>
+              </div>
+            </div>
+        </section>
+        
+        <section class="detail-panel" id="class-Scene">
+          <h2 class="detail-title">Scene</h2>
+          <div class="detail-section">
+            <span class="detail-label">Description</span>
+            <span class="detail-value">A Scene is a NarrativeConstituent defined by the simultaneous stability of two perceptually detectable dimensions: spatial (same NarrativeLocation) and character (same set of protagonists). Following the Event-Indexing Model (Zwaan & Radvansky 1998; Zwaan, Magliano & Graesser 1995), a new Scene begins whenever one of these dimensions shifts significantly — a change of location or a significant change in the protagonist cast. The causal and intentional dimensions of the EIM are delegated to the Event level, which groups Scenes around a shared dramatic question. The Scene bears the hasNarrativeLocation link and is composed of one or more Segments via hasNarrativeUnit.</span>
+          </div>
+          <div class="detail-section">
+            <span class="detail-label">URI</span>
+            <code class="detail-uri">/seqartonto#Scene</code>
+          </div>
+          <div class="detail-section">
+            <span class="detail-label">Visual node</span>
+            <span class="detail-value visual-preview">
+              <svg width="48" height="48" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><polygon points="24,2 46,24 24,46 2,24" fill="#9B30FF" stroke="#000000" stroke-width="2"/></svg>
+              <span class="visual-meta">
+                <span class="visual-chip">polygon</span>
+                <span class="visual-chip" style="background:#9B30FF;border-color:#000000;color:#000000;">#9B30FF</span>
+                <span class="visual-chip">stroke #000000</span>
+              </span>
+            </span>
+          </div>
+          <div class="detail-section"><span class="detail-label">Subclass of</span><span class="detail-value"><span class="badge">NarrativeConstituent</span></span></div>
+          
+        </section>
+        
+        <section class="detail-panel" id="class-SceneSetting">
+          <h2 class="detail-title">SceneSetting</h2>
+          <div class="detail-section">
+            <span class="detail-label">Description</span>
+            <span class="detail-value">A SceneSetting captures the visual appearance of the environment as it is rendered in a specific Level. It is the visual instance of a NarrativeLocation: while a NarrativeLocation is the diegetic concept ("the forest"), a SceneSetting describes how that location looks in a particular panel level ("dense foggy forest at night"). Anchored on Level (via hasSceneSetting) and linked to its corresponding NarrativeLocation (via realizesLocation). Mirrors the MetaCharacter/Character pattern for identity persistence vs. local visual description.</span>
+          </div>
+          <div class="detail-section">
+            <span class="detail-label">URI</span>
+            <code class="detail-uri">/seqartonto#SceneSetting</code>
+          </div>
+          <div class="detail-section">
+            <span class="detail-label">Visual node</span>
+            <span class="detail-value visual-preview">
+              <svg width="48" height="48" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><polygon points="24,2 46,24 24,46 2,24" fill="#90EE90" stroke="#000000" stroke-width="2"/></svg>
+              <span class="visual-meta">
+                <span class="visual-chip">hexagon</span>
+                <span class="visual-chip" style="background:#90EE90;border-color:#000000;color:#000000;">#90EE90</span>
+                <span class="visual-chip">stroke #000000</span>
+              </span>
+            </span>
+          </div>
+          
+          
+            <div class="detail-section detail-section--table">
+              <span class="detail-label">Attributes</span>
+              <div class="detail-value">
+                <table class="prop-table">
+                  <thead><tr><th>Name</th><th>Values</th><th>Description</th></tr></thead>
+                  <tbody><tr>
+                  <td class="prop-name">description</td>
+                  <td class="prop-range"><span class="badge badge-range">string</span></td>
+                  <td class="prop-comment">A free-text description of the visual appearance of the environment as seen in this Level (e.g. "Dense foggy forest at night", "Sun-lit clearing with tall grass"). Captures the local visual rendering of the NarrativeLocation without imposing a controlled vocabulary.</td>
+                  
+                </tr></tbody>
+                </table>
+              </div>
+            </div>
+        </section>
+        
+        <section class="detail-panel" id="class-Segment">
+          <h2 class="detail-title">Segment</h2>
+          <div class="detail-section">
+            <span class="detail-label">Description</span>
+            <span class="detail-value">A Segment is the leaf NarrativeConstituent in the narrative hierarchy. It corresponds to a VNG constituent (Arc) in the sense of Cohn (2013): a grouping of one or more Levels that together bear a single narrative role (Establisher, Initial, Peak, Release, or Refiner) relative to the parent Scene. The Segment is the only level that directly instantiates Levels (via instantiates) and the only level that carries a narrativeRole value. Higher levels (Scene, Event, Arc, Story) are realised indirectly through their descendant Segments. APPLICABILITY WARNING — narrativeRole should only be annotated when the visual track carries the narrative autonomously. As Cohn (2015) cautions: "not all sequences of images use the principles of VNG. In particular, narrative sequences used in multimodal contexts (i.e., combining text and image) may not have a clear-cut narrative structure, due to the meaning being distributed into both text and image. […] The structures of VNG appear most strongly in wordless visual narratives." A practical diagnostic: if deleting the text causes the visuals to lose their overall gist, narrativeRole should be left unassigned on this Segment.</span>
+          </div>
+          <div class="detail-section">
+            <span class="detail-label">URI</span>
+            <code class="detail-uri">/seqartonto#Segment</code>
+          </div>
+          <div class="detail-section">
+            <span class="detail-label">Visual node</span>
+            <span class="detail-value visual-preview">
+              <svg width="48" height="48" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><polygon points="24,2 46,24 24,46 2,24" fill="#C76BFF" stroke="#000000" stroke-width="2"/></svg>
+              <span class="visual-meta">
+                <span class="visual-chip">polygon</span>
+                <span class="visual-chip" style="background:#C76BFF;border-color:#000000;color:#000000;">#C76BFF</span>
+                <span class="visual-chip">stroke #000000</span>
+              </span>
+            </span>
+          </div>
+          <div class="detail-section"><span class="detail-label">Subclass of</span><span class="detail-value"><span class="badge">NarrativeConstituent</span></span></div>
+          
+            <div class="detail-section detail-section--table">
+              <span class="detail-label">Attributes</span>
+              <div class="detail-value">
+                <table class="prop-table">
+                  <thead><tr><th>Name</th><th>Values</th><th>Description</th></tr></thead>
+                  <tbody><tr>
+                  <td class="prop-name">narrativeRole</td>
+                  <td class="prop-range"><span class="badge badge-enum">Establisher</span><span class="badge badge-enum">Initial</span><span class="badge badge-enum">Peak</span><span class="badge badge-enum">Refiner</span><span class="badge badge-enum">Release</span></td>
+                  <td class="prop-comment">The narrative role of this NarrativeConstituent within its parent arc, following Cohn's Visual Narrative Grammar (2020). Functional: each constituent bears exactly one role. The value is constrained to the following enumeration: "Establisher" (E) — sets the scene without advancing the action; "Initial" (I) — initiates the narrative tension; "Peak" (P) — the climactic moment that heads the constituent and determines its role at the level above; "Release" (R) — resolves the tension after a Peak; "Refiner" (r) — elaborates or modifies an adjacent element without independent narrative force. The role is relative to the constituent's position within its parent: a sub-constituent with role "Peak" is what makes the parent itself a "Peak" at the next level up (recursive heading).</td>
+                  
+                </tr></tbody>
+                </table>
+              </div>
+            </div>
+        </section>
+        
+        <section class="detail-panel" id="class-Story">
+          <h2 class="detail-title">Story</h2>
+          <div class="detail-section">
+            <span class="detail-label">Description</span>
+            <span class="detail-value">A Story is the top-level NarrativeConstituent representing the complete narrative content of a comic work (the fabula in its entirety). It is the narrative counterpart of a Book: while a Book is the physical artefact, a Story is the abstract sequence of events it conveys. A Story is composed of one or more Arcs via hasNarrativeUnit.</span>
+          </div>
+          <div class="detail-section">
+            <span class="detail-label">URI</span>
+            <code class="detail-uri">/seqartonto#Story</code>
+          </div>
+          <div class="detail-section">
+            <span class="detail-label">Visual node</span>
+            <span class="detail-value visual-preview">
+              <svg width="48" height="48" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><polygon points="24,2 46,24 24,46 2,24" fill="#1A0040" stroke="#000000" stroke-width="2"/></svg>
+              <span class="visual-meta">
+                <span class="visual-chip">polygon</span>
+                <span class="visual-chip" style="background:#1A0040;border-color:#000000;color:#000000;">#1A0040</span>
+                <span class="visual-chip">stroke #000000</span>
+              </span>
+            </span>
+          </div>
+          <div class="detail-section"><span class="detail-label">Subclass of</span><span class="detail-value"><span class="badge">NarrativeConstituent</span></span></div>
+          
+        </section>
+        
+        <section class="detail-panel" id="class-Tail">
+          <h2 class="detail-title">Tail</h2>
+          <div class="detail-section">
+            <span class="detail-label">Description</span>
+            <span class="detail-value">A Tail is the graphical appendage of a Balloon that visually connects it to its speaker. It is characterised by its direction (tailDirection) and the coordinates of its tip (tailTip). A Balloon without a Tail denotes a broadcast, off-panel, or narrator voice.</span>
+          </div>
+          <div class="detail-section">
+            <span class="detail-label">URI</span>
+            <code class="detail-uri">/seqartonto#Tail</code>
+          </div>
+          <div class="detail-section">
+            <span class="detail-label">Visual node</span>
+            <span class="detail-value visual-preview">
+              <svg width="48" height="48" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><polygon points="24,2 46,46 2,46" fill="#4682B4" stroke="#1A1A2E" stroke-width="2"/></svg>
+              <span class="visual-meta">
+                <span class="visual-chip">triangle</span>
+                <span class="visual-chip" style="background:#4682B4;border-color:#1A1A2E;color:#1A1A2E;">#4682B4</span>
+                <span class="visual-chip">stroke #1A1A2E</span>
+              </span>
+            </span>
+          </div>
+          
+          
+            <div class="detail-section detail-section--table">
+              <span class="detail-label">Attributes</span>
+              <div class="detail-value">
+                <table class="prop-table">
+                  <thead><tr><th>Name</th><th>Values</th><th>Description</th></tr></thead>
+                  <tbody><tr>
+                  <td class="prop-name">tailDirection</td>
+                  <td class="prop-range"><span class="badge badge-enum">E</span><span class="badge badge-enum">N</span><span class="badge badge-enum">NE</span><span class="badge badge-enum">NW</span><span class="badge badge-enum">S</span><span class="badge badge-enum">SE</span><span class="badge badge-enum">SW</span><span class="badge badge-enum">W</span><span class="badge badge-enum">none</span></td>
+                  <td class="prop-comment">The cardinal direction in which the balloon tail points, relative to the balloon body. Allowed values: "N", "NE", "E", "SE", "S", "SW", "W", "NW", "none" (tail-less balloon).</td>
+                  
+                </tr><tr>
+                  <td class="prop-name">tailTip</td>
+                  <td class="prop-range"><span class="badge badge-range">string</span></td>
+                  <td class="prop-comment">The exact coordinates of the tip of the balloon tail, encoded as a single "x,y" pair (e.g. "142,87"). Coordinates are expressed in pixels relative to the plate origin, consistent with the borderPoints convention.</td>
+                  
+                </tr></tbody>
+                </table>
+              </div>
+            </div>
+        </section>
+        
+        <section class="detail-panel" id="class-TemporalLink">
+          <h2 class="detail-title">TemporalLink</h2>
+          <div class="detail-section">
+            <span class="detail-label">Description</span>
+            <span class="detail-value">A reified temporal relation between two NarrativeConstituents, expressing how their story-world intervals relate according to Allen's interval algebra (Allen 1983). Only instantiated when the fabula order differs from or complexifies the syuzhet order: flashbacks (BEFORE/AFTER), flash-forwards (AFTER), and parallel narration (SIMULTANEOUS). The default case — consecutive constituents in both reading and story order — requires no TemporalLink.</span>
+          </div>
+          <div class="detail-section">
+            <span class="detail-label">URI</span>
+            <code class="detail-uri">/seqartonto#TemporalLink</code>
+          </div>
+          <div class="detail-section">
+            <span class="detail-label">Visual node</span>
+            <span class="detail-value visual-preview">
+              <svg width="48" height="48" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><polygon points="24,2 46,24 24,46 2,24" fill="#FF8C00" stroke="#000000" stroke-width="2"/></svg>
+              <span class="visual-meta">
+                <span class="visual-chip">diamond</span>
+                <span class="visual-chip" style="background:#FF8C00;border-color:#000000;color:#000000;">#FF8C00</span>
+                <span class="visual-chip">stroke #000000</span>
+              </span>
+            </span>
+          </div>
+          
+          
+            <div class="detail-section detail-section--table">
+              <span class="detail-label">Attributes</span>
+              <div class="detail-value">
+                <table class="prop-table">
+                  <thead><tr><th>Name</th><th>Values</th><th>Description</th></tr></thead>
+                  <tbody><tr>
+                  <td class="prop-name">tlinkType</td>
+                  <td class="prop-range"><span class="badge badge-enum">BEFORE</span><span class="badge badge-enum">IDENTITY</span><span class="badge badge-enum">SIMULTANEOUS</span></td>
+                  <td class="prop-comment">The type of temporal relation between the source and target NarrativeConstituents, following TimeML (Pustejovsky et al. 2003): BEFORE (source ends before target begins in the story world, e.g. a flashback), SIMULTANEOUS (source and target co-occur in the story world, e.g. parallel narration), IDENTITY (source and target refer to the same story-world event seen from two different narrative positions).</td>
+                  
+                </tr></tbody>
+                </table>
+              </div>
+            </div>
+        </section>
+        
+        <section class="detail-panel" id="class-TextLine">
+          <h2 class="detail-title">TextLine</h2>
+          <div class="detail-section">
+            <span class="detail-label">Description</span>
+            <span class="detail-value">A TextLine represents a single physical line of text as it appears on the plate. It allows fine-grained annotation of text independently of its container. A TextLine may be contained in a Balloon, a Caption, or a FreeText element (e.g. text on the facade of a building or an object); containers link to their TextLines via hasTextLine. A TextLine is further decomposed into one or more TextSpans via hasTextSpan, only when typographic style varies within the line.</span>
+          </div>
+          <div class="detail-section">
+            <span class="detail-label">URI</span>
+            <code class="detail-uri">/seqartonto#TextLine</code>
+          </div>
+          <div class="detail-section">
+            <span class="detail-label">Visual node</span>
+            <span class="detail-value visual-preview">
+              <svg width="48" height="48" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><circle cx="24" cy="24" r="22" fill="#808080" stroke="#000000" stroke-width="2"/></svg>
+              <span class="visual-meta">
+                <span class="visual-chip">circle</span>
+                <span class="visual-chip" style="background:#808080;border-color:#000000;color:#000000;">#808080</span>
+                <span class="visual-chip">stroke #000000</span>
+              </span>
+            </span>
+          </div>
+          
+          
+            <div class="detail-section detail-section--table">
+              <span class="detail-label">Attributes</span>
+              <div class="detail-value">
+                <table class="prop-table">
+                  <thead><tr><th>Name</th><th>Values</th><th>Description</th></tr></thead>
+                  <tbody><tr>
+                  <td class="prop-name">borderPoints</td>
+                  <td class="prop-range"><span class="badge badge-range">string</span></td>
+                  <td class="prop-comment">The polygon boundary of the element as an ordered list of 2D points, encoded as a space-separated string of "x,y" pairs (SVG polygon format). Example: "10,20 50,20 50,80 10,80". Coordinates are expressed in pixels relative to the plate origin.</td>
+                  
+                </tr><tr>
+                  <td class="prop-name">textLineType</td>
+                  <td class="prop-range"><span class="badge badge-enum">diegetic</span><span class="badge badge-enum">narrative</span><span class="badge badge-enum">paratext</span></td>
+                  <td class="prop-comment">The functional role of the text line within the plate. Allowed values: "narrative" (text anchored in the discourse — speech or thought in a Balloon, narration or description in a Caption); "diegetic" (text that exists as a visual inscription within the represented world, e.g. text on a building facade, a road sign, an open letter or newspaper); "paratext" (editorial text outside the diegesis, e.g. title, page number, credits, legal notices, or any information printed in the margins of the plate — in the Genettian sense).</td>
+                  
+                </tr><tr>
+                  <td class="prop-name">textOrientation</td>
+                  <td class="prop-range"><span class="badge badge-enum">horizontal</span><span class="badge badge-enum">vertical</span></td>
+                  <td class="prop-comment">The physical orientation of the text line on the plate. Allowed values: "horizontal" (text runs left-to-right or right-to-left along the horizontal axis, as in most Western and manga layouts) or "vertical" (text runs top-to-bottom along the vertical axis, as in traditional East Asian comics). When absent, horizontal orientation is assumed.</td>
+                  
+                </tr></tbody>
+                </table>
+              </div>
+            </div>
+        </section>
+        
+        <section class="detail-panel" id="class-TextSpan">
+          <h2 class="detail-title">TextSpan</h2>
+          <div class="detail-section">
+            <span class="detail-label">Description</span>
+            <span class="detail-value">A TextSpan represents a word or group of words within a TextLine that share a uniform typographic style. This level of granularity is justified by the fact that typographic style can vary within a single line — a word rendered in bold, italic, or all-caps carries its own meaning and may signal emphasis, vocal stress, or a change of register. Multiple TextSpans within a TextLine are only warranted when there is actual stylistic variation; a stylistically homogeneous line maps to a single TextSpan.</span>
+          </div>
+          <div class="detail-section">
+            <span class="detail-label">URI</span>
+            <code class="detail-uri">/seqartonto#TextSpan</code>
+          </div>
+          <div class="detail-section">
+            <span class="detail-label">Visual node</span>
+            <span class="detail-value visual-preview">
+              <svg width="48" height="48" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><circle cx="24" cy="24" r="22" fill="#D3D3D3" stroke="#000000" stroke-width="2"/></svg>
+              <span class="visual-meta">
+                <span class="visual-chip">circle</span>
+                <span class="visual-chip" style="background:#D3D3D3;border-color:#000000;color:#000000;">#D3D3D3</span>
+                <span class="visual-chip">stroke #000000</span>
+              </span>
+            </span>
+          </div>
+          
+          
+            <div class="detail-section detail-section--table">
+              <span class="detail-label">Attributes</span>
+              <div class="detail-value">
+                <table class="prop-table">
+                  <thead><tr><th>Name</th><th>Values</th><th>Description</th></tr></thead>
+                  <tbody><tr>
+                  <td class="prop-name">borderPoints</td>
+                  <td class="prop-range"><span class="badge badge-range">string</span></td>
+                  <td class="prop-comment">The polygon boundary of the element as an ordered list of 2D points, encoded as a space-separated string of "x,y" pairs (SVG polygon format). Example: "10,20 50,20 50,80 10,80". Coordinates are expressed in pixels relative to the plate origin.</td>
+                  
+                </tr><tr>
+                  <td class="prop-name">content</td>
+                  <td class="prop-range"><span class="badge badge-range">string</span></td>
+                  <td class="prop-comment">The textual content of a TextSpan (word or group of words within a TextLine sharing a typographic style) or an Onomatopoeia (e.g. "BANG", "SPLASH"). Content is anchored at the finest granularity level.</td>
+                  
+                </tr><tr>
+                  <td class="prop-name">isBold</td>
+                  <td class="prop-range"><span class="badge badge-range">boolean</span></td>
+                  <td class="prop-comment">Indicates whether the span is rendered in bold. Bold text within a line typically signals emphasis, stress, or increased vocal intensity.</td>
+                  
+                </tr><tr>
+                  <td class="prop-name">isItalic</td>
+                  <td class="prop-range"><span class="badge badge-range">boolean</span></td>
+                  <td class="prop-comment">Indicates whether the span is rendered in italic. Italic text within a line typically signals a foreign word, a title, a whisper, or a particular vocal inflection.</td>
+                  
+                </tr><tr>
+                  <td class="prop-name">textColor</td>
+                  <td class="prop-range"><span class="badge badge-range">string</span></td>
+                  <td class="prop-comment">The color of the text in this span, encoded as a CSS hex color string (e.g. "#FF0000" for red). Color variation within a line can signal emphasis, character identity, or supernatural/magical connotations.</td>
+                  
+                </tr><tr>
+                  <td class="prop-name">textEffect</td>
+                  <td class="prop-range"><span class="badge badge-range">string</span></td>
+                  <td class="prop-comment">A free-text description of any visual effect or decoration applied to this span beyond basic typographic style (e.g. "yellow circle", "red underline", "drop shadow", "outlined"). Intended for graphical embellishments that cannot be expressed by isBold, isItalic, or textColor alone.</td>
+                  
+                </tr></tbody>
+                </table>
+              </div>
+            </div>
+        </section>
+        
+        <section class="detail-panel" id="class-Timex">
+          <h2 class="detail-title">Timex</h2>
+          <div class="detail-section">
+            <span class="detail-label">Description</span>
+            <span class="detail-value">A temporal expression found in a Caption (typically captionType "Effect"), such as "Three years later" or "The next morning". Corresponds to TimeML's TIMEX3 annotation standard (ISO 24617-1). Carries the original text (timexText), the expression type (timexType: DATE, TIME, DURATION, SET), and optionally a normalized ISO 8601 value (timexValue).</span>
+          </div>
+          <div class="detail-section">
+            <span class="detail-label">URI</span>
+            <code class="detail-uri">/seqartonto#Timex</code>
+          </div>
+          <div class="detail-section">
+            <span class="detail-label">Visual node</span>
+            <span class="detail-value visual-preview">
+              <svg width="48" height="48" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><polygon points="24,2 46,24 24,46 2,24" fill="#FFD700" stroke="#000000" stroke-width="2"/></svg>
+              <span class="visual-meta">
+                <span class="visual-chip">diamond</span>
+                <span class="visual-chip" style="background:#FFD700;border-color:#000000;color:#000000;">#FFD700</span>
+                <span class="visual-chip">stroke #000000</span>
+              </span>
+            </span>
+          </div>
+          
+          
+            <div class="detail-section detail-section--table">
+              <span class="detail-label">Attributes</span>
+              <div class="detail-value">
+                <table class="prop-table">
+                  <thead><tr><th>Name</th><th>Values</th><th>Description</th></tr></thead>
+                  <tbody><tr>
+                  <td class="prop-name">timexText</td>
+                  <td class="prop-range"><span class="badge badge-range">string</span></td>
+                  <td class="prop-comment">The original text of the temporal expression as it appears in the caption (e.g. "Three years later", "The next morning").</td>
+                  
+                </tr><tr>
+                  <td class="prop-name">timexType</td>
+                  <td class="prop-range"><span class="badge badge-enum">DATE</span><span class="badge badge-enum">DURATION</span><span class="badge badge-enum">SET</span><span class="badge badge-enum">TIME</span></td>
+                  <td class="prop-comment">The type of temporal expression, following TimeML's TIMEX3 typology (ISO 24617-1): DATE (calendar date), TIME (time of day), DURATION (elapsed time, e.g. "three years"), SET (recurring expressions, e.g. "every morning").</td>
+                  
+                </tr><tr>
+                  <td class="prop-name">timexValue</td>
+                  <td class="prop-range"><span class="badge badge-range">string</span></td>
+                  <td class="prop-comment">The normalized ISO 8601 value of the temporal expression (e.g. "P3Y" for "three years", "1944" for a year reference). Optional when normalization is not possible.</td>
+                  
+                </tr></tbody>
+                </table>
+              </div>
+            </div>
+        </section>
+        
+    <div class="section-heading">Object Properties</div>
+    
+        <section class="detail-panel" id="rel-emittedBy">
+          <h2 class="detail-title detail-title--rel">⟶ emittedBy</h2>
+          <div class="detail-section">
+            <span class="detail-label">Description</span>
+            <span class="detail-value">Links a Balloon or Caption to the Character who is its speaker, thinker, or narrative voice.</span>
+          </div>
+          <div class="detail-section">
+            <span class="detail-label">URI</span>
+            <code class="detail-uri">/seqartonto#emittedBy</code>
+          </div>
+          <div class="detail-section detail-section--rels">
+            <span class="detail-label">Diagram</span>
+            <div class="detail-value rel-list">
+            <div class="rel-row">
+              <div class="rel-node"><svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg"><circle cx="18" cy="18" r="16" fill="#90D5FF" stroke="#000000" stroke-width="2"/></svg><span class="rel-node-label">Balloon</span></div>
+              <div class="rel-arrow">
+                <span class="rel-prop-label">emittedBy</span>
+                <svg class="arrow-svg" viewBox="0 0 80 20" xmlns="http://www.w3.org/2000/svg">
+                  <line x1="0" y1="10" x2="70" y2="10" stroke="#a0aec0" stroke-width="1.5"/>
+                  <polygon points="70,5 80,10 70,15" fill="#a0aec0"/>
+                </svg>
+              </div>
+              <div class="rel-node"><svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg"><circle cx="18" cy="18" r="16" fill="#FF0000" stroke="#000000" stroke-width="2"/></svg><span class="rel-node-label">Character</span></div>
+            </div>
+            <div class="rel-row">
+              <div class="rel-node"><svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="2" width="32" height="32" rx="3" fill="#ffadf2" stroke="#000000" stroke-width="2"/></svg><span class="rel-node-label">Caption</span></div>
+              <div class="rel-arrow">
+                <span class="rel-prop-label">emittedBy</span>
+                <svg class="arrow-svg" viewBox="0 0 80 20" xmlns="http://www.w3.org/2000/svg">
+                  <line x1="0" y1="10" x2="70" y2="10" stroke="#a0aec0" stroke-width="1.5"/>
+                  <polygon points="70,5 80,10 70,15" fill="#a0aec0"/>
+                </svg>
+              </div>
+              <div class="rel-node"><svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg"><circle cx="18" cy="18" r="16" fill="#FF0000" stroke="#000000" stroke-width="2"/></svg><span class="rel-node-label">Character</span></div>
+            </div></div>
+          </div>
+          
+        </section>
+        
+        <section class="detail-panel" id="rel-hasAgent">
+          <h2 class="detail-title detail-title--rel">⟶ hasAgent</h2>
+          <div class="detail-section">
+            <span class="detail-label">Description</span>
+            <span class="detail-value">Links an Interaction to the entity (Character or Object) that performs the action. Non-functional: multiple agents are allowed for collective interactions (e.g. A, B and C sit together).</span>
+          </div>
+          <div class="detail-section">
+            <span class="detail-label">URI</span>
+            <code class="detail-uri">/seqartonto#hasAgent</code>
+          </div>
+          <div class="detail-section detail-section--rels">
+            <span class="detail-label">Diagram</span>
+            <div class="detail-value rel-list">
+            <div class="rel-row">
+              <div class="rel-node"><svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg"><polygon points="18,2 34,34 2,34" fill="#FF8C00" stroke="#000000" stroke-width="2"/></svg><span class="rel-node-label">Interaction</span></div>
+              <div class="rel-arrow">
+                <span class="rel-prop-label">hasAgent</span>
+                <svg class="arrow-svg" viewBox="0 0 80 20" xmlns="http://www.w3.org/2000/svg">
+                  <line x1="0" y1="10" x2="70" y2="10" stroke="#a0aec0" stroke-width="1.5"/>
+                  <polygon points="70,5 80,10 70,15" fill="#a0aec0"/>
+                </svg>
+              </div>
+              <div class="rel-node"><svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg"><circle cx="18" cy="18" r="16" fill="#FF0000" stroke="#000000" stroke-width="2"/></svg><span class="rel-node-label">Character</span></div>
+            </div>
+            <div class="rel-row">
+              <div class="rel-node"><svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg"><polygon points="18,2 34,34 2,34" fill="#FF8C00" stroke="#000000" stroke-width="2"/></svg><span class="rel-node-label">Interaction</span></div>
+              <div class="rel-arrow">
+                <span class="rel-prop-label">hasAgent</span>
+                <svg class="arrow-svg" viewBox="0 0 80 20" xmlns="http://www.w3.org/2000/svg">
+                  <line x1="0" y1="10" x2="70" y2="10" stroke="#a0aec0" stroke-width="1.5"/>
+                  <polygon points="70,5 80,10 70,15" fill="#a0aec0"/>
+                </svg>
+              </div>
+              <div class="rel-node"><svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg"><circle cx="18" cy="18" r="16" fill="#FFBF00" stroke="#000000" stroke-width="2"/></svg><span class="rel-node-label">Object</span></div>
+            </div></div>
+          </div>
+          
+        </section>
+        
+        <section class="detail-panel" id="rel-hasBalloon">
+          <h2 class="detail-title detail-title--rel">⟶ hasBalloon</h2>
+          <div class="detail-section">
+            <span class="detail-label">Description</span>
+            <span class="detail-value">Links a Level to the Balloons it contains.</span>
+          </div>
+          <div class="detail-section">
+            <span class="detail-label">URI</span>
+            <code class="detail-uri">/seqartonto#hasBalloon</code>
+          </div>
+          <div class="detail-section detail-section--rels">
+            <span class="detail-label">Diagram</span>
+            <div class="detail-value rel-list">
+            <div class="rel-row">
+              <div class="rel-node"><svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="2" width="32" height="32" rx="3" fill="#ff6600" stroke="#000000" stroke-width="2"/></svg><span class="rel-node-label">Level</span></div>
+              <div class="rel-arrow">
+                <span class="rel-prop-label">hasBalloon</span>
+                <svg class="arrow-svg" viewBox="0 0 80 20" xmlns="http://www.w3.org/2000/svg">
+                  <line x1="0" y1="10" x2="70" y2="10" stroke="#a0aec0" stroke-width="1.5"/>
+                  <polygon points="70,5 80,10 70,15" fill="#a0aec0"/>
+                </svg>
+              </div>
+              <div class="rel-node"><svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg"><circle cx="18" cy="18" r="16" fill="#90D5FF" stroke="#000000" stroke-width="2"/></svg><span class="rel-node-label">Balloon</span></div>
+            </div></div>
+          </div>
+          
+        </section>
+        
+        <section class="detail-panel" id="rel-hasCaption">
+          <h2 class="detail-title detail-title--rel">⟶ hasCaption</h2>
+          <div class="detail-section">
+            <span class="detail-label">Description</span>
+            <span class="detail-value">Links a Panel or a Plate to its Caption.</span>
+          </div>
+          <div class="detail-section">
+            <span class="detail-label">URI</span>
+            <code class="detail-uri">/seqartonto#hasCaption</code>
+          </div>
+          <div class="detail-section detail-section--rels">
+            <span class="detail-label">Diagram</span>
+            <div class="detail-value rel-list">
+            <div class="rel-row">
+              <div class="rel-node"><svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="2" width="32" height="32" rx="3" fill="#ffffff" stroke="#000000" stroke-width="2"/></svg><span class="rel-node-label">Panel</span></div>
+              <div class="rel-arrow">
+                <span class="rel-prop-label">hasCaption</span>
+                <svg class="arrow-svg" viewBox="0 0 80 20" xmlns="http://www.w3.org/2000/svg">
+                  <line x1="0" y1="10" x2="70" y2="10" stroke="#a0aec0" stroke-width="1.5"/>
+                  <polygon points="70,5 80,10 70,15" fill="#a0aec0"/>
+                </svg>
+              </div>
+              <div class="rel-node"><svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="2" width="32" height="32" rx="3" fill="#ffadf2" stroke="#000000" stroke-width="2"/></svg><span class="rel-node-label">Caption</span></div>
+            </div>
+            <div class="rel-row">
+              <div class="rel-node"><svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg"><polygon points="18,2 34,18 18,34 2,18" fill="#FF6347" stroke="#000000" stroke-width="2"/></svg><span class="rel-node-label">Plate</span></div>
+              <div class="rel-arrow">
+                <span class="rel-prop-label">hasCaption</span>
+                <svg class="arrow-svg" viewBox="0 0 80 20" xmlns="http://www.w3.org/2000/svg">
+                  <line x1="0" y1="10" x2="70" y2="10" stroke="#a0aec0" stroke-width="1.5"/>
+                  <polygon points="70,5 80,10 70,15" fill="#a0aec0"/>
+                </svg>
+              </div>
+              <div class="rel-node"><svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="2" width="32" height="32" rx="3" fill="#ffadf2" stroke="#000000" stroke-width="2"/></svg><span class="rel-node-label">Caption</span></div>
+            </div></div>
+          </div>
+          
+        </section>
+        
+        <section class="detail-panel" id="rel-hasCharacter">
+          <h2 class="detail-title detail-title--rel">⟶ hasCharacter</h2>
+          <div class="detail-section">
+            <span class="detail-label">Description</span>
+            <span class="detail-value">Links a Level to the Character occurrences it contains.</span>
+          </div>
+          <div class="detail-section">
+            <span class="detail-label">URI</span>
+            <code class="detail-uri">/seqartonto#hasCharacter</code>
+          </div>
+          <div class="detail-section detail-section--rels">
+            <span class="detail-label">Diagram</span>
+            <div class="detail-value rel-list">
+            <div class="rel-row">
+              <div class="rel-node"><svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="2" width="32" height="32" rx="3" fill="#ff6600" stroke="#000000" stroke-width="2"/></svg><span class="rel-node-label">Level</span></div>
+              <div class="rel-arrow">
+                <span class="rel-prop-label">hasCharacter</span>
+                <svg class="arrow-svg" viewBox="0 0 80 20" xmlns="http://www.w3.org/2000/svg">
+                  <line x1="0" y1="10" x2="70" y2="10" stroke="#a0aec0" stroke-width="1.5"/>
+                  <polygon points="70,5 80,10 70,15" fill="#a0aec0"/>
+                </svg>
+              </div>
+              <div class="rel-node"><svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg"><circle cx="18" cy="18" r="16" fill="#FF0000" stroke="#000000" stroke-width="2"/></svg><span class="rel-node-label">Character</span></div>
+            </div></div>
+          </div>
+          
+        </section>
+        
+        <section class="detail-panel" id="rel-hasCharacterOccurrence">
+          <h2 class="detail-title detail-title--rel">⟶ hasCharacterOccurrence</h2>
+          <div class="detail-section">
+            <span class="detail-label">Description</span>
+            <span class="detail-value">Links a MetaCharacter to all its local Character occurrences across panels and plates.</span>
+          </div>
+          <div class="detail-section">
+            <span class="detail-label">URI</span>
+            <code class="detail-uri">/seqartonto#hasCharacterOccurrence</code>
+          </div>
+          <div class="detail-section detail-section--rels">
+            <span class="detail-label">Diagram</span>
+            <div class="detail-value rel-list">
+            <div class="rel-row">
+              <div class="rel-node"><svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg"><circle cx="18" cy="18" r="16" fill="#FF00FF" stroke="#000000" stroke-width="2"/></svg><span class="rel-node-label">MetaCharacter</span></div>
+              <div class="rel-arrow">
+                <span class="rel-prop-label">hasCharacterOccurrence</span>
+                <svg class="arrow-svg" viewBox="0 0 80 20" xmlns="http://www.w3.org/2000/svg">
+                  <line x1="0" y1="10" x2="70" y2="10" stroke="#a0aec0" stroke-width="1.5"/>
+                  <polygon points="70,5 80,10 70,15" fill="#a0aec0"/>
+                </svg>
+              </div>
+              <div class="rel-node"><svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg"><circle cx="18" cy="18" r="16" fill="#FF0000" stroke="#000000" stroke-width="2"/></svg><span class="rel-node-label">Character</span></div>
+            </div></div>
+          </div>
+          <div class="detail-section">
+            <span class="detail-label">Inverse of</span>
+            <span class="detail-value"><span class="badge badge-inverse">⟵ isCharacter</span></span>
+          </div>
+        </section>
+        
+        <section class="detail-panel" id="rel-hasInstrument">
+          <h2 class="detail-title detail-title--rel">⟶ hasInstrument</h2>
+          <div class="detail-section">
+            <span class="detail-label">Description</span>
+            <span class="detail-value">Links an Interaction to an Object that plays a non-patient role — either as a tool used to perform the action (e.g. a gun, a sword) or as a passive support or spatial context (e.g. a bench being sat on, a table around which characters gather). The interactionType verb disambiguates the exact role.</span>
+          </div>
+          <div class="detail-section">
+            <span class="detail-label">URI</span>
+            <code class="detail-uri">/seqartonto#hasInstrument</code>
+          </div>
+          <div class="detail-section detail-section--rels">
+            <span class="detail-label">Diagram</span>
+            <div class="detail-value rel-list">
+            <div class="rel-row">
+              <div class="rel-node"><svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg"><polygon points="18,2 34,34 2,34" fill="#FF8C00" stroke="#000000" stroke-width="2"/></svg><span class="rel-node-label">Interaction</span></div>
+              <div class="rel-arrow">
+                <span class="rel-prop-label">hasInstrument</span>
+                <svg class="arrow-svg" viewBox="0 0 80 20" xmlns="http://www.w3.org/2000/svg">
+                  <line x1="0" y1="10" x2="70" y2="10" stroke="#a0aec0" stroke-width="1.5"/>
+                  <polygon points="70,5 80,10 70,15" fill="#a0aec0"/>
+                </svg>
+              </div>
+              <div class="rel-node"><svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg"><circle cx="18" cy="18" r="16" fill="#FFBF00" stroke="#000000" stroke-width="2"/></svg><span class="rel-node-label">Object</span></div>
+            </div></div>
+          </div>
+          
+        </section>
+        
+        <section class="detail-panel" id="rel-hasInteraction">
+          <h2 class="detail-title detail-title--rel">⟶ hasInteraction</h2>
+          <div class="detail-section">
+            <span class="detail-label">Description</span>
+            <span class="detail-value">Links a Level to the Interactions it contains. An Interaction groups the participants (Characters and/or Objects) of a single action or relation occurring within the same Level.</span>
+          </div>
+          <div class="detail-section">
+            <span class="detail-label">URI</span>
+            <code class="detail-uri">/seqartonto#hasInteraction</code>
+          </div>
+          <div class="detail-section detail-section--rels">
+            <span class="detail-label">Diagram</span>
+            <div class="detail-value rel-list">
+            <div class="rel-row">
+              <div class="rel-node"><svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="2" width="32" height="32" rx="3" fill="#ff6600" stroke="#000000" stroke-width="2"/></svg><span class="rel-node-label">Level</span></div>
+              <div class="rel-arrow">
+                <span class="rel-prop-label">hasInteraction</span>
+                <svg class="arrow-svg" viewBox="0 0 80 20" xmlns="http://www.w3.org/2000/svg">
+                  <line x1="0" y1="10" x2="70" y2="10" stroke="#a0aec0" stroke-width="1.5"/>
+                  <polygon points="70,5 80,10 70,15" fill="#a0aec0"/>
+                </svg>
+              </div>
+              <div class="rel-node"><svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg"><polygon points="18,2 34,34 2,34" fill="#FF8C00" stroke="#000000" stroke-width="2"/></svg><span class="rel-node-label">Interaction</span></div>
+            </div></div>
+          </div>
+          
+        </section>
+        
+        <section class="detail-panel" id="rel-hasLevel">
+          <h2 class="detail-title detail-title--rel">⟶ hasLevel</h2>
+          <div class="detail-section">
+            <span class="detail-label">Description</span>
+            <span class="detail-value">Links a Panel to one or more Levels it contains.</span>
+          </div>
+          <div class="detail-section">
+            <span class="detail-label">URI</span>
+            <code class="detail-uri">/seqartonto#hasLevel</code>
+          </div>
+          <div class="detail-section detail-section--rels">
+            <span class="detail-label">Diagram</span>
+            <div class="detail-value rel-list">
+            <div class="rel-row">
+              <div class="rel-node"><svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="2" width="32" height="32" rx="3" fill="#ffffff" stroke="#000000" stroke-width="2"/></svg><span class="rel-node-label">Panel</span></div>
+              <div class="rel-arrow">
+                <span class="rel-prop-label">hasLevel</span>
+                <svg class="arrow-svg" viewBox="0 0 80 20" xmlns="http://www.w3.org/2000/svg">
+                  <line x1="0" y1="10" x2="70" y2="10" stroke="#a0aec0" stroke-width="1.5"/>
+                  <polygon points="70,5 80,10 70,15" fill="#a0aec0"/>
+                </svg>
+              </div>
+              <div class="rel-node"><svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="2" width="32" height="32" rx="3" fill="#ff6600" stroke="#000000" stroke-width="2"/></svg><span class="rel-node-label">Level</span></div>
+            </div></div>
+          </div>
+          
+        </section>
+        
+        <section class="detail-panel" id="rel-hasLocative">
+          <h2 class="detail-title detail-title--rel">⟶ hasLocative</h2>
+          <div class="detail-section">
+            <span class="detail-label">Description</span>
+            <span class="detail-value">Links an Interaction to the Object that serves as its spatial reference point. Corresponds to the locative thematic role (Fillmore 1968): the object at, near, or in relation to which the action or spatial relation takes place (e.g. a wall, a table, a door). Distinct from hasInstrument (which the agent actively uses) and from hasPatient (which undergoes the action): the locative Object is a passive spatial anchor. Optional: only annotated when a specific Object grounds the spatial dimension of the Interaction.</span>
+          </div>
+          <div class="detail-section">
+            <span class="detail-label">URI</span>
+            <code class="detail-uri">/seqartonto#hasLocative</code>
+          </div>
+          <div class="detail-section detail-section--rels">
+            <span class="detail-label">Diagram</span>
+            <div class="detail-value rel-list">
+            <div class="rel-row">
+              <div class="rel-node"><svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg"><polygon points="18,2 34,34 2,34" fill="#FF8C00" stroke="#000000" stroke-width="2"/></svg><span class="rel-node-label">Interaction</span></div>
+              <div class="rel-arrow">
+                <span class="rel-prop-label">hasLocative</span>
+                <svg class="arrow-svg" viewBox="0 0 80 20" xmlns="http://www.w3.org/2000/svg">
+                  <line x1="0" y1="10" x2="70" y2="10" stroke="#a0aec0" stroke-width="1.5"/>
+                  <polygon points="70,5 80,10 70,15" fill="#a0aec0"/>
+                </svg>
+              </div>
+              <div class="rel-node"><svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg"><circle cx="18" cy="18" r="16" fill="#FFBF00" stroke="#000000" stroke-width="2"/></svg><span class="rel-node-label">Object</span></div>
+            </div></div>
+          </div>
+          
+        </section>
+        
+        <section class="detail-panel" id="rel-hasNarrativeLocation">
+          <h2 class="detail-title detail-title--rel">⟶ hasNarrativeLocation</h2>
+          <div class="detail-section">
+            <span class="detail-label">Description</span>
+            <span class="detail-value">Links a Scene to the NarrativeLocation where it takes place. Since a Scene is defined as the unit of spatial, character, and action continuity (Zwaan & Radvansky 1998), location is a constitutive property of the Scene and is anchored here rather than on finer-grained constituents. Non-leaf levels inherit their location implicitly through their sub-Scenes. Inspired by GOLEM's G13_Narrative_Location.</span>
+          </div>
+          <div class="detail-section">
+            <span class="detail-label">URI</span>
+            <code class="detail-uri">/seqartonto#hasNarrativeLocation</code>
+          </div>
+          <div class="detail-section detail-section--rels">
+            <span class="detail-label">Diagram</span>
+            <div class="detail-value rel-list">
+            <div class="rel-row">
+              <div class="rel-node"><svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg"><polygon points="18,2 34,18 18,34 2,18" fill="#9B30FF" stroke="#000000" stroke-width="2"/></svg><span class="rel-node-label">Scene</span></div>
+              <div class="rel-arrow">
+                <span class="rel-prop-label">hasNarrativeLocation</span>
+                <svg class="arrow-svg" viewBox="0 0 80 20" xmlns="http://www.w3.org/2000/svg">
+                  <line x1="0" y1="10" x2="70" y2="10" stroke="#a0aec0" stroke-width="1.5"/>
+                  <polygon points="70,5 80,10 70,15" fill="#a0aec0"/>
+                </svg>
+              </div>
+              <div class="rel-node"><svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg"><polygon points="18,2 34,18 18,34 2,18" fill="#2E8B57" stroke="#000000" stroke-width="2"/></svg><span class="rel-node-label">NarrativeLocation</span></div>
+            </div></div>
+          </div>
+          
+        </section>
+        
+        <section class="detail-panel" id="rel-hasNarrativeUnit">
+          <h2 class="detail-title detail-title--rel">⟶ hasNarrativeUnit</h2>
+          <div class="detail-section">
+            <span class="detail-label">Description</span>
+            <span class="detail-value">Hierarchical composition property linking a NarrativeConstituent to its direct sub-constituents within the five-level narrative tree (Story → Arc → Event → Scene → Segment). Used at every level of the hierarchy: a Story hasNarrativeUnit its Arcs, an Arc hasNarrativeUnit its Events, an Event hasNarrativeUnit its Scenes, and a Scene hasNarrativeUnit its Segments. Inspired by GOLEM's G9_Narrative_Unit mereological relation (Pianzola et al. 2025).</span>
+          </div>
+          <div class="detail-section">
+            <span class="detail-label">URI</span>
+            <code class="detail-uri">/seqartonto#hasNarrativeUnit</code>
+          </div>
+          <div class="detail-section detail-section--rels">
+            <span class="detail-label">Diagram</span>
+            <div class="detail-value rel-list">
+            <div class="rel-row">
+              <div class="rel-node"><svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg"><polygon points="18,2 34,18 18,34 2,18" fill="#6A0DAD" stroke="#000000" stroke-width="2"/></svg><span class="rel-node-label">NarrativeConstituent</span></div>
+              <div class="rel-arrow">
+                <span class="rel-prop-label">hasNarrativeUnit</span>
+                <svg class="arrow-svg" viewBox="0 0 80 20" xmlns="http://www.w3.org/2000/svg">
+                  <line x1="0" y1="10" x2="70" y2="10" stroke="#a0aec0" stroke-width="1.5"/>
+                  <polygon points="70,5 80,10 70,15" fill="#a0aec0"/>
+                </svg>
+              </div>
+              <div class="rel-node"><svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg"><polygon points="18,2 34,18 18,34 2,18" fill="#6A0DAD" stroke="#000000" stroke-width="2"/></svg><span class="rel-node-label">NarrativeConstituent</span></div>
+            </div></div>
+          </div>
+          
+        </section>
+        
+        <section class="detail-panel" id="rel-hasNextPanel">
+          <h2 class="detail-title detail-title--rel">⟶ hasNextPanel</h2>
+          <div class="detail-section">
+            <span class="detail-label">Description</span>
+            <span class="detail-value">Points to the next Panel(s) in reading order. Intentionally non-functional: certain page layouts leave the reading order partially open to the reader, so a panel may have more than one possible successor. Typically derived from hasRank, but the non-functional form allows modelling ambiguous or branching reading paths.</span>
+          </div>
+          <div class="detail-section">
+            <span class="detail-label">URI</span>
+            <code class="detail-uri">/seqartonto#hasNextPanel</code>
+          </div>
+          <div class="detail-section detail-section--rels">
+            <span class="detail-label">Diagram</span>
+            <div class="detail-value rel-list">
+            <div class="rel-row">
+              <div class="rel-node"><svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="2" width="32" height="32" rx="3" fill="#ffffff" stroke="#000000" stroke-width="2"/></svg><span class="rel-node-label">Panel</span></div>
+              <div class="rel-arrow">
+                <span class="rel-prop-label">hasNextPanel</span>
+                <svg class="arrow-svg" viewBox="0 0 80 20" xmlns="http://www.w3.org/2000/svg">
+                  <line x1="0" y1="10" x2="70" y2="10" stroke="#a0aec0" stroke-width="1.5"/>
+                  <polygon points="70,5 80,10 70,15" fill="#a0aec0"/>
+                </svg>
+              </div>
+              <div class="rel-node"><svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="2" width="32" height="32" rx="3" fill="#ffffff" stroke="#000000" stroke-width="2"/></svg><span class="rel-node-label">Panel</span></div>
+            </div></div>
+          </div>
+          
+        </section>
+        
+        <section class="detail-panel" id="rel-hasNextPlate">
+          <h2 class="detail-title detail-title--rel">⟶ hasNextPlate</h2>
+          <div class="detail-section">
+            <span class="detail-label">Description</span>
+            <span class="detail-value">Points to the immediately following Plate in reading order. Functional: a plate has at most one successor. Asymmetric and irreflexive: a plate cannot follow itself.</span>
+          </div>
+          <div class="detail-section">
+            <span class="detail-label">URI</span>
+            <code class="detail-uri">/seqartonto#hasNextPlate</code>
+          </div>
+          <div class="detail-section detail-section--rels">
+            <span class="detail-label">Diagram</span>
+            <div class="detail-value rel-list">
+            <div class="rel-row">
+              <div class="rel-node"><svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg"><polygon points="18,2 34,18 18,34 2,18" fill="#FF6347" stroke="#000000" stroke-width="2"/></svg><span class="rel-node-label">Plate</span></div>
+              <div class="rel-arrow">
+                <span class="rel-prop-label">hasNextPlate</span>
+                <svg class="arrow-svg" viewBox="0 0 80 20" xmlns="http://www.w3.org/2000/svg">
+                  <line x1="0" y1="10" x2="70" y2="10" stroke="#a0aec0" stroke-width="1.5"/>
+                  <polygon points="70,5 80,10 70,15" fill="#a0aec0"/>
+                </svg>
+              </div>
+              <div class="rel-node"><svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg"><polygon points="18,2 34,18 18,34 2,18" fill="#FF6347" stroke="#000000" stroke-width="2"/></svg><span class="rel-node-label">Plate</span></div>
+            </div></div>
+          </div>
+          
+        </section>
+        
+        <section class="detail-panel" id="rel-hasObject">
+          <h2 class="detail-title detail-title--rel">⟶ hasObject</h2>
+          <div class="detail-section">
+            <span class="detail-label">Description</span>
+            <span class="detail-value">Links a Level to the Objects it contains.</span>
+          </div>
+          <div class="detail-section">
+            <span class="detail-label">URI</span>
+            <code class="detail-uri">/seqartonto#hasObject</code>
+          </div>
+          <div class="detail-section detail-section--rels">
+            <span class="detail-label">Diagram</span>
+            <div class="detail-value rel-list">
+            <div class="rel-row">
+              <div class="rel-node"><svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="2" width="32" height="32" rx="3" fill="#ff6600" stroke="#000000" stroke-width="2"/></svg><span class="rel-node-label">Level</span></div>
+              <div class="rel-arrow">
+                <span class="rel-prop-label">hasObject</span>
+                <svg class="arrow-svg" viewBox="0 0 80 20" xmlns="http://www.w3.org/2000/svg">
+                  <line x1="0" y1="10" x2="70" y2="10" stroke="#a0aec0" stroke-width="1.5"/>
+                  <polygon points="70,5 80,10 70,15" fill="#a0aec0"/>
+                </svg>
+              </div>
+              <div class="rel-node"><svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg"><circle cx="18" cy="18" r="16" fill="#FFBF00" stroke="#000000" stroke-width="2"/></svg><span class="rel-node-label">Object</span></div>
+            </div></div>
+          </div>
+          
+        </section>
+        
+        <section class="detail-panel" id="rel-hasObjectOccurrence">
+          <h2 class="detail-title detail-title--rel">⟶ hasObjectOccurrence</h2>
+          <div class="detail-section">
+            <span class="detail-label">Description</span>
+            <span class="detail-value">Links a MetaObject to all its local Object occurrences across panels.</span>
+          </div>
+          <div class="detail-section">
+            <span class="detail-label">URI</span>
+            <code class="detail-uri">/seqartonto#hasObjectOccurrence</code>
+          </div>
+          <div class="detail-section detail-section--rels">
+            <span class="detail-label">Diagram</span>
+            <div class="detail-value rel-list">
+            <div class="rel-row">
+              <div class="rel-node"><svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg"><circle cx="18" cy="18" r="16" fill="#FFFE00" stroke="#000000" stroke-width="2"/></svg><span class="rel-node-label">MetaObject</span></div>
+              <div class="rel-arrow">
+                <span class="rel-prop-label">hasObjectOccurrence</span>
+                <svg class="arrow-svg" viewBox="0 0 80 20" xmlns="http://www.w3.org/2000/svg">
+                  <line x1="0" y1="10" x2="70" y2="10" stroke="#a0aec0" stroke-width="1.5"/>
+                  <polygon points="70,5 80,10 70,15" fill="#a0aec0"/>
+                </svg>
+              </div>
+              <div class="rel-node"><svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg"><circle cx="18" cy="18" r="16" fill="#FFBF00" stroke="#000000" stroke-width="2"/></svg><span class="rel-node-label">Object</span></div>
+            </div></div>
+          </div>
+          <div class="detail-section">
+            <span class="detail-label">Inverse of</span>
+            <span class="detail-value"><span class="badge badge-inverse">⟵ isObject</span></span>
+          </div>
+        </section>
+        
+        <section class="detail-panel" id="rel-hasOnomatopoeia">
+          <h2 class="detail-title detail-title--rel">⟶ hasOnomatopoeia</h2>
+          <div class="detail-section">
+            <span class="detail-label">Description</span>
+            <span class="detail-value">Links a Level or a Balloon to the Onomatopoeias it contains.</span>
+          </div>
+          <div class="detail-section">
+            <span class="detail-label">URI</span>
+            <code class="detail-uri">/seqartonto#hasOnomatopoeia</code>
+          </div>
+          <div class="detail-section detail-section--rels">
+            <span class="detail-label">Diagram</span>
+            <div class="detail-value rel-list">
+            <div class="rel-row">
+              <div class="rel-node"><svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="2" width="32" height="32" rx="3" fill="#ff6600" stroke="#000000" stroke-width="2"/></svg><span class="rel-node-label">Level</span></div>
+              <div class="rel-arrow">
+                <span class="rel-prop-label">hasOnomatopoeia</span>
+                <svg class="arrow-svg" viewBox="0 0 80 20" xmlns="http://www.w3.org/2000/svg">
+                  <line x1="0" y1="10" x2="70" y2="10" stroke="#a0aec0" stroke-width="1.5"/>
+                  <polygon points="70,5 80,10 70,15" fill="#a0aec0"/>
+                </svg>
+              </div>
+              <div class="rel-node"><svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg"><circle cx="18" cy="18" r="16" fill="#296a2b" stroke="#000000" stroke-width="2"/></svg><span class="rel-node-label">Onomatopoeia</span></div>
+            </div>
+            <div class="rel-row">
+              <div class="rel-node"><svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg"><circle cx="18" cy="18" r="16" fill="#90D5FF" stroke="#000000" stroke-width="2"/></svg><span class="rel-node-label">Balloon</span></div>
+              <div class="rel-arrow">
+                <span class="rel-prop-label">hasOnomatopoeia</span>
+                <svg class="arrow-svg" viewBox="0 0 80 20" xmlns="http://www.w3.org/2000/svg">
+                  <line x1="0" y1="10" x2="70" y2="10" stroke="#a0aec0" stroke-width="1.5"/>
+                  <polygon points="70,5 80,10 70,15" fill="#a0aec0"/>
+                </svg>
+              </div>
+              <div class="rel-node"><svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg"><circle cx="18" cy="18" r="16" fill="#296a2b" stroke="#000000" stroke-width="2"/></svg><span class="rel-node-label">Onomatopoeia</span></div>
+            </div></div>
+          </div>
+          
+        </section>
+        
+        <section class="detail-panel" id="rel-hasOrigin">
+          <h2 class="detail-title detail-title--rel">⟶ hasOrigin</h2>
+          <div class="detail-section">
+            <span class="detail-label">Description</span>
+            <span class="detail-value">Links an Onomatopoeia to the Character or Object that is the source of the sound it represents (e.g. a "BANG" originating from a gun, a "SPLASH" from a character falling into water).</span>
+          </div>
+          <div class="detail-section">
+            <span class="detail-label">URI</span>
+            <code class="detail-uri">/seqartonto#hasOrigin</code>
+          </div>
+          <div class="detail-section detail-section--rels">
+            <span class="detail-label">Diagram</span>
+            <div class="detail-value rel-list">
+            <div class="rel-row">
+              <div class="rel-node"><svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg"><circle cx="18" cy="18" r="16" fill="#296a2b" stroke="#000000" stroke-width="2"/></svg><span class="rel-node-label">Onomatopoeia</span></div>
+              <div class="rel-arrow">
+                <span class="rel-prop-label">hasOrigin</span>
+                <svg class="arrow-svg" viewBox="0 0 80 20" xmlns="http://www.w3.org/2000/svg">
+                  <line x1="0" y1="10" x2="70" y2="10" stroke="#a0aec0" stroke-width="1.5"/>
+                  <polygon points="70,5 80,10 70,15" fill="#a0aec0"/>
+                </svg>
+              </div>
+              <div class="rel-node"><svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg"><circle cx="18" cy="18" r="16" fill="#FF0000" stroke="#000000" stroke-width="2"/></svg><span class="rel-node-label">Character</span></div>
+            </div>
+            <div class="rel-row">
+              <div class="rel-node"><svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg"><circle cx="18" cy="18" r="16" fill="#296a2b" stroke="#000000" stroke-width="2"/></svg><span class="rel-node-label">Onomatopoeia</span></div>
+              <div class="rel-arrow">
+                <span class="rel-prop-label">hasOrigin</span>
+                <svg class="arrow-svg" viewBox="0 0 80 20" xmlns="http://www.w3.org/2000/svg">
+                  <line x1="0" y1="10" x2="70" y2="10" stroke="#a0aec0" stroke-width="1.5"/>
+                  <polygon points="70,5 80,10 70,15" fill="#a0aec0"/>
+                </svg>
+              </div>
+              <div class="rel-node"><svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg"><circle cx="18" cy="18" r="16" fill="#FFBF00" stroke="#000000" stroke-width="2"/></svg><span class="rel-node-label">Object</span></div>
+            </div></div>
+          </div>
+          
+        </section>
+        
+        <section class="detail-panel" id="rel-hasPanel">
+          <h2 class="detail-title detail-title--rel">⟶ hasPanel</h2>
+          <div class="detail-section">
+            <span class="detail-label">Description</span>
+            <span class="detail-value">Links a Plate to the Panels it contains.</span>
+          </div>
+          <div class="detail-section">
+            <span class="detail-label">URI</span>
+            <code class="detail-uri">/seqartonto#hasPanel</code>
+          </div>
+          <div class="detail-section detail-section--rels">
+            <span class="detail-label">Diagram</span>
+            <div class="detail-value rel-list">
+            <div class="rel-row">
+              <div class="rel-node"><svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg"><polygon points="18,2 34,18 18,34 2,18" fill="#FF6347" stroke="#000000" stroke-width="2"/></svg><span class="rel-node-label">Plate</span></div>
+              <div class="rel-arrow">
+                <span class="rel-prop-label">hasPanel</span>
+                <svg class="arrow-svg" viewBox="0 0 80 20" xmlns="http://www.w3.org/2000/svg">
+                  <line x1="0" y1="10" x2="70" y2="10" stroke="#a0aec0" stroke-width="1.5"/>
+                  <polygon points="70,5 80,10 70,15" fill="#a0aec0"/>
+                </svg>
+              </div>
+              <div class="rel-node"><svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="2" width="32" height="32" rx="3" fill="#ffffff" stroke="#000000" stroke-width="2"/></svg><span class="rel-node-label">Panel</span></div>
+            </div></div>
+          </div>
+          
+        </section>
+        
+        <section class="detail-panel" id="rel-hasPatient">
+          <h2 class="detail-title detail-title--rel">⟶ hasPatient</h2>
+          <div class="detail-section">
+            <span class="detail-label">Description</span>
+            <span class="detail-value">Links an Interaction to the entity (Character or Object) that undergoes or receives the action. Absent for symmetric interactions where no participant is primarily affected (e.g. A and B kiss).</span>
+          </div>
+          <div class="detail-section">
+            <span class="detail-label">URI</span>
+            <code class="detail-uri">/seqartonto#hasPatient</code>
+          </div>
+          <div class="detail-section detail-section--rels">
+            <span class="detail-label">Diagram</span>
+            <div class="detail-value rel-list">
+            <div class="rel-row">
+              <div class="rel-node"><svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg"><polygon points="18,2 34,34 2,34" fill="#FF8C00" stroke="#000000" stroke-width="2"/></svg><span class="rel-node-label">Interaction</span></div>
+              <div class="rel-arrow">
+                <span class="rel-prop-label">hasPatient</span>
+                <svg class="arrow-svg" viewBox="0 0 80 20" xmlns="http://www.w3.org/2000/svg">
+                  <line x1="0" y1="10" x2="70" y2="10" stroke="#a0aec0" stroke-width="1.5"/>
+                  <polygon points="70,5 80,10 70,15" fill="#a0aec0"/>
+                </svg>
+              </div>
+              <div class="rel-node"><svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg"><circle cx="18" cy="18" r="16" fill="#FF0000" stroke="#000000" stroke-width="2"/></svg><span class="rel-node-label">Character</span></div>
+            </div>
+            <div class="rel-row">
+              <div class="rel-node"><svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg"><polygon points="18,2 34,34 2,34" fill="#FF8C00" stroke="#000000" stroke-width="2"/></svg><span class="rel-node-label">Interaction</span></div>
+              <div class="rel-arrow">
+                <span class="rel-prop-label">hasPatient</span>
+                <svg class="arrow-svg" viewBox="0 0 80 20" xmlns="http://www.w3.org/2000/svg">
+                  <line x1="0" y1="10" x2="70" y2="10" stroke="#a0aec0" stroke-width="1.5"/>
+                  <polygon points="70,5 80,10 70,15" fill="#a0aec0"/>
+                </svg>
+              </div>
+              <div class="rel-node"><svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg"><circle cx="18" cy="18" r="16" fill="#FFBF00" stroke="#000000" stroke-width="2"/></svg><span class="rel-node-label">Object</span></div>
+            </div></div>
+          </div>
+          
+        </section>
+        
+        <section class="detail-panel" id="rel-hasPlate">
+          <h2 class="detail-title detail-title--rel">⟶ hasPlate</h2>
+          <div class="detail-section">
+            <span class="detail-label">Description</span>
+            <span class="detail-value">Links a Book to the Plates it contains.</span>
+          </div>
+          <div class="detail-section">
+            <span class="detail-label">URI</span>
+            <code class="detail-uri">/seqartonto#hasPlate</code>
+          </div>
+          <div class="detail-section detail-section--rels">
+            <span class="detail-label">Diagram</span>
+            <div class="detail-value rel-list">
+            <div class="rel-row">
+              <div class="rel-node"><svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg"><polygon points="18,2 34,18 18,34 2,18" fill="#4169E1" stroke="#000000" stroke-width="2"/></svg><span class="rel-node-label">Book</span></div>
+              <div class="rel-arrow">
+                <span class="rel-prop-label">hasPlate</span>
+                <svg class="arrow-svg" viewBox="0 0 80 20" xmlns="http://www.w3.org/2000/svg">
+                  <line x1="0" y1="10" x2="70" y2="10" stroke="#a0aec0" stroke-width="1.5"/>
+                  <polygon points="70,5 80,10 70,15" fill="#a0aec0"/>
+                </svg>
+              </div>
+              <div class="rel-node"><svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg"><polygon points="18,2 34,18 18,34 2,18" fill="#FF6347" stroke="#000000" stroke-width="2"/></svg><span class="rel-node-label">Plate</span></div>
+            </div></div>
+          </div>
+          
+        </section>
+        
+        <section class="detail-panel" id="rel-hasPolypticContinuity">
+          <h2 class="detail-title detail-title--rel">⟶ hasPolypticContinuity</h2>
+          <div class="detail-section">
+            <span class="detail-label">Description</span>
+            <span class="detail-value">Links a polyptic panel to the other panels with which it shares a continuous visual composition.</span>
+          </div>
+          <div class="detail-section">
+            <span class="detail-label">URI</span>
+            <code class="detail-uri">/seqartonto#hasPolypticContinuity</code>
+          </div>
+          <div class="detail-section detail-section--rels">
+            <span class="detail-label">Diagram</span>
+            <div class="detail-value rel-list">
+            <div class="rel-row">
+              <div class="rel-node"><svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="2" width="32" height="32" rx="3" fill="#ffffff" stroke="#000000" stroke-width="2"/></svg><span class="rel-node-label">Panel</span></div>
+              <div class="rel-arrow">
+                <span class="rel-prop-label">hasPolypticContinuity</span>
+                <svg class="arrow-svg" viewBox="0 0 80 20" xmlns="http://www.w3.org/2000/svg">
+                  <line x1="0" y1="10" x2="70" y2="10" stroke="#a0aec0" stroke-width="1.5"/>
+                  <polygon points="70,5 80,10 70,15" fill="#a0aec0"/>
+                </svg>
+              </div>
+              <div class="rel-node"><svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="2" width="32" height="32" rx="3" fill="#ffffff" stroke="#000000" stroke-width="2"/></svg><span class="rel-node-label">Panel</span></div>
+            </div></div>
+          </div>
+          
+        </section>
+        
+        <section class="detail-panel" id="rel-hasSceneSetting">
+          <h2 class="detail-title detail-title--rel">⟶ hasSceneSetting</h2>
+          <div class="detail-section">
+            <span class="detail-label">Description</span>
+            <span class="detail-value">Links a Level to its SceneSetting, describing the visual appearance of the environment as it is rendered in that specific panel level.</span>
+          </div>
+          <div class="detail-section">
+            <span class="detail-label">URI</span>
+            <code class="detail-uri">/seqartonto#hasSceneSetting</code>
+          </div>
+          <div class="detail-section detail-section--rels">
+            <span class="detail-label">Diagram</span>
+            <div class="detail-value rel-list">
+            <div class="rel-row">
+              <div class="rel-node"><svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="2" width="32" height="32" rx="3" fill="#ff6600" stroke="#000000" stroke-width="2"/></svg><span class="rel-node-label">Level</span></div>
+              <div class="rel-arrow">
+                <span class="rel-prop-label">hasSceneSetting</span>
+                <svg class="arrow-svg" viewBox="0 0 80 20" xmlns="http://www.w3.org/2000/svg">
+                  <line x1="0" y1="10" x2="70" y2="10" stroke="#a0aec0" stroke-width="1.5"/>
+                  <polygon points="70,5 80,10 70,15" fill="#a0aec0"/>
+                </svg>
+              </div>
+              <div class="rel-node"><svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg"><polygon points="18,2 34,18 18,34 2,18" fill="#90EE90" stroke="#000000" stroke-width="2"/></svg><span class="rel-node-label">SceneSetting</span></div>
+            </div></div>
+          </div>
+          
+        </section>
+        
+        <section class="detail-panel" id="rel-hasSourceEvent">
+          <h2 class="detail-title detail-title--rel">⟶ hasSourceEvent</h2>
+          <div class="detail-section">
+            <span class="detail-label">Description</span>
+            <span class="detail-value">The source NarrativeConstituent of a TemporalLink (the arc from which the temporal relation is expressed). Corresponds to the source EVENT in a TimeML TLINK.</span>
+          </div>
+          <div class="detail-section">
+            <span class="detail-label">URI</span>
+            <code class="detail-uri">/seqartonto#hasSourceEvent</code>
+          </div>
+          <div class="detail-section detail-section--rels">
+            <span class="detail-label">Diagram</span>
+            <div class="detail-value rel-list">
+            <div class="rel-row">
+              <div class="rel-node"><svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg"><polygon points="18,2 34,18 18,34 2,18" fill="#FF8C00" stroke="#000000" stroke-width="2"/></svg><span class="rel-node-label">TemporalLink</span></div>
+              <div class="rel-arrow">
+                <span class="rel-prop-label">hasSourceEvent</span>
+                <svg class="arrow-svg" viewBox="0 0 80 20" xmlns="http://www.w3.org/2000/svg">
+                  <line x1="0" y1="10" x2="70" y2="10" stroke="#a0aec0" stroke-width="1.5"/>
+                  <polygon points="70,5 80,10 70,15" fill="#a0aec0"/>
+                </svg>
+              </div>
+              <div class="rel-node"><svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg"><polygon points="18,2 34,18 18,34 2,18" fill="#6A0DAD" stroke="#000000" stroke-width="2"/></svg><span class="rel-node-label">NarrativeConstituent</span></div>
+            </div></div>
+          </div>
+          
+        </section>
+        
+        <section class="detail-panel" id="rel-hasSubLocation">
+          <h2 class="detail-title detail-title--rel">⟶ hasSubLocation</h2>
+          <div class="detail-section">
+            <span class="detail-label">Description</span>
+            <span class="detail-value">Links a NarrativeLocation to its spatially contained sub-locations. Enables a recursive containment hierarchy of diegetic places (e.g. "Paris" hasSubLocation "Café de Flore"). Inspired by the mereological location structure in GOLEM (Pianzola et al. 2025).</span>
+          </div>
+          <div class="detail-section">
+            <span class="detail-label">URI</span>
+            <code class="detail-uri">/seqartonto#hasSubLocation</code>
+          </div>
+          <div class="detail-section detail-section--rels">
+            <span class="detail-label">Diagram</span>
+            <div class="detail-value rel-list">
+            <div class="rel-row">
+              <div class="rel-node"><svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg"><polygon points="18,2 34,18 18,34 2,18" fill="#2E8B57" stroke="#000000" stroke-width="2"/></svg><span class="rel-node-label">NarrativeLocation</span></div>
+              <div class="rel-arrow">
+                <span class="rel-prop-label">hasSubLocation</span>
+                <svg class="arrow-svg" viewBox="0 0 80 20" xmlns="http://www.w3.org/2000/svg">
+                  <line x1="0" y1="10" x2="70" y2="10" stroke="#a0aec0" stroke-width="1.5"/>
+                  <polygon points="70,5 80,10 70,15" fill="#a0aec0"/>
+                </svg>
+              </div>
+              <div class="rel-node"><svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg"><polygon points="18,2 34,18 18,34 2,18" fill="#2E8B57" stroke="#000000" stroke-width="2"/></svg><span class="rel-node-label">NarrativeLocation</span></div>
+            </div></div>
+          </div>
+          
+        </section>
+        
+        <section class="detail-panel" id="rel-hasTail">
+          <h2 class="detail-title detail-title--rel">⟶ hasTail</h2>
+          <div class="detail-section">
+            <span class="detail-label">Description</span>
+            <span class="detail-value">Links a Balloon to its Tail. The absence of this relation indicates a tail-less balloon (e.g. broadcast or narrator balloon).</span>
+          </div>
+          <div class="detail-section">
+            <span class="detail-label">URI</span>
+            <code class="detail-uri">/seqartonto#hasTail</code>
+          </div>
+          <div class="detail-section detail-section--rels">
+            <span class="detail-label">Diagram</span>
+            <div class="detail-value rel-list">
+            <div class="rel-row">
+              <div class="rel-node"><svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg"><circle cx="18" cy="18" r="16" fill="#90D5FF" stroke="#000000" stroke-width="2"/></svg><span class="rel-node-label">Balloon</span></div>
+              <div class="rel-arrow">
+                <span class="rel-prop-label">hasTail</span>
+                <svg class="arrow-svg" viewBox="0 0 80 20" xmlns="http://www.w3.org/2000/svg">
+                  <line x1="0" y1="10" x2="70" y2="10" stroke="#a0aec0" stroke-width="1.5"/>
+                  <polygon points="70,5 80,10 70,15" fill="#a0aec0"/>
+                </svg>
+              </div>
+              <div class="rel-node"><svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg"><polygon points="18,2 34,34 2,34" fill="#4682B4" stroke="#1A1A2E" stroke-width="2"/></svg><span class="rel-node-label">Tail</span></div>
+            </div></div>
+          </div>
+          
+        </section>
+        
+        <section class="detail-panel" id="rel-hasTargetEvent">
+          <h2 class="detail-title detail-title--rel">⟶ hasTargetEvent</h2>
+          <div class="detail-section">
+            <span class="detail-label">Description</span>
+            <span class="detail-value">The target NarrativeConstituent of a TemporalLink (the arc to which the temporal relation points). Corresponds to the related EVENT in a TimeML TLINK.</span>
+          </div>
+          <div class="detail-section">
+            <span class="detail-label">URI</span>
+            <code class="detail-uri">/seqartonto#hasTargetEvent</code>
+          </div>
+          <div class="detail-section detail-section--rels">
+            <span class="detail-label">Diagram</span>
+            <div class="detail-value rel-list">
+            <div class="rel-row">
+              <div class="rel-node"><svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg"><polygon points="18,2 34,18 18,34 2,18" fill="#FF8C00" stroke="#000000" stroke-width="2"/></svg><span class="rel-node-label">TemporalLink</span></div>
+              <div class="rel-arrow">
+                <span class="rel-prop-label">hasTargetEvent</span>
+                <svg class="arrow-svg" viewBox="0 0 80 20" xmlns="http://www.w3.org/2000/svg">
+                  <line x1="0" y1="10" x2="70" y2="10" stroke="#a0aec0" stroke-width="1.5"/>
+                  <polygon points="70,5 80,10 70,15" fill="#a0aec0"/>
+                </svg>
+              </div>
+              <div class="rel-node"><svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg"><polygon points="18,2 34,18 18,34 2,18" fill="#6A0DAD" stroke="#000000" stroke-width="2"/></svg><span class="rel-node-label">NarrativeConstituent</span></div>
+            </div></div>
+          </div>
+          
+        </section>
+        
+        <section class="detail-panel" id="rel-hasTextLine">
+          <h2 class="detail-title detail-title--rel">⟶ hasTextLine</h2>
+          <div class="detail-section">
+            <span class="detail-label">Description</span>
+            <span class="detail-value">Links a Balloon, Caption, Level, or Plate to the TextLines it contains. A TextLine directly attached to a Level with no Balloon or Caption parent represents free text integrated into the image (e.g. text on a building facade or an object). A TextLine directly attached to a Plate represents text outside any panel, typically with a para-narrative function (e.g. titles, credits, dedications).</span>
+          </div>
+          <div class="detail-section">
+            <span class="detail-label">URI</span>
+            <code class="detail-uri">/seqartonto#hasTextLine</code>
+          </div>
+          <div class="detail-section detail-section--rels">
+            <span class="detail-label">Diagram</span>
+            <div class="detail-value rel-list">
+            <div class="rel-row">
+              <div class="rel-node"><svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg"><circle cx="18" cy="18" r="16" fill="#90D5FF" stroke="#000000" stroke-width="2"/></svg><span class="rel-node-label">Balloon</span></div>
+              <div class="rel-arrow">
+                <span class="rel-prop-label">hasTextLine</span>
+                <svg class="arrow-svg" viewBox="0 0 80 20" xmlns="http://www.w3.org/2000/svg">
+                  <line x1="0" y1="10" x2="70" y2="10" stroke="#a0aec0" stroke-width="1.5"/>
+                  <polygon points="70,5 80,10 70,15" fill="#a0aec0"/>
+                </svg>
+              </div>
+              <div class="rel-node"><svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg"><circle cx="18" cy="18" r="16" fill="#808080" stroke="#000000" stroke-width="2"/></svg><span class="rel-node-label">TextLine</span></div>
+            </div>
+            <div class="rel-row">
+              <div class="rel-node"><svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="2" width="32" height="32" rx="3" fill="#ffadf2" stroke="#000000" stroke-width="2"/></svg><span class="rel-node-label">Caption</span></div>
+              <div class="rel-arrow">
+                <span class="rel-prop-label">hasTextLine</span>
+                <svg class="arrow-svg" viewBox="0 0 80 20" xmlns="http://www.w3.org/2000/svg">
+                  <line x1="0" y1="10" x2="70" y2="10" stroke="#a0aec0" stroke-width="1.5"/>
+                  <polygon points="70,5 80,10 70,15" fill="#a0aec0"/>
+                </svg>
+              </div>
+              <div class="rel-node"><svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg"><circle cx="18" cy="18" r="16" fill="#808080" stroke="#000000" stroke-width="2"/></svg><span class="rel-node-label">TextLine</span></div>
+            </div>
+            <div class="rel-row">
+              <div class="rel-node"><svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="2" width="32" height="32" rx="3" fill="#ff6600" stroke="#000000" stroke-width="2"/></svg><span class="rel-node-label">Level</span></div>
+              <div class="rel-arrow">
+                <span class="rel-prop-label">hasTextLine</span>
+                <svg class="arrow-svg" viewBox="0 0 80 20" xmlns="http://www.w3.org/2000/svg">
+                  <line x1="0" y1="10" x2="70" y2="10" stroke="#a0aec0" stroke-width="1.5"/>
+                  <polygon points="70,5 80,10 70,15" fill="#a0aec0"/>
+                </svg>
+              </div>
+              <div class="rel-node"><svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg"><circle cx="18" cy="18" r="16" fill="#808080" stroke="#000000" stroke-width="2"/></svg><span class="rel-node-label">TextLine</span></div>
+            </div>
+            <div class="rel-row">
+              <div class="rel-node"><svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg"><polygon points="18,2 34,18 18,34 2,18" fill="#FF6347" stroke="#000000" stroke-width="2"/></svg><span class="rel-node-label">Plate</span></div>
+              <div class="rel-arrow">
+                <span class="rel-prop-label">hasTextLine</span>
+                <svg class="arrow-svg" viewBox="0 0 80 20" xmlns="http://www.w3.org/2000/svg">
+                  <line x1="0" y1="10" x2="70" y2="10" stroke="#a0aec0" stroke-width="1.5"/>
+                  <polygon points="70,5 80,10 70,15" fill="#a0aec0"/>
+                </svg>
+              </div>
+              <div class="rel-node"><svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg"><circle cx="18" cy="18" r="16" fill="#808080" stroke="#000000" stroke-width="2"/></svg><span class="rel-node-label">TextLine</span></div>
+            </div></div>
+          </div>
+          
+        </section>
+        
+        <section class="detail-panel" id="rel-hasTextSpan">
+          <h2 class="detail-title detail-title--rel">⟶ hasTextSpan</h2>
+          <div class="detail-section">
+            <span class="detail-label">Description</span>
+            <span class="detail-value">Links a TextLine to the TextSpans (words or groups of words sharing the same typographic style) it contains. Multiple TextSpans within a TextLine are only justified when typographic style varies within the line.</span>
+          </div>
+          <div class="detail-section">
+            <span class="detail-label">URI</span>
+            <code class="detail-uri">/seqartonto#hasTextSpan</code>
+          </div>
+          <div class="detail-section detail-section--rels">
+            <span class="detail-label">Diagram</span>
+            <div class="detail-value rel-list">
+            <div class="rel-row">
+              <div class="rel-node"><svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg"><circle cx="18" cy="18" r="16" fill="#808080" stroke="#000000" stroke-width="2"/></svg><span class="rel-node-label">TextLine</span></div>
+              <div class="rel-arrow">
+                <span class="rel-prop-label">hasTextSpan</span>
+                <svg class="arrow-svg" viewBox="0 0 80 20" xmlns="http://www.w3.org/2000/svg">
+                  <line x1="0" y1="10" x2="70" y2="10" stroke="#a0aec0" stroke-width="1.5"/>
+                  <polygon points="70,5 80,10 70,15" fill="#a0aec0"/>
+                </svg>
+              </div>
+              <div class="rel-node"><svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg"><circle cx="18" cy="18" r="16" fill="#D3D3D3" stroke="#000000" stroke-width="2"/></svg><span class="rel-node-label">TextSpan</span></div>
+            </div></div>
+          </div>
+          
+        </section>
+        
+        <section class="detail-panel" id="rel-hasTimex">
+          <h2 class="detail-title detail-title--rel">⟶ hasTimex</h2>
+          <div class="detail-section">
+            <span class="detail-label">Description</span>
+            <span class="detail-value">Links a Caption (typically of captionType "Effect", e.g. "Three years later...") to a Timex instance encoding the temporal expression it contains. Corresponds to TimeML's TIMEX3 annotation (Pustejovsky et al. 2003 / ISO 24617-1).</span>
+          </div>
+          <div class="detail-section">
+            <span class="detail-label">URI</span>
+            <code class="detail-uri">/seqartonto#hasTimex</code>
+          </div>
+          <div class="detail-section detail-section--rels">
+            <span class="detail-label">Diagram</span>
+            <div class="detail-value rel-list">
+            <div class="rel-row">
+              <div class="rel-node"><svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="2" width="32" height="32" rx="3" fill="#ffadf2" stroke="#000000" stroke-width="2"/></svg><span class="rel-node-label">Caption</span></div>
+              <div class="rel-arrow">
+                <span class="rel-prop-label">hasTimex</span>
+                <svg class="arrow-svg" viewBox="0 0 80 20" xmlns="http://www.w3.org/2000/svg">
+                  <line x1="0" y1="10" x2="70" y2="10" stroke="#a0aec0" stroke-width="1.5"/>
+                  <polygon points="70,5 80,10 70,15" fill="#a0aec0"/>
+                </svg>
+              </div>
+              <div class="rel-node"><svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg"><polygon points="18,2 34,18 18,34 2,18" fill="#FFD700" stroke="#000000" stroke-width="2"/></svg><span class="rel-node-label">Timex</span></div>
+            </div></div>
+          </div>
+          
+        </section>
+        
+        <section class="detail-panel" id="rel-instantiates">
+          <h2 class="detail-title detail-title--rel">⟶ instantiates</h2>
+          <div class="detail-section">
+            <span class="detail-label">Description</span>
+            <span class="detail-value">Links a Segment (leaf NarrativeConstituent) to the Level(s) of the comic that visually realise it. Only Segments carry instantiates relations directly: higher-level constituents (Scene, Event, Arc, Story) are realised indirectly through the instantiates of their descendant Segments. A Segment may instantiate multiple Levels when it spans a polymorphic panel (e.g. both Level_3a and Level_3b of the same panel instantiate the same Segment). This property bridges the narrative/discourse layer and the visual/material layer.</span>
+          </div>
+          <div class="detail-section">
+            <span class="detail-label">URI</span>
+            <code class="detail-uri">/seqartonto#instantiates</code>
+          </div>
+          <div class="detail-section detail-section--rels">
+            <span class="detail-label">Diagram</span>
+            <div class="detail-value rel-list">
+            <div class="rel-row">
+              <div class="rel-node"><svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg"><polygon points="18,2 34,18 18,34 2,18" fill="#C76BFF" stroke="#000000" stroke-width="2"/></svg><span class="rel-node-label">Segment</span></div>
+              <div class="rel-arrow">
+                <span class="rel-prop-label">instantiates</span>
+                <svg class="arrow-svg" viewBox="0 0 80 20" xmlns="http://www.w3.org/2000/svg">
+                  <line x1="0" y1="10" x2="70" y2="10" stroke="#a0aec0" stroke-width="1.5"/>
+                  <polygon points="70,5 80,10 70,15" fill="#a0aec0"/>
+                </svg>
+              </div>
+              <div class="rel-node"><svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="2" width="32" height="32" rx="3" fill="#ff6600" stroke="#000000" stroke-width="2"/></svg><span class="rel-node-label">Level</span></div>
+            </div></div>
+          </div>
+          
+        </section>
+        
+        <section class="detail-panel" id="rel-isCharacter">
+          <h2 class="detail-title detail-title--rel">⟶ isCharacter</h2>
+          <div class="detail-section">
+            <span class="detail-label">Description</span>
+            <span class="detail-value">Links a local character occurrence (within a panel or plate) to the meta-character it represents.</span>
+          </div>
+          <div class="detail-section">
+            <span class="detail-label">URI</span>
+            <code class="detail-uri">/seqartonto#isCharacter</code>
+          </div>
+          <div class="detail-section detail-section--rels">
+            <span class="detail-label">Diagram</span>
+            <div class="detail-value rel-list">
+            <div class="rel-row">
+              <div class="rel-node"><svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg"><circle cx="18" cy="18" r="16" fill="#FF0000" stroke="#000000" stroke-width="2"/></svg><span class="rel-node-label">Character</span></div>
+              <div class="rel-arrow">
+                <span class="rel-prop-label">isCharacter</span>
+                <svg class="arrow-svg" viewBox="0 0 80 20" xmlns="http://www.w3.org/2000/svg">
+                  <line x1="0" y1="10" x2="70" y2="10" stroke="#a0aec0" stroke-width="1.5"/>
+                  <polygon points="70,5 80,10 70,15" fill="#a0aec0"/>
+                </svg>
+              </div>
+              <div class="rel-node"><svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg"><circle cx="18" cy="18" r="16" fill="#FF00FF" stroke="#000000" stroke-width="2"/></svg><span class="rel-node-label">MetaCharacter</span></div>
+            </div></div>
+          </div>
+          <div class="detail-section">
+            <span class="detail-label">Inverse of</span>
+            <span class="detail-value"><span class="badge badge-inverse">⟵ hasCharacterOccurrence</span></span>
+          </div>
+        </section>
+        
+        <section class="detail-panel" id="rel-isObject">
+          <h2 class="detail-title detail-title--rel">⟶ isObject</h2>
+          <div class="detail-section">
+            <span class="detail-label">Description</span>
+            <span class="detail-value">Links a local object occurrence (within a panel) to the meta-object it represents.</span>
+          </div>
+          <div class="detail-section">
+            <span class="detail-label">URI</span>
+            <code class="detail-uri">/seqartonto#isObject</code>
+          </div>
+          <div class="detail-section detail-section--rels">
+            <span class="detail-label">Diagram</span>
+            <div class="detail-value rel-list">
+            <div class="rel-row">
+              <div class="rel-node"><svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg"><circle cx="18" cy="18" r="16" fill="#FFBF00" stroke="#000000" stroke-width="2"/></svg><span class="rel-node-label">Object</span></div>
+              <div class="rel-arrow">
+                <span class="rel-prop-label">isObject</span>
+                <svg class="arrow-svg" viewBox="0 0 80 20" xmlns="http://www.w3.org/2000/svg">
+                  <line x1="0" y1="10" x2="70" y2="10" stroke="#a0aec0" stroke-width="1.5"/>
+                  <polygon points="70,5 80,10 70,15" fill="#a0aec0"/>
+                </svg>
+              </div>
+              <div class="rel-node"><svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg"><circle cx="18" cy="18" r="16" fill="#FFFE00" stroke="#000000" stroke-width="2"/></svg><span class="rel-node-label">MetaObject</span></div>
+            </div></div>
+          </div>
+          <div class="detail-section">
+            <span class="detail-label">Inverse of</span>
+            <span class="detail-value"><span class="badge badge-inverse">⟵ hasObjectOccurrence</span></span>
+          </div>
+        </section>
+        
+        <section class="detail-panel" id="rel-linkedTo">
+          <h2 class="detail-title detail-title--rel">⟶ linkedTo</h2>
+          <div class="detail-section">
+            <span class="detail-label">Description</span>
+            <span class="detail-value">Links two Balloons that form a multi-balloon group (i.e. a single utterance split across several connected bubbles). Balloons linked this way typically share no individual tail. Symmetric: if A is linkedTo B, then B is linkedTo A.</span>
+          </div>
+          <div class="detail-section">
+            <span class="detail-label">URI</span>
+            <code class="detail-uri">/seqartonto#linkedTo</code>
+          </div>
+          <div class="detail-section detail-section--rels">
+            <span class="detail-label">Diagram</span>
+            <div class="detail-value rel-list">
+            <div class="rel-row">
+              <div class="rel-node"><svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg"><circle cx="18" cy="18" r="16" fill="#90D5FF" stroke="#000000" stroke-width="2"/></svg><span class="rel-node-label">Balloon</span></div>
+              <div class="rel-arrow">
+                <span class="rel-prop-label">linkedTo</span>
+                <svg class="arrow-svg" viewBox="0 0 80 20" xmlns="http://www.w3.org/2000/svg">
+                  <line x1="0" y1="10" x2="70" y2="10" stroke="#a0aec0" stroke-width="1.5"/>
+                  <polygon points="70,5 80,10 70,15" fill="#a0aec0"/>
+                </svg>
+              </div>
+              <div class="rel-node"><svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg"><circle cx="18" cy="18" r="16" fill="#90D5FF" stroke="#000000" stroke-width="2"/></svg><span class="rel-node-label">Balloon</span></div>
+            </div></div>
+          </div>
+          
+        </section>
+        
+        <section class="detail-panel" id="rel-mentions">
+          <h2 class="detail-title detail-title--rel">⟶ mentions</h2>
+          <div class="detail-section">
+            <span class="detail-label">Description</span>
+            <span class="detail-value">Links a Balloon or Caption to a MetaCharacter or MetaObject explicitly mentioned or referred to in its text content. The range targets meta-level entities (persistent referents) rather than local occurrences, since verbal references identify the entity across the story world regardless of its visual presence in the panel. Captions are included because narrator text frequently mentions absent characters or objects (e.g. "And so our friends Asterix and Obelix...").</span>
+          </div>
+          <div class="detail-section">
+            <span class="detail-label">URI</span>
+            <code class="detail-uri">/seqartonto#mentions</code>
+          </div>
+          <div class="detail-section detail-section--rels">
+            <span class="detail-label">Diagram</span>
+            <div class="detail-value rel-list">
+            <div class="rel-row">
+              <div class="rel-node"><svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg"><circle cx="18" cy="18" r="16" fill="#90D5FF" stroke="#000000" stroke-width="2"/></svg><span class="rel-node-label">Balloon</span></div>
+              <div class="rel-arrow">
+                <span class="rel-prop-label">mentions</span>
+                <svg class="arrow-svg" viewBox="0 0 80 20" xmlns="http://www.w3.org/2000/svg">
+                  <line x1="0" y1="10" x2="70" y2="10" stroke="#a0aec0" stroke-width="1.5"/>
+                  <polygon points="70,5 80,10 70,15" fill="#a0aec0"/>
+                </svg>
+              </div>
+              <div class="rel-node"><svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg"><circle cx="18" cy="18" r="16" fill="#FF00FF" stroke="#000000" stroke-width="2"/></svg><span class="rel-node-label">MetaCharacter</span></div>
+            </div>
+            <div class="rel-row">
+              <div class="rel-node"><svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg"><circle cx="18" cy="18" r="16" fill="#90D5FF" stroke="#000000" stroke-width="2"/></svg><span class="rel-node-label">Balloon</span></div>
+              <div class="rel-arrow">
+                <span class="rel-prop-label">mentions</span>
+                <svg class="arrow-svg" viewBox="0 0 80 20" xmlns="http://www.w3.org/2000/svg">
+                  <line x1="0" y1="10" x2="70" y2="10" stroke="#a0aec0" stroke-width="1.5"/>
+                  <polygon points="70,5 80,10 70,15" fill="#a0aec0"/>
+                </svg>
+              </div>
+              <div class="rel-node"><svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg"><circle cx="18" cy="18" r="16" fill="#FFFE00" stroke="#000000" stroke-width="2"/></svg><span class="rel-node-label">MetaObject</span></div>
+            </div>
+            <div class="rel-row">
+              <div class="rel-node"><svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="2" width="32" height="32" rx="3" fill="#ffadf2" stroke="#000000" stroke-width="2"/></svg><span class="rel-node-label">Caption</span></div>
+              <div class="rel-arrow">
+                <span class="rel-prop-label">mentions</span>
+                <svg class="arrow-svg" viewBox="0 0 80 20" xmlns="http://www.w3.org/2000/svg">
+                  <line x1="0" y1="10" x2="70" y2="10" stroke="#a0aec0" stroke-width="1.5"/>
+                  <polygon points="70,5 80,10 70,15" fill="#a0aec0"/>
+                </svg>
+              </div>
+              <div class="rel-node"><svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg"><circle cx="18" cy="18" r="16" fill="#FF00FF" stroke="#000000" stroke-width="2"/></svg><span class="rel-node-label">MetaCharacter</span></div>
+            </div>
+            <div class="rel-row">
+              <div class="rel-node"><svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="2" width="32" height="32" rx="3" fill="#ffadf2" stroke="#000000" stroke-width="2"/></svg><span class="rel-node-label">Caption</span></div>
+              <div class="rel-arrow">
+                <span class="rel-prop-label">mentions</span>
+                <svg class="arrow-svg" viewBox="0 0 80 20" xmlns="http://www.w3.org/2000/svg">
+                  <line x1="0" y1="10" x2="70" y2="10" stroke="#a0aec0" stroke-width="1.5"/>
+                  <polygon points="70,5 80,10 70,15" fill="#a0aec0"/>
+                </svg>
+              </div>
+              <div class="rel-node"><svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg"><circle cx="18" cy="18" r="16" fill="#FFFE00" stroke="#000000" stroke-width="2"/></svg><span class="rel-node-label">MetaObject</span></div>
+            </div></div>
+          </div>
+          
+        </section>
+        
+        <section class="detail-panel" id="rel-nextNarrativeTextLine">
+          <h2 class="detail-title detail-title--rel">⟶ nextNarrativeTextLine</h2>
+          <div class="detail-section">
+            <span class="detail-label">Description</span>
+            <span class="detail-value">Points to the immediately following narrative TextLine in reading order within its container (Balloon or Caption). Only applies to TextLines of type "narrative"; diegetic and paratextual lines are excluded. Functional: a TextLine has at most one successor.</span>
+          </div>
+          <div class="detail-section">
+            <span class="detail-label">URI</span>
+            <code class="detail-uri">/seqartonto#nextNarrativeTextLine</code>
+          </div>
+          <div class="detail-section detail-section--rels">
+            <span class="detail-label">Diagram</span>
+            <div class="detail-value rel-list">
+            <div class="rel-row">
+              <div class="rel-node"><svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg"><circle cx="18" cy="18" r="16" fill="#808080" stroke="#000000" stroke-width="2"/></svg><span class="rel-node-label">TextLine</span></div>
+              <div class="rel-arrow">
+                <span class="rel-prop-label">nextNarrativeTextLine</span>
+                <svg class="arrow-svg" viewBox="0 0 80 20" xmlns="http://www.w3.org/2000/svg">
+                  <line x1="0" y1="10" x2="70" y2="10" stroke="#a0aec0" stroke-width="1.5"/>
+                  <polygon points="70,5 80,10 70,15" fill="#a0aec0"/>
+                </svg>
+              </div>
+              <div class="rel-node"><svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg"><circle cx="18" cy="18" r="16" fill="#808080" stroke="#000000" stroke-width="2"/></svg><span class="rel-node-label">TextLine</span></div>
+            </div></div>
+          </div>
+          
+        </section>
+        
+        <section class="detail-panel" id="rel-realizesLocation">
+          <h2 class="detail-title detail-title--rel">⟶ realizesLocation</h2>
+          <div class="detail-section">
+            <span class="detail-label">Description</span>
+            <span class="detail-value">Links a SceneSetting (visual instance in a Level) to the NarrativeLocation (diegetic concept) it visually realises. Mirrors the isInstanceOf relation between Character and MetaCharacter.</span>
+          </div>
+          <div class="detail-section">
+            <span class="detail-label">URI</span>
+            <code class="detail-uri">/seqartonto#realizesLocation</code>
+          </div>
+          <div class="detail-section detail-section--rels">
+            <span class="detail-label">Diagram</span>
+            <div class="detail-value rel-list">
+            <div class="rel-row">
+              <div class="rel-node"><svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg"><polygon points="18,2 34,18 18,34 2,18" fill="#90EE90" stroke="#000000" stroke-width="2"/></svg><span class="rel-node-label">SceneSetting</span></div>
+              <div class="rel-arrow">
+                <span class="rel-prop-label">realizesLocation</span>
+                <svg class="arrow-svg" viewBox="0 0 80 20" xmlns="http://www.w3.org/2000/svg">
+                  <line x1="0" y1="10" x2="70" y2="10" stroke="#a0aec0" stroke-width="1.5"/>
+                  <polygon points="70,5 80,10 70,15" fill="#a0aec0"/>
+                </svg>
+              </div>
+              <div class="rel-node"><svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg"><polygon points="18,2 34,18 18,34 2,18" fill="#2E8B57" stroke="#000000" stroke-width="2"/></svg><span class="rel-node-label">NarrativeLocation</span></div>
+            </div></div>
+          </div>
+          
+        </section>
+        
+  </main>
+</div>
+
+<div class="modal-backdrop" id="imgModal">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <img id="modalImg" src="" alt=""/>
+  </div>
+</div>
+
+<footer>Generated from <code>SequArtOnto.rdf</code></footer>
+
+<script>
+  /* ── Toggle subclasses ── */
+  document.querySelectorAll('.nav-toggle').forEach(btn => {
+    btn.addEventListener('click', function(e) {
+      e.preventDefault();
+      const li = this.closest('.nav-item');
+      const sublist = li.querySelector('.nav-sublist');
+      const collapsed = sublist.style.display === 'none';
+      sublist.style.display = collapsed ? '' : 'none';
+      this.classList.toggle('collapsed', !collapsed);
+    });
+  });
+
+  /* ── Active link on scroll ── */
+  const sections = document.querySelectorAll('.detail-panel');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        document.querySelectorAll('.nav-row').forEach(r => r.classList.remove('active'));
+        const a = document.querySelector('.nav-link[href="#' + entry.target.id + '"]');
+        if (a) a.closest('.nav-row').classList.add('active');
+      }
+    });
+  }, { threshold: 0.5 });
+  sections.forEach(s => observer.observe(s));
+
+  function openModal(url) {
+    document.getElementById('modalImg').src = url;
+    document.getElementById('imgModal').classList.add('open');
+  }
+  function closeModal() {
+    document.getElementById('imgModal').classList.remove('open');
+    document.getElementById('modalImg').src = '';
+  }
+  document.getElementById('imgModal').addEventListener('click', function(e) {
+    if (e.target === this) closeModal();
+  });
+</script>
+
+</body>
+</html>
